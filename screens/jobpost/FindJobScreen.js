@@ -39,7 +39,7 @@ const FindJobScreen = ({ route, navigation }) => {
     }}
   >
     <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
-        <View style={{ ...styles.mealRow, ...styles.mealHeader }}>
+        <View style={{ ...styles.postRow, ...styles.postHeader }}>
 
       <ImageBackground
         source={require("../../assets/PostPlaceholder.png")}
@@ -96,7 +96,7 @@ const FindJobScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   item: {
@@ -132,11 +132,11 @@ const styles = StyleSheet.create({
     resizeMode: "stretch",
 
   },
-  mealRow: {
+  postRow: {
     flexDirection: "row",
     backgroundColor:"gray",
   },
-  mealHeader: {
+  postHeader: {
     height: "50%",
   },
 });
