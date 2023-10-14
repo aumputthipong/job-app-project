@@ -170,14 +170,14 @@ const styles = StyleSheet.create({
   },
   subText: {
     fontSize: 18,
-    marginLeft: 20,
+    marginHorizontal: 20,
     // backgroundColor:"blue"
     
   },
   detailText: {
     fontSize: 11,
     color: "#929090",
-    marginLeft: 10,
+    marginHorizontal: 10,
   },
   bgImage: {
     width: "100%",

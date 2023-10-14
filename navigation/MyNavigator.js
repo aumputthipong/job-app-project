@@ -40,7 +40,7 @@ function HomeStack() {
     <HomeNavigator.Navigator
       initialRouteName="HomeScreen"
       screenOptions={{
-        headerStyle: { backgroundColor: "#4a148c" },
+        headerStyle: { backgroundColor: "#4769E2"},
         headerTintColor: "white",
       }}
     >
@@ -48,7 +48,6 @@ function HomeStack() {
         name="HomeScreen"
         component={HomeScreen}
         options={{
-          title: "Meal Categories",
         }}
       />
       <HomeNavigator.Screen
@@ -108,7 +107,10 @@ function BottomTabNav() {
   return (
     <BottomTab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: "salmon",
+        //  headerShown: false,
+        tabBarActiveTintColor: "black",
+        headerStyle: {      backgroundColor: "#4769E2",},
+        headerTintColor: "white",
         tabBarStyle: { backgroundColor: "white" },
         tabBarLabelStyle: { fontSize: 15 },
       }}
@@ -118,6 +120,7 @@ function BottomTabNav() {
         component={HomeStack}
         options={{
           headerShown: false,
+          
           tabBarIcon: ({ tintColor }) => {
             return (
               <Ionicons name="ios-home" size={24} color={tintColor} />
@@ -130,7 +133,7 @@ function BottomTabNav() {
         name="MyKeep"
         component={KeepScreen}
         options={{
-          headerShown: false,
+        
           tabBarIcon: () => {
             return <Ionicons name="ios-save" size={24} color="gray" />;
           },
@@ -140,7 +143,7 @@ function BottomTabNav() {
         name="Notifcation"
         component={NotificationScreen}
         options={{
-          headerShown: false,
+          
           tabBarIcon: () => {
             return <Ionicons name="ios-notifications" size={24} color="gray" />;
           },

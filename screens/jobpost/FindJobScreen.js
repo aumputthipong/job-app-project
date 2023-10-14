@@ -45,7 +45,7 @@ const FindJobScreen = ({ route, navigation }) => {
         source={require("../../assets/PostPlaceholder.png")}
         style={styles.bgImage}
       ></ImageBackground>
-
+  
       </View>
       {/* ชื่อหน่วยงาน */}
       <Text style={styles.title} numberOfLines={2}>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   detailText:{
     fontSize:11,
     color:"#929090",
-    marginLeft:10,
+    marginHorizontal:10,
     
   },
   bgImage: {
