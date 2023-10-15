@@ -78,14 +78,14 @@ const MyProfileScreen = ({ route, navigation }) => {
         {/* email */}
         <View style={{ ...styles.postRow, ...{} }}>
           <Text style={styles.subTitle}>ปริญญาตรี :</Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
+          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal",width:"75%" } }}>
           เทคโนโลยีสารสนเทศ แขนง Software Engineer
           </Text>
         </View>
         {/* เบอร์ */}
         <View style={styles.postRow}>
           <Text style={styles.subTitle}>ปริญญาโท : </Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
+          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal",marginRight:10 } }}>
           วิศกรรมปลูกผัก
           </Text>
         </View>
