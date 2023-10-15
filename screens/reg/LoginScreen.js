@@ -45,7 +45,15 @@ const LoginScreen = ({ route, navigation }) => {
       }}>
         <Text style={{...styles.text,...{alignSelf:"center",}}}>เข้าสู่ระบบ</Text>
       </TouchableOpacity>
-        
+      <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" } }}>
+        <Text style={{...styles.text,...{fontSize:18,color:"blue",marginLeft:20}}}>ยังไม่มีบัญชีใช่ไหม</Text>
+        <TouchableOpacity  onPress={() => {
+        navigation.navigate("Register");
+      }}>
+        <Text style={{...styles.text,...{fontSize:18,marginLeft:10,textDecorationLine:"underline"}}}>สมัครที่นี่</Text>
+
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -81,6 +89,10 @@ const styles = StyleSheet.create({
     height:"5%",
     borderRadius:10,
     paddingTop:"1.5%"
+  },
+  postRow: {
+    flexDirection: "row",
+    // backgroundColor:"red",
   },
 });
 
