@@ -7,11 +7,16 @@ import {
   TouchableOpacity,
   ImageBackground,
   Image,
-  FlatList,
+  FlatList,TextInput,
 } from "react-native";
+import { useSelector } from "react-redux"; 
 
 const FindJobScreen = ({ route, navigation }) => {
-  //   const {step, title} = route.params;
+  // const catId = route.params.id;
+  
+  const displayedJobs = useSelector(state => state.jobs.filteredJobs);
+  // const displayedMeals =   availableMeals.filter((meal) => meal.categoryIds.indexOf(catId) >= 0
+  // );
   const DATA = [
     {
       id: "1",
@@ -29,7 +34,9 @@ const FindJobScreen = ({ route, navigation }) => {
       position: "Frontend Dev",
     },
   ];
-  const Item = ({ Agency }) => (
+  // const attributeItem = ({}) => 
+  //      (<Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>);
+  const Item = ({itemData}) => (
     <TouchableOpacity
       onPress={() => {
         navigation.navigate("FindJobDetailScreen");
@@ -44,7 +51,7 @@ const FindJobScreen = ({ route, navigation }) => {
         </View>
         {/* ชื่อหน่วยงาน */}
         <Text style={styles.title} numberOfLines={2}>
-          KMITL
+        {/* {itemData.title} */}test
         </Text>
         {/* ตำแหน่ง */}
         <Text style={styles.subText}>Frontend Dev</Text>
@@ -69,6 +76,19 @@ const FindJobScreen = ({ route, navigation }) => {
   );
   return (
     <View styles={styles.container}>
+      {/* searchbar */}
+      <TextInput
+          style={styles.textInput}
+          blurOnSubmit
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="number-pad"
+          maxLength={20}
+          placeholder="ค้นหา"
+          //...เพิ่ม property value และ onChangeText...
+          // value={enteredValue}
+          // onChangeText={numberInputHandler}
+        />
       <Button
         title="create"
         onPress={() => {
@@ -76,7 +96,7 @@ const FindJobScreen = ({ route, navigation }) => {
         }}
       />
       <FlatList
-        data={DATA}
+        data={displayedJobs}
         renderItem={({ item }) => <Item title={item.title} />}
         keyExtractor={(item) => item.id}
       />
@@ -127,6 +147,20 @@ const styles = StyleSheet.create({
   },
   postHeader: {
     height: "50%",
+  },
+  textInput: {
+    width: "90%",
+    height: "5%",
+    backgroundColor:"white",
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+    marginVertical: 10,
+    alignSelf: "left",
+    textAlign:"left",
+    paddingLeft:15,
+    marginLeft:15,
+    borderRadius:20,
+
   },
 });
 

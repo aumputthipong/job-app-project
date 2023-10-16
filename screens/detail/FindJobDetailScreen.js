@@ -11,7 +11,8 @@ import {
 } from "react-native";
 
 const FindJobDetailScreen = ({ route, navigation }) => {
-  //   const {step, title} = route.params;
+  
+
 
   return (
     <View style={styles.screen}>
