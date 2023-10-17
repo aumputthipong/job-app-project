@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 const LoginScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
-
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <View style={styles.screen}>
       <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
@@ -33,7 +37,7 @@ const LoginScreen = ({ route, navigation }) => {
         blurOnSubmit
         autoCapitalize="none"
         autoCorrect={false}
-
+        secureTextEntry={!showPassword}
         keyboardType="default"
 
         // จำนวนตัวอักษรมากสุด
@@ -43,6 +47,10 @@ const LoginScreen = ({ route, navigation }) => {
         // value={enteredValue}
         // onChangeText={numberInputHandler}
       />
+      <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconButton}>
+        <Ionicons name={showPassword ? 'eye' : 'eye-off'} size={20} color="black" />
+      </TouchableOpacity>
+
      <TouchableOpacity style={styles.button}
       onPress={() => {
         navigation.navigate("BottomTabNav");
@@ -79,13 +87,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignSelf: "center",
     textAlign: "left",
-    marginLeft: 15,
     backgroundColor: "white",
   },
   text: {
     textAlign: "left",
     fontSize: 15,
-    
   },
   button: {
     marginVertical:10,  
@@ -99,6 +105,11 @@ const styles = StyleSheet.create({
   postRow: {
     flexDirection: "row",
     // backgroundColor:"red",
+  },
+  iconButton: {
+    position: 'relative',
+    left: 150,
+    top: -40,
   },
 });
 

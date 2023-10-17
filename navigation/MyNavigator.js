@@ -82,7 +82,7 @@ function HomeStack() {
           // id: route.params.id,
         })}
       />
-            <HomeNavigator.Screen
+        <HomeNavigator.Screen
         name="CreateFind"
         component={CreateFind}
         options={({ route }) => ({
@@ -123,7 +123,7 @@ function BottomTabNav() {
           
           tabBarIcon: ({ tintColor }) => {
             return (
-              <Ionicons name="ios-home" size={24} color={tintColor} />
+              <Ionicons name="ios-home-outline" size={24} color={tintColor} />
             );
           },
           tabBarOptions: { tabBarActiveTintColor: "blue" },
@@ -134,8 +134,8 @@ function BottomTabNav() {
         component={KeepScreen}
         options={{
         
-          tabBarIcon: () => {
-            return <Ionicons name="ios-save" size={24} color="gray" />;
+          tabBarIcon: ({ tintColor }) => {
+            return <Ionicons name="bookmark-outline" size={24} color={tintColor} />;
           },
         }}
       />
@@ -144,8 +144,8 @@ function BottomTabNav() {
         component={NotificationScreen}
         options={{
           
-          tabBarIcon: () => {
-            return <Ionicons name="ios-notifications" size={24} color="gray" />;
+          tabBarIcon: ({ tintColor }) => {
+            return <Ionicons name="notifications-outline" size={24} color={tintColor} />;
           },
         }}
       />
@@ -153,9 +153,9 @@ function BottomTabNav() {
         name="MyProfile"
         component={MyProfileScreen}
         options={{
-          headerShown: false,
-          tabBarIcon: () => {
-            return <Ionicons name="ios-person" size={24} color="gray" />;
+
+          tabBarIcon: ({ tintColor }) => {
+            return <Ionicons name="ios-person-outline" size={24} color={tintColor} />;
           },
         }}
       />
@@ -181,11 +181,29 @@ export default function MyNavigator() {
           component={BottomTabNav}
           options={{
             drawerLabel: "Meals",
+            headerShown:false,
           }}
         />
-        <MainNavigator.Screen name="Welcome" component={WelcomeScreen} />
-        <MainNavigator.Screen name="Login" component={LoginScreen} />
-        <MainNavigator.Screen name="Register" component={RegisterScreen} />
+        <MainNavigator.Screen name="Welcome" component={WelcomeScreen} 
+          options={{
+            headerStyle: { backgroundColor: "#4769E2" },
+            headerTitleStyle: { color: "white" }
+          }}
+        />
+        <MainNavigator.Screen name="Login" component={LoginScreen} 
+          options={{
+            headerStyle: { backgroundColor: "#4769E2" },
+            headerTitleStyle: { color: "white" },
+            headerTintColor: "white",
+          }}
+        />
+        <MainNavigator.Screen name="Register" component={RegisterScreen} 
+        options={{
+          headerStyle: { backgroundColor: "#4769E2" },
+          headerTitleStyle: { color: "white" },
+          headerTintColor: "white",
+        }}
+        />
       </MainNavigator.Navigator>
     </NavigationContainer>
   );
