@@ -1,5 +1,5 @@
 // import Category from "../models/category";
-import Job from "../models/meals";
+import Job from "../models/Jobs";
 
 export const JOBS = [
   new Job(
