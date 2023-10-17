@@ -10,22 +10,20 @@ import {
   FlatList,
   TextInput,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+import {LINK_JOB} from "../../store/actions/jobAction"
 
 const FindJobScreen = ({ route, navigation }) => {
-  // const catId = route.params.id;
 
   const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
 
-  console.log(displayedJobs);
-
-  // const attributeItem = ({}) =>
-  //      (<Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>);
   const renderJobItem = ({ itemData }) => (
     <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("FindJobDetailScreen");
-      }}
+
+       onPress={() => {
+       navigation.navigate("FindJobDetailScreen", {
+      id: itemData.id})
+            }}
     >
       <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
         <View style={{ ...styles.postRow, ...styles.postHeader }}>
@@ -36,14 +34,14 @@ const FindJobScreen = ({ route, navigation }) => {
         </View>
         {/* ชื่อหน่วยงาน */}
         <Text style={styles.title} numberOfLines={2}>
-          {itemData.Agency}
+          {itemData.agency}
         </Text>
         {/* ตำแหน่ง */}
-        <Text style={styles.subText}>{itemData.Position}</Text>
+        <Text style={styles.subText}>{itemData.position}</Text>
         {/* ค่าจ้าง */}
-        <Text style={styles.subText}>{itemData.Wages}</Text>
+        <Text style={styles.subText}>{itemData.wages}</Text>
         {/* เงื่อนไข */}
-        {itemData.Attribute.map((attribute, index) => (
+        {itemData.attributes.map((attribute, index) => (
         <Text style={styles.detailText} key={index}>-{attribute}</Text>
       ))}
         {/* <Text style={styles.detailText}>-{itemData.Attribute}</Text> */}

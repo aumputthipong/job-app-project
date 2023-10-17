@@ -51,7 +51,7 @@ export const JOBS = [
     // category
     ["c1"],
     //  JobTitle,
-    "หัวเรื่อง1",
+    "หัวเรื่อง2",
     //  Position,
     "ตำแหน่ง",
     // imageUrl,
@@ -93,7 +93,7 @@ export const JOBS = [
     // category
     ["c1"],
     //  JobTitle,
-    "หัวเรื่อง1",
+    "หัวเรื่อง3",
     //  Position,
     "ตำแหน่ง",
     // imageUrl,
@@ -128,6 +128,7 @@ export const JOBS = [
       "มีประสบการณ์5ปีขึ้นไป",
       "มีประสบการณ์5ปีขึ้นไป",
     ],
+    "พัฒนาเว็บไซต์ของมหาลัยในส่วน Front end ใช้ภาษา HTML CSS JavaScriptเป็นหลัก มีห้องทำงานที่มหาลัยให้แต่สามารถ Work From Home ได้ทำงานตั้งแต่ 9.00 - 17.00 รับทั้งหมด 3 คน",
   ),
   new Job(
     // id
@@ -135,7 +136,7 @@ export const JOBS = [
     // category
     ["c1"],
     //  JobTitle,
-    "หัวเรื่อง1",
+    "หัวเรื่อง4",
     //  Position,
     "ตำแหน่ง",
     // imageUrl,
@@ -170,5 +171,6 @@ export const JOBS = [
       "มีประสบการณ์5ปีขึ้นไป",
       "มีประสบการณ์5ปีขึ้นไป",
     ],
+    "พัฒนาเว็บไซต์ของมหาลัยในส่วน Front end ใช้ภาษา HTML CSS JavaScriptเป็นหลัก มีห้องทำงานที่มหาลัยให้แต่สามารถ Work From Home ได้ทำงานตั้งแต่ 9.00 - 17.00 รับทั้งหมด 3 คน",
   ),
   ]

@@ -9,9 +9,15 @@ import {
   Image,
   TextInput,
 } from "react-native";
-
+import { useSelector } from "react-redux";
 const FindJobDetailScreen = ({ route, navigation }) => {
-  //   const {step, title} = route.params;
+  const jobid = route.params.id;
+  console.log(jobid)
+  const availableJob = useSelector((state) => state.jobs.filteredJobs);
+  const displayedJob = availableJob.find(job => job.id == jobid);
+  console.log("display index :"+displayedJob)
+
+  // const displayedJob = useSelector((state) => state.jobs.selectedJob);
 
   return (
     <View style={styles.screen}>
@@ -22,62 +28,56 @@ const FindJobDetailScreen = ({ route, navigation }) => {
             style={styles.bgImage}
           ></ImageBackground>
         </View>
+         {/* ชื่อหน่วยงาน */}
+         <Text style={styles.jobTitle} >
+          {displayedJob.jobTitle}
+        </Text>
         {/* ชื่อหน่วยงาน */}
-        <Text style={styles.title} numberOfLines={2}>
-          KMITL
+        <Text style={styles.title} >
+          {displayedJob.agency}
         </Text>
         {/* ตำแหน่ง */}
  
       
         <Text style={styles.subTitle}>ตำแหน่ง</Text>
-        <Text style={styles.subText}>Frontend Dev</Text>
+        <Text style={styles.subText}>{displayedJob.position}</Text>
 
         {/* ค่าจ้าง */}
       
         <Text style={styles.subTitle}>รายละเอียดงาน</Text>
         <Text style={styles.subText}>
-          พัฒนาเว็บไซต์ของมหาลัยในส่วน Front end ใช้ภาษา HTML CSS JavaScript
-          เป็นหลัก มีห้องทำงานที่มหาลัยให้แต่สามารถ Work From Home ได้
-          ทำงานตั้งแต่ 9.00 - 17.00 รับทั้งหมด 3 คน
+        {displayedJob.detail}
         </Text>
      {/* ต้องทำเป็นflatlist แสดงคุณสมบัติ */}
         {/* คุณสมบัติ */}
 
         <Text style={styles.subTitle}>คุณสมบัติ:</Text>
 
-        <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
-          ๐ ประสบการณ์ 5ปีขึ้นไป
-        </Text>
-        <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
-          ๐ ประสบการณ์ 5ปีขึ้นไป
-        </Text>
-        <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
-          ๐ ประสบการณ์ 5ปีขึ้นไป
-        </Text>
-        <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
-          ๐ ประสบการณ์ 5ปีขึ้นไป
-        </Text>
-        <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
-          ๐ ประสบการณ์ 5ปีขึ้นไป
-        </Text>
+      {/* เงื่อนไข */}
+      {displayedJob.attributes.map((attribute, index) => (
+        <Text style={styles.subText} key={index}>-{attribute}</Text>
+      ))}
+       
 
         {/* ระยะงาน */}
   
         <Text style={styles.subTitle}>ระยะเวลางาน:</Text>
-        <Text style={styles.subText}>10ปี</Text>
+        <Text style={styles.subText}>{displayedJob.position}</Text>
         {/* ค่าจ้าง */}
 
         <Text style={styles.subTitle}>ค่าจ้าง:</Text>
-        <Text style={styles.subText}>10k</Text>
+        <Text style={styles.subText}>{displayedJob.wages} บาท/{displayedJob.employmentType}</Text>
 
         {/* สวัสดิการ */}
         <Text style={styles.subTitle}>สวัสดิการ</Text>
-        <Text style={styles.subText}>ป่วยไปหาหมอ</Text>
+        {displayedJob.welfareBenefits.map((welfareBenefit, index) => (
+        <Text style={styles.subText} key={index}>-{welfareBenefit}</Text>
+      ))}
         {/* ช่องทางติดต่อ */}
         <Text style={styles.subTitle}>ช่องทางติดต่อ</Text>
-        <Text style={styles.subText}>Email: yoyo</Text>
+        <Text style={styles.subText}>Email: {displayedJob.email}</Text>
 
-        <Text style={styles.subText}>เบอร์โทร: yoyo</Text>
+        <Text style={styles.subText}>เบอร์โทร: {displayedJob.phone}</Text>
 
 {/* กล่องคอมเม้น */}
         <Text style={{ ...styles.subText, ...{ marginTop: 30 } }}>
@@ -142,6 +142,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     
+  },
+  jobTitle:{
+    marginTop: 20,
+    marginLeft: 15,
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "left",
+    color: "black",
   },
   item: {
     backgroundColor: "#f9c2ff",
