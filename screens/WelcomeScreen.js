@@ -10,21 +10,23 @@ const WelcomeScreen = ({route, navigation}) => {
       <Image  style={styles.logo}source={require("../assets/welcomelogo.png")}></Image>
     <Text style={styles.title}>Job Search </Text>
     <Text  style={styles.title}> Application </Text>
-    <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" } }}>
-      <Text style={{...styles.text,...{fontSize:18,color:"blue",marginLeft:20}}}>มีบัญชีแล้ว</Text>
+
+    <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent: "center"}}}>
+      <Text style={{...styles.text,...{fontSize:18,color:"blue",marginLeft:20,marginTop:20}}}>มีบัญชีแล้ว</Text>
       <TouchableOpacity  onPress={() => {
       navigation.navigate("Login");
     }}>
-      <Text style={{...styles.text,...{fontSize:18,marginLeft:10,textDecorationLine:"underline"}}}>เข้าสู่ระบบที่นี่</Text>
+      <Text style={{...styles.text,...{fontSize:18,marginLeft:10,marginTop:20,textDecorationLine: "underline"}}}>เข้าสู่ระบบที่นี่</Text>
 
       </TouchableOpacity>
-    </View>
-    <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" } }}>
-      <Text style={{...styles.text,...{fontSize:18,color:"blue",marginLeft:20}}}>ยังไม่มีบัญชีใช่ไหม</Text>
+    </View> 
+    <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent: "center"}}}>
+      <Text style={{...styles.text,...{fontSize:18,color: "blue",marginLeft:20,marginTop:20}}}>ยังไม่มีบัญชีใช่ไหม</Text>
       <TouchableOpacity  onPress={() => {
-      navigation.navigate("Login");
+      navigation.navigate("Register");
     }}>
-      <Text style={{...styles.text,...{fontSize:18,marginLeft:10,textDecorationLine:"underline"}}}>สมัครสมาชิกที่นี่</Text>
+      <Text style={{...styles.text,...{fontSize:18,marginLeft:10,marginTop:20,textDecorationLine:"underline"}}}>สมัครสมาชิกที่นี่</Text>
+
 
       </TouchableOpacity>
     </View>

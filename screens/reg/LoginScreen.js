@@ -14,7 +14,9 @@ const LoginScreen = ({ route, navigation }) => {
         blurOnSubmit
         autoCapitalize="none"
         autoCorrect={false}
-        keyboardType="number-pad"
+
+        keyboardType="default"
+
         // จำนวนตัวอักษรมากสุด
         maxLength={20}
         placeholder="ชื่อผู้ใช้"
@@ -31,7 +33,9 @@ const LoginScreen = ({ route, navigation }) => {
         blurOnSubmit
         autoCapitalize="none"
         autoCorrect={false}
-        keyboardType="number-pad"
+
+        keyboardType="default"
+
         // จำนวนตัวอักษรมากสุด
         maxLength={20}
         placeholder="รหัสผ่าน"
@@ -45,7 +49,9 @@ const LoginScreen = ({ route, navigation }) => {
       }}>
         <Text style={{...styles.text,...{alignSelf:"center",}}}>เข้าสู่ระบบ</Text>
       </TouchableOpacity>
-      <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" } }}>
+
+      <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" ,justifyContent:"center"} }}>
+
         <Text style={{...styles.text,...{fontSize:18,color:"blue",marginLeft:20}}}>ยังไม่มีบัญชีใช่ไหม</Text>
         <TouchableOpacity  onPress={() => {
         navigation.navigate("Register");

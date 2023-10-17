@@ -7,6 +7,28 @@ const RegisterScreen = ({route, navigation}) => {
 
   return (
     <View style={styles.screen}>
+
+    {/* username */}
+    <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+      <Text style={{ ...styles.text, ...{} }}>ชื่อผู้ใช้</Text>
+
+    </View>
+    <TextInput
+      style={styles.input}
+      blurOnSubmit
+      autoCapitalize="none"
+      autoCorrect={false}
+
+      keyboardType="default"
+
+      // จำนวนตัวอักษรมากสุด
+      maxLength={20}
+      placeholder="ชื่อผู้ใช้"
+      //...เพิ่ม property value และ onChangeText...
+      // value={enteredValue}
+      // onChangeText={numberInputHandler}
+    />
+
         {/* email */}
     <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
       <Text style={{ ...styles.text, ...{} }}>อีเมล</Text>
@@ -16,14 +38,15 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-      keyboardType="number-pad"
+      keyboardType="email-address"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
-      placeholder="ชื่อผู้ใช้"
+      placeholder="อีเมล"
       //...เพิ่ม property value และ onChangeText...
       // value={enteredValue}
       // onChangeText={numberInputHandler}
     />
+
        {/* =ชื่อ */}
        <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
       <Text style={{ ...styles.text, ...{} }}>ชื่อจริง</Text>
@@ -33,10 +56,12 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-      keyboardType="number-pad"
+
+      keyboardType="default"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
-      placeholder="ชื่อผู้ใช้"
+      placeholder="ชื่อจริง"
+
       //...เพิ่ม property value และ onChangeText...
       // value={enteredValue}
       // onChangeText={numberInputHandler}
@@ -50,10 +75,12 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-      keyboardType="number-pad"
+
+      keyboardType="default"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
-      placeholder="ชื่อผู้ใช้"
+      placeholder="นามสกุล"
+
       //...เพิ่ม property value และ onChangeText...
       // value={enteredValue}
       // onChangeText={numberInputHandler}
@@ -67,7 +94,9 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-      keyboardType="number-pad"
+
+      keyboardType="password"
+
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
       placeholder="รหัสผ่าน"
@@ -84,10 +113,12 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-      keyboardType="number-pad"
+
+      keyboardType="default"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
-      placeholder="รหัสผ่าน"
+      placeholder="ยืนยันรหัสผ่าน"
+
       //...เพิ่ม property value และ onChangeText...
       // value={enteredValue}
       // onChangeText={numberInputHandler}
@@ -99,7 +130,9 @@ const RegisterScreen = ({route, navigation}) => {
     }}>
       <Text style={{...styles.text,...{alignSelf:"center",}}}>สมัครสมาชิก</Text>
     </TouchableOpacity>
-    <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" } }}>
+
+    <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent:"center" } }}>
+
       <Text style={{...styles.text,...{fontSize:18,color:"blue",marginLeft:20}}}>มีบัญชีแล้ว</Text>
       <TouchableOpacity  onPress={() => {
       navigation.navigate("Login");
