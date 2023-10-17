@@ -3,14 +3,23 @@ import Job from "../models/meals";
 
 export const JOBS = [
   new Job(
+    // id
     "1",
+    // category
     ["c1"],
+    //  JobTitle,
     "หัวเรื่อง1",
+    //  Position,
     "ตำแหน่ง",
-    "10ปี",
+    // imageUrl,
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg/800px-Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg",
+    // Workperiod,
+    "10ปี",
+    // Agency,
     "kmitl",
+    // Wages,
    100,
+    // WelfareBenefit,
     [
       "Cut the tomatoes and the onion into small pieces.",
       "Boil some water - add salt to it once it boils.",
@@ -20,9 +29,13 @@ export const JOBS = [
       "The sauce will be done once the spaghetti are.",
       "Feel free to add some cheese on top of the finished dish.",
     ],
+    // Email,
     "F123@gmail",
+    // Phone,
     "096xxxxx",
+    // EmploymentType,
     "รายวัน",
+    // Attribute,
     [
       "Cut the tomatoes and the onion into small pieces.",
       "Boil some water - add salt to it once it boils.",

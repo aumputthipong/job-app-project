@@ -11,30 +11,10 @@ import {
 } from "react-native";
 
 const FindJobScreen = ({ route, navigation }) => {
-  // const catId = route.params.id;
   
   const displayedJobs = useSelector(state => state.jobs.filteredJobs);
-  // const displayedMeals =   availableMeals.filter((meal) => meal.categoryIds.indexOf(catId) >= 0
-  // );
-  const DATA = [
-    {
-      id: "1",
-      Agency: "KMITL",
-      position: "Frontend Dev",
-    },
-    {
-      id: "2",
-      Agency: "KMITL",
-      position: "Frontend Dev",
-    },
-    {
-      id: "3",
-      Agency: "KMITL",
-      position: "Frontend Dev",
-    },
-  ];
-  // const attributeItem = ({}) => 
-  //      (<Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>);
+  console.log(displayedJobs)
+
   const Item = ({itemData}) => (
   //   const {step, title} = route.params;
   const DATA = [
