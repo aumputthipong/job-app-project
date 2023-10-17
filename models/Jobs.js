@@ -2,31 +2,33 @@ class Job {
   constructor(
     id,
     category,
-    JobTitle,
-    Position,
+    jobTitle,
+    position,
     imageUrl,
-    Workperiod,
-    Agency,
-    Wages,
-    WelfareBenefit,
-    Email,
-    Phone,
-    EmploymentType,
-    Attribute,
+    workperiod,
+    agency,
+    wages,
+    welfareBenefits,
+    email,
+    phone,
+    employmentType,
+    attributes,
+    detail,
   ) {
     this.id = id;
-    this.JobTitle = JobTitle;
+    this.jobTitle = jobTitle;
     this.category = category;
-    this.Position = Position;
+    this.position = position;
     this.imageUrl = imageUrl;
-    this.Workperiod = Workperiod;
-    this.Agency = Agency;
-    this.Wages = Wages;
-    this.WelfareBenefit = WelfareBenefit;
-    this.Email = Email;
-    this.Phone = Phone;
-    this.EmploymentType = EmploymentType;
-    this.Attribute =Attribute
+    this.workperiod = workperiod;
+    this.agency = agency;
+    this.wages = wages;
+    this.welfareBenefits = welfareBenefits;
+    this.email = email;
+    this.phone = phone;
+    this.employmentType = employmentType;
+    this.attributes =attributes
+    this.detail =detail
   }
 }
 

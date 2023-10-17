@@ -1,8 +1,10 @@
 import { JOBS } from "../../data/dummy-data";
-import { TOGGLE_FAVORITE } from "../actions/mealAction";
+import { TOGGLE_FAVORITE } from "../actions/jobAction";
+import { LINK_JOB } from "../actions/jobAction";
 const initialState = {
     jobs: JOBS ,
     filteredJobs:JOBS ,
+    selectedJob:JOBS[0] ,
     favoriteJobs: []
     };
 
@@ -26,6 +28,12 @@ const initialState = {
                     ...state,
                     favoriteMeals: updatedFavoriteMeals, 
                 };
+                
+                case LINK_JOB:
+                
+                // const selectedJob = [...state.favoriteMeals];
+    
+               
     
             default:
                 return state;

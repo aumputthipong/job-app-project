@@ -7,25 +7,23 @@ import {
   TouchableOpacity,
   ImageBackground,
   Image,
-  FlatList,TextInput,
+  FlatList,
+  TextInput,
 } from "react-native";
-import { useSelector } from "react-redux"; 
-
+import { useSelector,useDispatch } from "react-redux";
+import {LINK_JOB} from "../../store/actions/jobAction"
 
 const FindJobScreen = ({ route, navigation }) => {
-    // const catId = route.params.id;
-  
-  const displayedJobs = useSelector(state => state.jobs.filteredJobs);
 
-  console.log(displayedJobs)
+  const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
 
-    // const attributeItem = ({}) => 
-  //      (<Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>);
-  const Item = ({itemData}) => (
+  const renderJobItem = ({ itemData }) => (
     <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("FindJobDetailScreen");
-      }}
+
+       onPress={() => {
+       navigation.navigate("FindJobDetailScreen", {
+      id: itemData.id})
+            }}
     >
       <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
         <View style={{ ...styles.postRow, ...styles.postHeader }}>
@@ -36,18 +34,18 @@ const FindJobScreen = ({ route, navigation }) => {
         </View>
         {/* ชื่อหน่วยงาน */}
         <Text style={styles.title} numberOfLines={2}>
-               {/* {itemData.title} */}test
+          {itemData.agency}
         </Text>
         {/* ตำแหน่ง */}
-        <Text style={styles.subText}>Frontend Dev</Text>
+        <Text style={styles.subText}>{itemData.position}</Text>
         {/* ค่าจ้าง */}
-        <Text style={styles.subText}>สามารถต่อรองเงินเดือนได้</Text>
+        <Text style={styles.subText}>{itemData.wages}</Text>
         {/* เงื่อนไข */}
-
-        <Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>
-        <Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>
-        <Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>
-        <Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>
+        {itemData.attributes.map((attribute, index) => (
+        <Text style={styles.detailText} key={index}>-{attribute}</Text>
+      ))}
+        {/* <Text style={styles.detailText}>-{itemData.Attribute}</Text> */}
+    
         <Text
           style={{
             ...styles.detailText,
@@ -61,19 +59,19 @@ const FindJobScreen = ({ route, navigation }) => {
   );
   return (
     <View styles={styles.container}>
-         {/* searchbar */}
+      {/* searchbar */}
       <TextInput
-          style={styles.textInput}
-          blurOnSubmit
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="number-pad"
-          maxLength={20}
-          placeholder="ค้นหา"
-          //...เพิ่ม property value และ onChangeText...
-          // value={enteredValue}
-          // onChangeText={numberInputHandler}
-        />
+        style={styles.textInput}
+        blurOnSubmit
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="number-pad"
+        maxLength={20}
+        placeholder="ค้นหา"
+        //...เพิ่ม property value และ onChangeText...
+        // value={enteredValue}
+        // onChangeText={numberInputHandler}
+      />
       <Button
         title="create"
         onPress={() => {
@@ -82,8 +80,10 @@ const FindJobScreen = ({ route, navigation }) => {
       />
       <FlatList
         data={displayedJobs}
-        renderItem={({ item }) => <Item title={item.title} />}
-        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => {
+          return renderJobItem({ itemData: item });
+        }}
+        keyExtractor={(item) => item.id.toString()} // Use toString() to ensure the key is a string
       />
     </View>
   );
@@ -95,19 +95,18 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
   },
-   textInput: {
+  textInput: {
     width: "90%",
     height: "5%",
-    backgroundColor:"white",
+    backgroundColor: "white",
     borderBottomColor: "grey",
     borderBottomWidth: 1,
     marginVertical: 10,
     alignSelf: "left",
-    textAlign:"left",
-    paddingLeft:15,
-    marginLeft:15,
-    borderRadius:20,
-
+    textAlign: "left",
+    paddingLeft: 15,
+    marginLeft: 15,
+    borderRadius: 20,
   },
   item: {
     backgroundColor: "#f9c2ff",
