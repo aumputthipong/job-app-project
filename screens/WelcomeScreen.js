@@ -10,6 +10,7 @@ const WelcomeScreen = ({route, navigation}) => {
       <Image  style={styles.logo}source={require("../assets/welcomelogo.png")}></Image>
     <Text style={styles.title}>Job Search </Text>
     <Text  style={styles.title}> Application </Text>
+
     <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent: "center"}}}>
       <Text style={{...styles.text,...{fontSize:18,color:"blue",marginLeft:20,marginTop:20}}}>มีบัญชีแล้ว</Text>
       <TouchableOpacity  onPress={() => {
@@ -25,6 +26,7 @@ const WelcomeScreen = ({route, navigation}) => {
       navigation.navigate("Register");
     }}>
       <Text style={{...styles.text,...{fontSize:18,marginLeft:10,marginTop:20,textDecorationLine:"underline"}}}>สมัครสมาชิกที่นี่</Text>
+
 
       </TouchableOpacity>
     </View>
