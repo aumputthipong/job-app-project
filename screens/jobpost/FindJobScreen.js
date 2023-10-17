@@ -11,7 +11,11 @@ import {
 } from "react-native";
 
 const FindJobScreen = ({ route, navigation }) => {
-  //   const {step, title} = route.params;
+  // const catId = route.params.id;
+  
+  const displayedJobs = useSelector(state => state.jobs.filteredJobs);
+  // const displayedMeals =   availableMeals.filter((meal) => meal.categoryIds.indexOf(catId) >= 0
+  // );
   const DATA = [
     {
       id: "1",
@@ -29,7 +33,9 @@ const FindJobScreen = ({ route, navigation }) => {
       position: "Frontend Dev",
     },
   ];
-  const Item = ({ Agency }) => (
+  // const attributeItem = ({}) => 
+  //      (<Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>);
+  const Item = ({itemData}) => (
     <TouchableOpacity
       onPress={() => {
         navigation.navigate("FindJobDetailScreen");
