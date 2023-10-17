@@ -1,5 +1,5 @@
 import { JOBS } from "../../data/dummy-data";
-import { TOGGLE_FAVORITE } from "../actions/mealAction";
+import { TOGGLE_FAVORITE } from "../actions/jobAction";
 const initialState = {
     jobs: JOBS ,
     filteredJobs:JOBS ,
@@ -26,6 +26,24 @@ const initialState = {
                     ...state,
                     favoriteMeals: updatedFavoriteMeals, 
                 };
+                
+                // case TOGGLE_FAVORITE:
+                
+                // const selectedJob = [...state.favoriteMeals];
+    
+                // if (favIndex === -1) {
+                //     updatedFavoriteMeals.push(action.mealId);
+                //     console.log('push', updatedFavoriteMeals);
+                //     console.log('favIndex', favIndex);
+                // }
+                // else {
+                //     updatedFavoriteMeals.splice(favIndex, 1);
+                //     console.log('splice');
+                // }
+                // return {
+                //     ...state,
+                //     favoriteMeals: updatedFavoriteMeals, 
+                // };
     
             default:
                 return state;

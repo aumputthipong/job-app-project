@@ -7,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import { useDispatch } from "react-redux";
-import { toggleFavorite } from "../store/actions/mealAction";
+import { toggleFavorite } from "../store/actions/jobAction";
 // import screen ที่เกี่ยวข้อง
 
 import HomeScreen from "../screens/HomeScreen";
