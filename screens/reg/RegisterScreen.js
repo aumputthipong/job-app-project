@@ -1,9 +1,7 @@
 import React from "react";
 import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity} from "react-native";
 
-export const txtEmail = document.querySelector('#txtEmail')
-export const txtPassword = document.querySelector('#txtPassword')
-export const btnReg = document.querySelector('#btnReg')
+
 
 const RegisterScreen = ({route, navigation}) => {
   
