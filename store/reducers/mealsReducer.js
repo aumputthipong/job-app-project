@@ -1,9 +1,9 @@
-import { JOBS } from "../../data/dummy-data";
+import { MEALS } from "../../data/dummy-data";
 import { TOGGLE_FAVORITE } from "../actions/mealAction";
 const initialState = {
-    jobs: JOBS ,
-    filteredJobs:JOBS ,
-    favoriteJobs: []
+    meals: MEALS,
+    filteredMeals: MEALS,
+    favoriteMeals: []
     };
 
     const mealsReducer = (state = initialState, action) => {

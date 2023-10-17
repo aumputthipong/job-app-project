@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import MyNavigator from "./navigation/MyNavigator";
 // ทำrootreducer เชื่อมกับทุกreducer
 const rootReducer = combineReducers({
-  jobs: mealsReducer
+  meals: mealsReducer
   })
 //สร้างstore กลาง 
 const store = createStore(rootReducer);
