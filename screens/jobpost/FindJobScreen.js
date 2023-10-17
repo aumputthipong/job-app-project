@@ -10,6 +10,8 @@ import {
   FlatList,TextInput,
 } from "react-native";
 import { useSelector } from "react-redux"; 
+import { useSelector } from "react-redux"; 
+
 const FindJobScreen = ({ route, navigation }) => {
     // const catId = route.params.id;
   
@@ -34,7 +36,7 @@ const FindJobScreen = ({ route, navigation }) => {
         </View>
         {/* ชื่อหน่วยงาน */}
         <Text style={styles.title} numberOfLines={2}>
-           {/* {itemData.title} */}test
+               {/* {itemData.title} */}test
         </Text>
         {/* ตำแหน่ง */}
         <Text style={styles.subText}>Frontend Dev</Text>
