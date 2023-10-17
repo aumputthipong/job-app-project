@@ -10,7 +10,7 @@ import {
   FlatList,TextInput,
 } from "react-native";
 import { useSelector } from "react-redux"; 
-import { useSelector } from "react-redux"; 
+
 
 const FindJobScreen = ({ route, navigation }) => {
     // const catId = route.params.id;
