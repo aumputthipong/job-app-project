@@ -1,25 +1,29 @@
 import React from "react";
 import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity} from "react-native";
 
+export const txtEmail = document.querySelector('#txtEmail')
+export const txtPassword = document.querySelector('#txtPassword')
+export const btnLog = document.querySelector('#btnLog')
+
 const LoginScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
 
   return (
     <View style={styles.screen}>
       <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-        <Text style={{ ...styles.text, ...{} }}>ชื่อผู้ใช้</Text>
+        <Text style={{ ...styles.text, ...{} }}>อีเมล</Text>
       </View>
       <TextInput
         style={styles.input}
         blurOnSubmit
         autoCapitalize="none"
         autoCorrect={false}
-
+        id="txtEmail"
         keyboardType="default"
 
         // จำนวนตัวอักษรมากสุด
         maxLength={20}
-        placeholder="ชื่อผู้ใช้"
+        placeholder="อีเมล"
         //...เพิ่ม property value และ onChangeText...
         // value={enteredValue}
         // onChangeText={numberInputHandler}
@@ -33,7 +37,7 @@ const LoginScreen = ({ route, navigation }) => {
         blurOnSubmit
         autoCapitalize="none"
         autoCorrect={false}
-
+        id="txtPassword"
         keyboardType="default"
 
         // จำนวนตัวอักษรมากสุด
@@ -47,7 +51,7 @@ const LoginScreen = ({ route, navigation }) => {
       onPress={() => {
         navigation.navigate("BottomTabNav");
       }}>
-        <Text style={{...styles.text,...{alignSelf:"center",}}}>เข้าสู่ระบบ</Text>
+        <Button id="btnLog" style={{...styles.text,...{alignSelf:"center",}}}>เข้าสู่ระบบ</Button>
       </TouchableOpacity>
 
       <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" ,justifyContent:"center"} }}>

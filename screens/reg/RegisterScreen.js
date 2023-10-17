@@ -1,6 +1,10 @@
 import React from "react";
 import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity} from "react-native";
 
+export const txtEmail = document.querySelector('#txtEmail')
+export const txtPassword = document.querySelector('#txtPassword')
+export const btnReg = document.querySelector('#btnReg')
+
 const RegisterScreen = ({route, navigation}) => {
   
 //   const {step, title} = route.params;
@@ -39,6 +43,7 @@ const RegisterScreen = ({route, navigation}) => {
       autoCapitalize="none"
       autoCorrect={false}
       keyboardType="email-address"
+      id="txtEmail"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
       placeholder="อีเมล"
@@ -94,7 +99,7 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-
+      id="txtPassword"
       keyboardType="password"
 
       // จำนวนตัวอักษรมากสุด
@@ -128,7 +133,7 @@ const RegisterScreen = ({route, navigation}) => {
     onPress={() => {
       navigation.navigate("Login");
     }}>
-      <Text style={{...styles.text,...{alignSelf:"center",}}}>สมัครสมาชิก</Text>
+      <Button id="btnReg" style={{...styles.text,...{alignSelf:"center",}}}>สมัครสมาชิก</Button>
     </TouchableOpacity>
 
     <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent:"center" } }}>
