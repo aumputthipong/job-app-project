@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useState }  from "react";
 import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity} from "react-native";
-
+import firebase from '../../database/firebaseDB';
 
 
 const LoginScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const handleLogin = async () => {
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+      navigation.navigate("BottomTabNav");
+      // เข้าสู่ระบบสำเร็จ
+    } catch (error) {
+      // เข้าสู่ระบบไม่สำเร็จ
+      console.log("ไออั้ม");
+      alert("ไออัั้ม");
+      
+    }
+  }
 
   return (
     <View style={styles.screen}>
@@ -18,7 +32,7 @@ const LoginScreen = ({ route, navigation }) => {
         autoCorrect={false}
         id="txtEmail"
         keyboardType="default"
-
+        onChangeText={(text) => setEmail(text)}
         // จำนวนตัวอักษรมากสุด
         maxLength={20}
         placeholder="อีเมล"
@@ -37,7 +51,7 @@ const LoginScreen = ({ route, navigation }) => {
         autoCorrect={false}
         id="txtPassword"
         keyboardType="default"
-
+        onChangeText={(text) => setPassword(text)}
         // จำนวนตัวอักษรมากสุด
         maxLength={20}
         placeholder="รหัสผ่าน"
@@ -46,10 +60,8 @@ const LoginScreen = ({ route, navigation }) => {
         // onChangeText={numberInputHandler}
       />
      <TouchableOpacity style={styles.button}
-      onPress={() => {
-        navigation.navigate("BottomTabNav");
-      }}>
-        <Button id="btnLog" style={{...styles.text,...{alignSelf:"center",}}}>เข้าสู่ระบบ</Button>
+      >
+        <Button id="btnLog" title="เข้าสู่ระบบ" onPress={handleLogin} style={{...styles.text,...{alignSelf:"center",}}}></Button>
       </TouchableOpacity>
 
       <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" ,justifyContent:"center"} }}>
