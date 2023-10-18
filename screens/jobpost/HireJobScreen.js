@@ -69,7 +69,7 @@ const HireJobScreen = ({ route, navigation }) => {
   </TouchableOpacity>
   );
   return (
-    <View styles={styles.container}>
+    <View style={styles.container}>
               <Button
       title="create"
       onPress={() => {
@@ -97,8 +97,7 @@ const HireJobScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor:"#ABA7FA",
   },
   item: {
     backgroundColor: "#f9c2ff",

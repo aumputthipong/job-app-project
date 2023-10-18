@@ -7,7 +7,7 @@ const NotificationScreen = ({route, navigation}) => {
 
   return (
     <View style={styles.screen}>
-    <Text>NotificationScreen</Text>
+    <Text style={styles.text}>NotificationScreen</Text>
     {/* <Button
       title="Go Back to Categories"
       onPress={() => {
@@ -26,7 +26,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor:"#ABA7FA",
   },
+  text: {
+    color: "white",
+  }
 });
 
 export default NotificationScreen;

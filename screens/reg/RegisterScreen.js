@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+
+
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import firebase from '../../database/firebaseDB';
-
+import { Ionicons } from "@expo/vector-icons";
+  
 const RegisterScreen = ({ route, navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,14 +27,23 @@ const RegisterScreen = ({ route, navigation }) => {
       console.error(error);
     }
   }
+  const [showPassword1, setShowPassword1] = useState(false);
+  const togglePasswordVisibility1 = () => {
+    setShowPassword1(!showPassword1);
+  };
+
+  const [showPassword2, setShowPassword2] = useState(false);
+  const togglePasswordVisibility2 = () => {
+    setShowPassword2(!showPassword2);
+  };
 
   return (
     <View style={styles.screen}>
 
+
     {/* username */}
     <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
       <Text style={{ ...styles.text, ...{} }}>ชื่อผู้ใช้</Text>
-
     </View>
     <TextInput
       style={styles.input}
@@ -50,7 +62,7 @@ const RegisterScreen = ({ route, navigation }) => {
       // onChangeText={numberInputHandler}
     />
 
-        {/* email */}
+    {/* email */}
     <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
       <Text style={{ ...styles.text, ...{} }}>อีเมล</Text>
     </View>
@@ -89,7 +101,7 @@ const RegisterScreen = ({ route, navigation }) => {
       // onChangeText={numberInputHandler}
     />
        {/* สกุล*/}
-       <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+    <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
       <Text style={{ ...styles.text, ...{} }}>นามสกุล</Text>
     </View>
     <TextInput
@@ -116,8 +128,12 @@ const RegisterScreen = ({ route, navigation }) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
+
+      secureTextEntry={!showPassword1}
+      keyboardType="default"
+
       onChangeText={(text) => setPassword(text)}
-      keyboardType="password"
+
 
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
@@ -126,8 +142,9 @@ const RegisterScreen = ({ route, navigation }) => {
       // value={enteredValue}
       // onChangeText={numberInputHandler}
     />
+
      {/* ยืนยันรหัสผ่าน */}
-     <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+    <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
       <Text style={styles.text}>ยืนยันรหัสผ่าน</Text>
     </View>
     <TextInput
@@ -135,20 +152,35 @@ const RegisterScreen = ({ route, navigation }) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
+      secureTextEntry={!showPassword2}
       onChangeText={(text) => setConfirmPassword(text)}
       keyboardType="default"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
       placeholder="ยืนยันรหัสผ่าน"
-
       //...เพิ่ม property value และ onChangeText...
       // value={enteredValue}
       // onChangeText={numberInputHandler}
     />
 
+
+    <TouchableOpacity onPress={togglePasswordVisibility1} style={styles.iconButton}>
+      <Ionicons name={showPassword1 ? 'eye' : 'eye-off'} size={20} color="black" />
+    </TouchableOpacity>
+    <TouchableOpacity onPress={togglePasswordVisibility2}  style={{ ...styles.iconButton, top: -142.5 }}>
+      <Ionicons name={showPassword2 ? 'eye' : 'eye-off'} size={20} color="black" />
+    </TouchableOpacity>
+
+    <TouchableOpacity style={styles.button}
+    onPress={() => {
+      navigation.navigate("Login");
+    }}>
+      <Text style={{...styles.text,...{alignSelf:"center",}}}>สมัครสมาชิก</Text>
+
    <TouchableOpacity style={styles.button}
     >
       <Button title="ลงทะเบียน" onPress={handleRegistration} />
+
     </TouchableOpacity>
 
     <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent:"center" } }}>
@@ -170,7 +202,7 @@ const styles = StyleSheet.create({
     paddingTop: "10%",
     flex: 1,
     justifyContent: "flex-start",
-    alignItems: "center",
+    alignItems:"center"
   },
   input: {
     width: "85%",
@@ -181,7 +213,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignSelf: "center",
     textAlign: "left",
-    marginLeft: 15,
     backgroundColor: "white",
   },
   text: {
@@ -199,6 +230,11 @@ const styles = StyleSheet.create({
   },
   postRow: {
     flexDirection: "row",
+  },
+  iconButton: {
+    position: 'relative',
+    left: 150,
+    top: -40,
   },
 });
 

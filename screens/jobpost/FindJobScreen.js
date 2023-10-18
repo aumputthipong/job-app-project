@@ -58,6 +58,7 @@ const FindJobScreen = ({ route, navigation }) => {
     </TouchableOpacity>
   );
   return (
+
     <View styles={styles.container}>
       {/* searchbar */}
       <TextInput
@@ -72,6 +73,7 @@ const FindJobScreen = ({ route, navigation }) => {
         // value={enteredValue}
         // onChangeText={numberInputHandler}
       />
+
       <Button
         title="create"
         onPress={() => {
@@ -92,8 +94,7 @@ const FindJobScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
+    backgroundColor:"#ABA7FA",
   },
   textInput: {
     width: "90%",
@@ -138,6 +139,7 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "flex-end",
     resizeMode: "stretch",
+    borderRadius: 10,
   },
   postRow: {
     flexDirection: "row",

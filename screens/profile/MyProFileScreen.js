@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
+    backgroundColor:"#ABA7FA",
   },
   profileBox: {
     backgroundColor: "#f9c2ff",

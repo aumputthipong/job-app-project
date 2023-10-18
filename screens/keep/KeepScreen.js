@@ -61,7 +61,7 @@ const KeepScreen = ({ route, navigation }) => {
     </TouchableOpacity>
   );
   return (
-    <View styles={{...styles.container,...{ }}}>
+    <View style={styles.screen}>
       <FlatList
         data={DATA}
         renderItem={({ item }) => <Item title={item.title} />}
@@ -72,11 +72,14 @@ const KeepScreen = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  screen: {
+    flex:1,
+    backgroundColor:"#ABA7FA",
+  },
   container: {
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-
   },
   item: {
     backgroundColor: "#f9c2ff",
