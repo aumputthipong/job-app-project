@@ -6,6 +6,7 @@ import firebase from '../../database/firebaseDB';
 import { Ionicons } from "@expo/vector-icons";
   
 const RegisterScreen = ({ route, navigation }) => {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -16,9 +17,19 @@ const RegisterScreen = ({ route, navigation }) => {
   const handleRegistration = async () => {
     try {
       if (password === confirmPassword) {
-        await firebase.auth().createUserWithEmailAndPassword(email, password);
-        navigation.navigate("Login");
+        const response = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        
         // การลงทะเบียนสำเร็จ
+        if (response.user) {
+          // การลงทะเบียนสำเร็จ
+          const user = {
+            email,
+            firstName,
+            lastName,
+          };
+          await firebase.firestore().collection("๊User Info").doc(response.user.uid).set(user);
+          navigation.navigate("Login");
+        }
       } else {
         console.log("รหัสผ่านไม่ตรงกัน");
       }
@@ -41,26 +52,7 @@ const RegisterScreen = ({ route, navigation }) => {
     <View style={styles.screen}>
 
 
-    {/* username */}
-    <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-      <Text style={{ ...styles.text, ...{} }}>ชื่อผู้ใช้</Text>
-    </View>
-    <TextInput
-      style={styles.input}
-      blurOnSubmit
-      autoCapitalize="none"
-      autoCorrect={false}
-
-      keyboardType="default"
-      onChangeText={(text) => setUsername(text)}
-
-      // จำนวนตัวอักษรมากสุด
-      maxLength={20}
-      placeholder="ชื่อผู้ใช้"
-      //...เพิ่ม property value และ onChangeText...
-      // value={enteredValue}
-      // onChangeText={numberInputHandler}
-    />
+    
 
     {/* email */}
     <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
