@@ -8,26 +8,15 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
+import { useSelector } from "react-redux"; 
 
 const KeepScreen = ({ route, navigation }) => {
-  const DATA = [
-    {
-      id: "1",
-      Agency: "KMITL",
-      position: "Frontend Dev",
-    },
-    {
-      id: "2",
-      Agency: "KMITL",
-      position: "Frontend Dev",
-    },
-    {
-      id: "3",
-      Agency: "KMITL",
-      position: "Frontend Dev",
-    },
-  ];
-  const Item = ({ Agency }) => (
+
+  const favoriteJobs = useSelector(state => state.jobs.favoriteJobs)
+  const filteredJobs = useSelector(state => state.jobs.filteredJobs)
+  const favJobs = filteredJobs.filter((job) => favoriteJobs.includes(job.id))
+  console.log(favJobs);
+  const renderKeepItem = ({ itemData }) => (
     <TouchableOpacity
       onPress={() => {
         navigation.navigate("FindJobDetailScreen");
@@ -37,18 +26,17 @@ const KeepScreen = ({ route, navigation }) => {
 
         {/* ชื่อหน่วยงาน */}
         <Text style={styles.title} numberOfLines={2}>
-          KMITL
+        {itemData.agency}
         </Text>
         {/* ตำแหน่ง */}
-        <Text style={styles.subText}>Frontend Dev</Text>
+        <Text style={styles.subText}>{itemData.position}</Text>
         {/* ค่าจ้าง */}
-        <Text style={styles.subText}>สามารถต่อรองเงินเดือนได้</Text>
+        <Text style={styles.subText}>{itemData.wage}บาท/{itemData.employmentType}</Text>
         {/* เงื่อนไข */}
 
-        <Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>
-        <Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>
-        <Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>
-        <Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>
+        {itemData.attributes.map((attribute, index) => (
+        <Text style={styles.detailText} key={index}>-{attribute}</Text>
+      ))}
         <Text
           style={{
             ...styles.detailText,
@@ -63,9 +51,11 @@ const KeepScreen = ({ route, navigation }) => {
   return (
     <View styles={{...styles.container,...{ }}}>
       <FlatList
-        data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
-        keyExtractor={(item) => item.id}
+        data={favJobs}
+        renderItem={({ item }) => {
+          return renderKeepItem({ itemData: item });
+        }}
+        keyExtractor={(item) => item.id.toString()} // Use toString() to ensure the key is a string
       />
     </View>
   );

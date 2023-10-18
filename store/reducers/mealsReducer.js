@@ -12,26 +12,26 @@ const initialState = {
         switch (action.type) {
             case TOGGLE_FAVORITE:
                 
-                const updatedFavoriteMeals = [...state.favoriteMeals];
-                const favIndex = updatedFavoriteMeals.findIndex((mealId) => mealId === action.mealId);
+                const updatedFavoriteJobs = [...state.favoriteJobs];
+                const favIndex = updatedFavoriteJobs.findIndex((jobId) => jobId === action.jobId);
     
                 if (favIndex === -1) {
-                    updatedFavoriteMeals.push(action.mealId);
-                    console.log('push', updatedFavoriteMeals);
+                    updatedFavoriteJobs.push(action.jobId);
+                    console.log('push', updatedFavoriteJobs);
                     console.log('favIndex', favIndex);
                 }
                 else {
-                    updatedFavoriteMeals.splice(favIndex, 1);
+                    updatedFavoriteJobs.splice(favIndex, 1);
                     console.log('splice');
                 }
                 return {
                     ...state,
-                    favoriteMeals: updatedFavoriteMeals, 
+                    favoriteJobs: updatedFavoriteJobs, 
                 };
                 
                 case LINK_JOB:
                 
-                // const selectedJob = [...state.favoriteMeals];
+                // const selectedJob = [...state.favoriteJobs];
     
                
     
