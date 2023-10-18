@@ -31,6 +31,7 @@ const FindJobScreen = ({ route, navigation }) => {
             source={require("../../assets/PostPlaceholder.png")}
             style={styles.bgImage}
           ></ImageBackground>
+          
         </View>
         {/* ชื่อหน่วยงาน */}
         <Text style={styles.title} numberOfLines={2}>
@@ -39,7 +40,7 @@ const FindJobScreen = ({ route, navigation }) => {
         {/* ตำแหน่ง */}
         <Text style={styles.subText}>{itemData.position}</Text>
         {/* ค่าจ้าง */}
-        <Text style={styles.subText}>{itemData.wages}</Text>
+        <Text style={styles.subText}>{itemData.wages} บาท/{itemData.employmentType}</Text>
         {/* เงื่อนไข */}
         {itemData.attributes.map((attribute, index) => (
         <Text style={styles.detailText} key={index}>-{attribute}</Text>
@@ -103,7 +104,6 @@ const styles = StyleSheet.create({
     borderBottomColor: "grey",
     borderBottomWidth: 1,
     marginVertical: 10,
-    alignSelf: "left",
     textAlign: "left",
     paddingLeft: 15,
     marginLeft: 15,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 11,
     color: "#929090",
-    marginHorizontal: 10,
+    marginHorizontal: 10, 
   },
   bgImage: {
     width: "100%",
