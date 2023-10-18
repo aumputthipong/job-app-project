@@ -1,23 +1,47 @@
-import React from "react";
+
+import React, { useState }  from "react";
 import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity} from "react-native";
+import firebase from '../../database/firebaseDB';
+import { Ionicons } from "@expo/vector-icons";
 
 const LoginScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
-
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const handleLogin = async () => {
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+      navigation.navigate("BottomTabNav");
+      // เข้าสู่ระบบสำเร็จ
+    } catch (error) {
+      // เข้าสู่ระบบไม่สำเร็จ
+      console.log("ไออั้ม");
+      alert("ไออัั้ม");
+      
+    }
+  }
+  
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  
   return (
     <View style={styles.screen}>
       <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-        <Text style={{ ...styles.text, ...{} }}>ชื่อผู้ใช้</Text>
+        <Text style={{ ...styles.text, ...{} }}>อีเมล</Text>
       </View>
       <TextInput
         style={styles.input}
         blurOnSubmit
         autoCapitalize="none"
         autoCorrect={false}
-        keyboardType="number-pad"
+        id="txtEmail"
+        keyboardType="default"
+        onChangeText={(text) => setEmail(text)}
         // จำนวนตัวอักษรมากสุด
         maxLength={20}
-        placeholder="ชื่อผู้ใช้"
+        placeholder="อีเมล"
         //...เพิ่ม property value และ onChangeText...
         // value={enteredValue}
         // onChangeText={numberInputHandler}
@@ -31,7 +55,10 @@ const LoginScreen = ({ route, navigation }) => {
         blurOnSubmit
         autoCapitalize="none"
         autoCorrect={false}
-        keyboardType="number-pad"
+        secureTextEntry={!showPassword}
+        id="txtPassword"
+        keyboardType="default"
+        onChangeText={(text) => setPassword(text)}
         // จำนวนตัวอักษรมากสุด
         maxLength={20}
         placeholder="รหัสผ่าน"
@@ -39,13 +66,17 @@ const LoginScreen = ({ route, navigation }) => {
         // value={enteredValue}
         // onChangeText={numberInputHandler}
       />
-     <TouchableOpacity style={styles.button}
-      onPress={() => {
-        navigation.navigate("BottomTabNav");
-      }}>
-        <Text style={{...styles.text,...{alignSelf:"center",}}}>เข้าสู่ระบบ</Text>
+      <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconButton}>
+        <Ionicons name={showPassword ? 'eye' : 'eye-off'} size={20} color="black" />
       </TouchableOpacity>
-      <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" } }}>
+
+     <TouchableOpacity style={styles.button}
+      >
+        <Button id="btnLog" title="เข้าสู่ระบบ" onPress={handleLogin} style={{...styles.text,...{alignSelf:"center",}}}></Button>
+      </TouchableOpacity>
+
+      <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" ,justifyContent:"center"} }}>
+
         <Text style={{...styles.text,...{fontSize:18,color:"blue",marginLeft:20}}}>ยังไม่มีบัญชีใช่ไหม</Text>
         <TouchableOpacity  onPress={() => {
         navigation.navigate("Register");
@@ -73,13 +104,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignSelf: "center",
     textAlign: "left",
-    marginLeft: 15,
     backgroundColor: "white",
   },
   text: {
     textAlign: "left",
     fontSize: 15,
-    
   },
   button: {
     marginVertical:10,  
@@ -93,6 +122,11 @@ const styles = StyleSheet.create({
   postRow: {
     flexDirection: "row",
     // backgroundColor:"red",
+  },
+  iconButton: {
+    position: 'relative',
+    left: 150,
+    top: -40,
   },
 });
 

@@ -1,13 +1,68 @@
-import React from "react";
-import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity} from "react-native";
+import React, { useState } from "react";
 
-const RegisterScreen = ({route, navigation}) => {
+
+import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import firebase from '../../database/firebaseDB';
+import { Ionicons } from "@expo/vector-icons";
   
-//   const {step, title} = route.params;
+const RegisterScreen = ({ route, navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleRegistration = async () => {
+    try {
+      if (password === confirmPassword) {
+        await firebase.auth().createUserWithEmailAndPassword(email, password);
+        navigation.navigate("Login");
+        // การลงทะเบียนสำเร็จ
+      } else {
+        console.log("รหัสผ่านไม่ตรงกัน");
+      }
+    } catch (error) {
+      // การลงทะเบียนไม่สำเร็จ
+      console.error(error);
+    }
+  }
+  const [showPassword1, setShowPassword1] = useState(false);
+  const togglePasswordVisibility1 = () => {
+    setShowPassword1(!showPassword1);
+  };
+
+  const [showPassword2, setShowPassword2] = useState(false);
+  const togglePasswordVisibility2 = () => {
+    setShowPassword2(!showPassword2);
+  };
 
   return (
     <View style={styles.screen}>
-        {/* email */}
+
+
+    {/* username */}
+    <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+      <Text style={{ ...styles.text, ...{} }}>ชื่อผู้ใช้</Text>
+    </View>
+    <TextInput
+      style={styles.input}
+      blurOnSubmit
+      autoCapitalize="none"
+      autoCorrect={false}
+
+      keyboardType="default"
+      onChangeText={(text) => setUsername(text)}
+
+      // จำนวนตัวอักษรมากสุด
+      maxLength={20}
+      placeholder="ชื่อผู้ใช้"
+      //...เพิ่ม property value และ onChangeText...
+      // value={enteredValue}
+      // onChangeText={numberInputHandler}
+    />
+
+    {/* email */}
     <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
       <Text style={{ ...styles.text, ...{} }}>อีเมล</Text>
     </View>
@@ -16,14 +71,16 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-      keyboardType="number-pad"
+      keyboardType="email-address"
+      onChangeText={(text) => setEmail(text)}
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
-      placeholder="ชื่อผู้ใช้"
+      placeholder="อีเมล"
       //...เพิ่ม property value และ onChangeText...
       // value={enteredValue}
       // onChangeText={numberInputHandler}
     />
+
        {/* =ชื่อ */}
        <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
       <Text style={{ ...styles.text, ...{} }}>ชื่อจริง</Text>
@@ -33,16 +90,18 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-      keyboardType="number-pad"
+      onChangeText={(text) => setFirstName(text)}
+      keyboardType="default"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
-      placeholder="ชื่อผู้ใช้"
+      placeholder="ชื่อจริง"
+
       //...เพิ่ม property value และ onChangeText...
       // value={enteredValue}
       // onChangeText={numberInputHandler}
     />
        {/* สกุล*/}
-       <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+    <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
       <Text style={{ ...styles.text, ...{} }}>นามสกุล</Text>
     </View>
     <TextInput
@@ -50,10 +109,12 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-      keyboardType="number-pad"
+      onChangeText={(text) => setLastName(text)}
+      keyboardType="default"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
-      placeholder="ชื่อผู้ใช้"
+      placeholder="นามสกุล"
+
       //...เพิ่ม property value และ onChangeText...
       // value={enteredValue}
       // onChangeText={numberInputHandler}
@@ -67,24 +128,13 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-      keyboardType="number-pad"
-      // จำนวนตัวอักษรมากสุด
-      maxLength={20}
-      placeholder="รหัสผ่าน"
-      //...เพิ่ม property value และ onChangeText...
-      // value={enteredValue}
-      // onChangeText={numberInputHandler}
-    />
-     {/* ยืนยันรหัสผ่าน */}
-     <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-      <Text style={styles.text}>ยืนยันรหัสผ่าน</Text>
-    </View>
-    <TextInput
-      style={styles.input}
-      blurOnSubmit
-      autoCapitalize="none"
-      autoCorrect={false}
-      keyboardType="number-pad"
+
+      secureTextEntry={!showPassword1}
+      keyboardType="default"
+
+      onChangeText={(text) => setPassword(text)}
+
+
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
       placeholder="รหัสผ่าน"
@@ -93,13 +143,48 @@ const RegisterScreen = ({route, navigation}) => {
       // onChangeText={numberInputHandler}
     />
 
-   <TouchableOpacity style={styles.button}
+     {/* ยืนยันรหัสผ่าน */}
+    <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+      <Text style={styles.text}>ยืนยันรหัสผ่าน</Text>
+    </View>
+    <TextInput
+      style={styles.input}
+      blurOnSubmit
+      autoCapitalize="none"
+      autoCorrect={false}
+      secureTextEntry={!showPassword2}
+      onChangeText={(text) => setConfirmPassword(text)}
+      keyboardType="default"
+      // จำนวนตัวอักษรมากสุด
+      maxLength={20}
+      placeholder="ยืนยันรหัสผ่าน"
+      //...เพิ่ม property value และ onChangeText...
+      // value={enteredValue}
+      // onChangeText={numberInputHandler}
+    />
+
+
+    <TouchableOpacity onPress={togglePasswordVisibility1} style={styles.iconButton}>
+      <Ionicons name={showPassword1 ? 'eye' : 'eye-off'} size={20} color="black" />
+    </TouchableOpacity>
+    <TouchableOpacity onPress={togglePasswordVisibility2}  style={{ ...styles.iconButton, top: -142.5 }}>
+      <Ionicons name={showPassword2 ? 'eye' : 'eye-off'} size={20} color="black" />
+    </TouchableOpacity>
+
+    <TouchableOpacity style={styles.button}
     onPress={() => {
       navigation.navigate("Login");
     }}>
       <Text style={{...styles.text,...{alignSelf:"center",}}}>สมัครสมาชิก</Text>
+
+   <TouchableOpacity style={styles.button}
+    >
+      <Button title="ลงทะเบียน" onPress={handleRegistration} />
+
     </TouchableOpacity>
-    <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" } }}>
+
+    <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent:"center" } }}>
+
       <Text style={{...styles.text,...{fontSize:18,color:"blue",marginLeft:20}}}>มีบัญชีแล้ว</Text>
       <TouchableOpacity  onPress={() => {
       navigation.navigate("Login");
@@ -114,10 +199,10 @@ const RegisterScreen = ({route, navigation}) => {
 
 const styles = StyleSheet.create({
   screen: {
-    paddingTop:"10%",
+    paddingTop: "10%",
     flex: 1,
     justifyContent: "flex-start",
-    alignItems: "center",
+    alignItems:"center"
   },
   input: {
     width: "85%",
@@ -128,26 +213,28 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignSelf: "center",
     textAlign: "left",
-    marginLeft: 15,
     backgroundColor: "white",
   },
   text: {
     textAlign: "left",
     fontSize: 15,
-    
   },
   button: {
-    marginVertical:10,  
+    marginVertical: 10,
     backgroundColor: "#BEBDFF",
-    color: "red",
-    width:"50%",
-    height:"5%",
-    borderRadius:10,
-    paddingTop:"1.5%"
+    width: "50%",
+    height: 40,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   postRow: {
     flexDirection: "row",
-    // backgroundColor:"red",
+  },
+  iconButton: {
+    position: 'relative',
+    left: 150,
+    top: -40,
   },
 });
 

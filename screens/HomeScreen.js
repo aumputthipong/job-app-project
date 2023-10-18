@@ -26,7 +26,7 @@ const HomeScreen = ({navigation}) => {
   ];
 
   return (
-    <View>
+    <View style={styles.screen}>
     <TouchableOpacity
       style={styles.gridItem}
       onPress={() => {
@@ -41,7 +41,7 @@ const HomeScreen = ({navigation}) => {
       </View>
 
       <Text style={styles.title} numberOfLines={2}>
-        Find Job
+        Find Jobs
       </Text>
     </TouchableOpacity>
     <TouchableOpacity
@@ -58,7 +58,7 @@ const HomeScreen = ({navigation}) => {
       </View>
 
       <Text style={styles.title} numberOfLines={2}>
-        Hire Job
+        Hire Jobs
       </Text>
     </TouchableOpacity>
 
@@ -70,9 +70,8 @@ const HomeScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor:"#BEBDFF",
+    paddingTop:60,
+    backgroundColor:"#ABA7FA",
   },
   gridItem: {
     // flex: 1,
@@ -96,7 +95,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: "bold",
-    textAlign: "right",
+    textAlign: "center",
+    color: "white"
   },
   bgImage: {
     width: "85%",

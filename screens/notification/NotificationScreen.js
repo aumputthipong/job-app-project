@@ -59,6 +59,7 @@ const NotificationScreen = ({route, navigation}) => {
     </TouchableOpacity>
   );
   return (
+
     <View styles={styles.container}>
       <FlatList
         data={displayedJobs}
@@ -68,6 +69,20 @@ const NotificationScreen = ({route, navigation}) => {
         keyExtractor={(item) => item.id.toString()} // Use toString() to ensure the key is a string
       />
     </View>
+
+//     <View style={styles.screen}>
+//     <Text style={styles.text}>NotificationScreen</Text>
+//     {/* <Button
+//       title="Go Back to Categories"
+//       onPress={() => {
+//         // เขียนโค้ดเพิ่ม
+//         navigation.navigate("Categories", {
+//           prev: "MealDetail",
+//         });
+//       }}
+//     /> */}
+//   </View>
+
   );
 };
 
@@ -76,7 +91,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
+    backgroundColor:"#ABA7FA",
   },
+
   textInput: {
     width: "90%",
     height: "5%",
@@ -127,6 +144,10 @@ const styles = StyleSheet.create({
   postHeader: {
     height: "50%",
   },
+  text: {
+    color: "white",
+  },
+
 });
 
 export default NotificationScreen;
