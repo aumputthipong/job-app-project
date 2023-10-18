@@ -1,11 +1,29 @@
-import React from "react";
-import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity} from "react-native";
+import React, { useState } from "react";
+import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import firebase from '../../database/firebaseDB';
 
+const RegisterScreen = ({ route, navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-
-const RegisterScreen = ({route, navigation}) => {
-  
-//   const {step, title} = route.params;
+  const handleRegistration = async () => {
+    try {
+      if (password === confirmPassword) {
+        await firebase.auth().createUserWithEmailAndPassword(email, password);
+        navigation.navigate("Login");
+        // การลงทะเบียนสำเร็จ
+      } else {
+        console.log("รหัสผ่านไม่ตรงกัน");
+      }
+    } catch (error) {
+      // การลงทะเบียนไม่สำเร็จ
+      console.error(error);
+    }
+  }
 
   return (
     <View style={styles.screen}>
@@ -22,6 +40,7 @@ const RegisterScreen = ({route, navigation}) => {
       autoCorrect={false}
 
       keyboardType="default"
+      onChangeText={(text) => setUsername(text)}
 
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
@@ -41,7 +60,7 @@ const RegisterScreen = ({route, navigation}) => {
       autoCapitalize="none"
       autoCorrect={false}
       keyboardType="email-address"
-      id="txtEmail"
+      onChangeText={(text) => setEmail(text)}
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
       placeholder="อีเมล"
@@ -59,7 +78,7 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-
+      onChangeText={(text) => setFirstName(text)}
       keyboardType="default"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
@@ -78,7 +97,7 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-
+      onChangeText={(text) => setLastName(text)}
       keyboardType="default"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
@@ -97,7 +116,7 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-      id="txtPassword"
+      onChangeText={(text) => setPassword(text)}
       keyboardType="password"
 
       // จำนวนตัวอักษรมากสุด
@@ -116,7 +135,7 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-
+      onChangeText={(text) => setConfirmPassword(text)}
       keyboardType="default"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
@@ -128,10 +147,8 @@ const RegisterScreen = ({route, navigation}) => {
     />
 
    <TouchableOpacity style={styles.button}
-    onPress={() => {
-      navigation.navigate("Login");
-    }}>
-      <Button id="btnReg" style={{...styles.text,...{alignSelf:"center",}}}>สมัครสมาชิก</Button>
+    >
+      <Button title="ลงทะเบียน" onPress={handleRegistration} />
     </TouchableOpacity>
 
     <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent:"center" } }}>
@@ -150,7 +167,7 @@ const RegisterScreen = ({route, navigation}) => {
 
 const styles = StyleSheet.create({
   screen: {
-    paddingTop:"10%",
+    paddingTop: "10%",
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
@@ -170,20 +187,18 @@ const styles = StyleSheet.create({
   text: {
     textAlign: "left",
     fontSize: 15,
-    
   },
   button: {
-    marginVertical:10,  
+    marginVertical: 10,
     backgroundColor: "#BEBDFF",
-    color: "red",
-    width:"50%",
-    height:"5%",
-    borderRadius:10,
-    paddingTop:"1.5%"
+    width: "50%",
+    height: 40,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   postRow: {
     flexDirection: "row",
-    // backgroundColor:"red",
   },
 });
 
