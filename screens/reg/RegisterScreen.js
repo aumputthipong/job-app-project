@@ -1,9 +1,32 @@
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
-const RegisterScreen = ({route, navigation}) => {
+
+import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import firebase from '../../database/firebaseDB';
+import { Ionicons } from "@expo/vector-icons";
   
+const RegisterScreen = ({ route, navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleRegistration = async () => {
+    try {
+      if (password === confirmPassword) {
+        await firebase.auth().createUserWithEmailAndPassword(email, password);
+        navigation.navigate("Login");
+        // การลงทะเบียนสำเร็จ
+      } else {
+        console.log("รหัสผ่านไม่ตรงกัน");
+      }
+    } catch (error) {
+      // การลงทะเบียนไม่สำเร็จ
+      console.error(error);
+    }
+  }
   const [showPassword1, setShowPassword1] = useState(false);
   const togglePasswordVisibility1 = () => {
     setShowPassword1(!showPassword1);
@@ -29,6 +52,7 @@ const RegisterScreen = ({route, navigation}) => {
       autoCorrect={false}
 
       keyboardType="default"
+      onChangeText={(text) => setUsername(text)}
 
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
@@ -48,6 +72,7 @@ const RegisterScreen = ({route, navigation}) => {
       autoCapitalize="none"
       autoCorrect={false}
       keyboardType="email-address"
+      onChangeText={(text) => setEmail(text)}
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
       placeholder="อีเมล"
@@ -65,7 +90,7 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-
+      onChangeText={(text) => setFirstName(text)}
       keyboardType="default"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
@@ -84,7 +109,7 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-
+      onChangeText={(text) => setLastName(text)}
       keyboardType="default"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
@@ -103,8 +128,12 @@ const RegisterScreen = ({route, navigation}) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
+
       secureTextEntry={!showPassword1}
       keyboardType="default"
+
+      onChangeText={(text) => setPassword(text)}
+
 
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
@@ -124,6 +153,7 @@ const RegisterScreen = ({route, navigation}) => {
       autoCapitalize="none"
       autoCorrect={false}
       secureTextEntry={!showPassword2}
+      onChangeText={(text) => setConfirmPassword(text)}
       keyboardType="default"
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
@@ -132,6 +162,7 @@ const RegisterScreen = ({route, navigation}) => {
       // value={enteredValue}
       // onChangeText={numberInputHandler}
     />
+
 
     <TouchableOpacity onPress={togglePasswordVisibility1} style={styles.iconButton}>
       <Ionicons name={showPassword1 ? 'eye' : 'eye-off'} size={20} color="black" />
@@ -145,6 +176,11 @@ const RegisterScreen = ({route, navigation}) => {
       navigation.navigate("Login");
     }}>
       <Text style={{...styles.text,...{alignSelf:"center",}}}>สมัครสมาชิก</Text>
+
+   <TouchableOpacity style={styles.button}
+    >
+      <Button title="ลงทะเบียน" onPress={handleRegistration} />
+
     </TouchableOpacity>
 
     <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent:"center" } }}>
@@ -163,7 +199,7 @@ const RegisterScreen = ({route, navigation}) => {
 
 const styles = StyleSheet.create({
   screen: {
-    paddingTop:"10%",
+    paddingTop: "10%",
     flex: 1,
     justifyContent: "flex-start",
     alignItems:"center"
@@ -184,17 +220,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   button: {
-    marginBottom:10,  
+    marginVertical: 10,
     backgroundColor: "#BEBDFF",
-    color: "red",
-    width:"50%",
-    height:"5%",
-    borderRadius:10,
-    paddingTop:"1.5%"
+    width: "50%",
+    height: 40,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   postRow: {
     flexDirection: "row",
-    // backgroundColor:"red",
   },
   iconButton: {
     position: 'relative',

@@ -8,32 +8,22 @@ import {
   ImageBackground,
   Image,
   FlatList,
+  TextInput,
 } from "react-native";
+import { useSelector,useDispatch } from "react-redux";
+import {LINK_JOB} from "../../store/actions/jobAction"
 
 const FindJobScreen = ({ route, navigation }) => {
-  //   const {step, title} = route.params;
-  const DATA = [
-    {
-      id: "1",
-      Agency: "KMITL",
-      position: "Frontend Dev",
-    },
-    {
-      id: "2",
-      Agency: "KMITL",
-      position: "Frontend Dev",
-    },
-    {
-      id: "3",
-      Agency: "KMITL",
-      position: "Frontend Dev",
-    },
-  ];
-  const Item = ({ Agency }) => (
+
+  const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
+
+  const renderJobItem = ({ itemData }) => (
     <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("FindJobDetailScreen");
-      }}
+
+       onPress={() => {
+       navigation.navigate("FindJobDetailScreen", {
+      id: itemData.id})
+            }}
     >
       <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
         <View style={{ ...styles.postRow, ...styles.postHeader }}>
@@ -44,18 +34,18 @@ const FindJobScreen = ({ route, navigation }) => {
         </View>
         {/* ชื่อหน่วยงาน */}
         <Text style={styles.title} numberOfLines={2}>
-          KMITL
+          {itemData.agency}
         </Text>
         {/* ตำแหน่ง */}
-        <Text style={styles.subText}>Frontend Dev</Text>
+        <Text style={styles.subText}>{itemData.position}</Text>
         {/* ค่าจ้าง */}
-        <Text style={styles.subText}>สามารถต่อรองเงินเดือนได้</Text>
+        <Text style={styles.subText}>{itemData.wages}</Text>
         {/* เงื่อนไข */}
-
-        <Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>
-        <Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>
-        <Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>
-        <Text style={styles.detailText}>-มีประสบการณ์5ปีขึ้นไป</Text>
+        {itemData.attributes.map((attribute, index) => (
+        <Text style={styles.detailText} key={index}>-{attribute}</Text>
+      ))}
+        {/* <Text style={styles.detailText}>-{itemData.Attribute}</Text> */}
+    
         <Text
           style={{
             ...styles.detailText,
@@ -68,7 +58,22 @@ const FindJobScreen = ({ route, navigation }) => {
     </TouchableOpacity>
   );
   return (
-    <View style={styles.container}>
+
+    <View styles={styles.container}>
+      {/* searchbar */}
+      <TextInput
+        style={styles.textInput}
+        blurOnSubmit
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="number-pad"
+        maxLength={20}
+        placeholder="ค้นหา"
+        //...เพิ่ม property value และ onChangeText...
+        // value={enteredValue}
+        // onChangeText={numberInputHandler}
+      />
+
       <Button
         title="create"
         onPress={() => {
@@ -76,9 +81,11 @@ const FindJobScreen = ({ route, navigation }) => {
         }}
       />
       <FlatList
-        data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
-        keyExtractor={(item) => item.id}
+        data={displayedJobs}
+        renderItem={({ item }) => {
+          return renderJobItem({ itemData: item });
+        }}
+        keyExtractor={(item) => item.id.toString()} // Use toString() to ensure the key is a string
       />
     </View>
   );
@@ -88,6 +95,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor:"#ABA7FA",
+  },
+  textInput: {
+    width: "90%",
+    height: "5%",
+    backgroundColor: "white",
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+    marginVertical: 10,
+    alignSelf: "left",
+    textAlign: "left",
+    paddingLeft: 15,
+    marginLeft: 15,
+    borderRadius: 20,
   },
   item: {
     backgroundColor: "#f9c2ff",
