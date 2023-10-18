@@ -10,6 +10,7 @@ import {
   FlatList,
   SafeAreaView,
   ScrollView,
+  TextInput,
 } from "react-native";
 
 const HireJobScreen = ({ route, navigation }) => {
@@ -70,18 +71,29 @@ const HireJobScreen = ({ route, navigation }) => {
   );
   return (
     <View style={styles.container}>
-              <Button
-      title="create"
-      onPress={() => {
-        navigation.navigate("CreateHire", {
-        });
-      }}
-    />
-             <FlatList
-          data={DATA}
-          renderItem={({item}) => <Item title={item.title} />}
-          keyExtractor={item => item.id}
-            />
+      {/* searchbar */}
+      <TextInput
+        style={styles.textInput}
+        blurOnSubmit
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="default"
+        maxLength={20}
+        placeholder="ค้นหา"
+        //...เพิ่ม property value และ onChangeText...
+        // value={enteredValue}
+        // onChangeText={numberInputHandler}
+      />
+
+      <TouchableOpacity style={styles.button}>
+        <Text onPress={() => {navigation.navigate("CreateHire", {});}} style={{...{color: "white"}}}>สร้างโพสต์</Text>
+      </TouchableOpacity>
+
+      <FlatList
+        data={DATA}
+        renderItem={({item}) => <Item title={item.title} />}
+        keyExtractor={item => item.id}
+      />
      
     </View>
     //     <SafeAreaView style={styles.container}>
@@ -98,6 +110,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor:"#ABA7FA",
+  },
+  textInput: {
+    width: "90%",
+    height: "5%",
+    backgroundColor: "white",
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+    marginVertical: 10,
+    alignSelf: "left",
+    textAlign: "left",
+    paddingLeft: 15,
+    marginLeft: 15,
+    borderRadius: 20,
   },
   item: {
     backgroundColor: "#f9c2ff",
@@ -123,7 +148,6 @@ const styles = StyleSheet.create({
     fontSize:11,
     color:"#929090",
     marginLeft:10,
-    
   },
   bgImage: {
     width: "100%",
@@ -138,6 +162,15 @@ const styles = StyleSheet.create({
   },
   mealHeader: {
     height: "50%",
+  },
+  button: { 
+    backgroundColor: "#5A6BF5",
+    width:"50%",
+    height: 40,
+    borderRadius:10,
+    padding:"2.5%",
+    alignItems: "center",
+    alignSelf:"center",
   },
 });
 

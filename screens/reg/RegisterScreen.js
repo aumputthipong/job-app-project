@@ -114,7 +114,6 @@ const RegisterScreen = ({ route, navigation }) => {
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
       placeholder="นามสกุล"
-
       //...เพิ่ม property value และ onChangeText...
       // value={enteredValue}
       // onChangeText={numberInputHandler}
@@ -128,13 +127,9 @@ const RegisterScreen = ({ route, navigation }) => {
       blurOnSubmit
       autoCapitalize="none"
       autoCorrect={false}
-
       secureTextEntry={!showPassword1}
       keyboardType="default"
-
       onChangeText={(text) => setPassword(text)}
-
-
       // จำนวนตัวอักษรมากสุด
       maxLength={20}
       placeholder="รหัสผ่าน"
@@ -163,36 +158,28 @@ const RegisterScreen = ({ route, navigation }) => {
       // onChangeText={numberInputHandler}
     />
 
-
-    <TouchableOpacity onPress={togglePasswordVisibility1} style={styles.iconButton}>
-      <Ionicons name={showPassword1 ? 'eye' : 'eye-off'} size={20} color="black" />
-    </TouchableOpacity>
-    <TouchableOpacity onPress={togglePasswordVisibility2}  style={{ ...styles.iconButton, top: -142.5 }}>
-      <Ionicons name={showPassword2 ? 'eye' : 'eye-off'} size={20} color="black" />
-    </TouchableOpacity>
-
-    <TouchableOpacity style={styles.button}
+   <TouchableOpacity style={styles.button}
     onPress={() => {
       navigation.navigate("Login");
     }}>
-      <Text style={{...styles.text,...{alignSelf:"center",}}}>สมัครสมาชิก</Text>
-
-   <TouchableOpacity style={styles.button}
-    >
-      <Button title="ลงทะเบียน" onPress={handleRegistration} />
-
+      <Text onPress={handleRegistration} style={{...styles.text,...{alignSelf:"center",}}}>ลงทะเบียน</Text>
     </TouchableOpacity>
 
     <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent:"center" } }}>
-
       <Text style={{...styles.text,...{fontSize:18,color:"blue",marginLeft:20}}}>มีบัญชีแล้ว</Text>
       <TouchableOpacity  onPress={() => {
       navigation.navigate("Login");
     }}>
       <Text style={{...styles.text,...{fontSize:18,marginLeft:10,textDecorationLine:"underline"}}}>เข้าสู่ระบบที่นี่</Text>
-
       </TouchableOpacity>
     </View>
+
+    <TouchableOpacity onPress={togglePasswordVisibility1} style={styles.iconButton}>
+      <Ionicons name={showPassword1 ? 'eye' : 'eye-off'} size={20} color="black" />
+    </TouchableOpacity>
+    <TouchableOpacity onPress={togglePasswordVisibility2}  style={{ ...styles.iconButton, top: -145 }}>
+      <Ionicons name={showPassword2 ? 'eye' : 'eye-off'} size={20} color="black" />
+    </TouchableOpacity>
   </View>
   );
 };
@@ -233,8 +220,8 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     position: 'relative',
-    left: 150,
-    top: -40,
+    left: 145,
+    top: -205,
   },
 });
 
