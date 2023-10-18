@@ -13,6 +13,7 @@ const MyProfileScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
 
   return (
+    <ScrollView>
     <View style={styles.screen}>
       {/*1st profileBox */}
       <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" } }}>
@@ -91,6 +92,7 @@ const MyProfileScreen = ({ route, navigation }) => {
         </View>
       </View>
     </View>
+    </ScrollView>
   );
 };
 
