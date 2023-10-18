@@ -12,12 +12,9 @@ import {
 import { useSelector } from "react-redux";
 const FindJobDetailScreen = ({ route, navigation }) => {
   const jobid = route.params.id;
-  console.log(jobid)
   const availableJob = useSelector((state) => state.jobs.filteredJobs);
   const displayedJob = availableJob.find(job => job.id == jobid);
-  console.log("display index :"+displayedJob)
-
-  // const displayedJob = useSelector((state) => state.jobs.selectedJob);
+  // console.log("display index :"+displayedJob)
 
   return (
     <View style={styles.screen}>

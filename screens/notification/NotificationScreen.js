@@ -46,7 +46,6 @@ const NotificationScreen = ({route, navigation}) => {
         {itemData.attributes.map((attribute, index) => (
         <Text style={styles.detailText} key={index}>-{attribute}</Text>
       ))}
-        {/* <Text style={styles.detailText}>-{itemData.Attribute}</Text> */}
     
         <Text
           style={{
@@ -61,12 +60,6 @@ const NotificationScreen = ({route, navigation}) => {
   );
   return (
     <View styles={styles.container}>
-      {/* <Button
-        title="create"
-        onPress={() => {
-          navigation.navigate("CreateFind", {});
-        }}
-      /> */}
       <FlatList
         data={displayedJobs}
         renderItem={({ item }) => {

@@ -15,7 +15,7 @@ const KeepScreen = ({ route, navigation }) => {
   const favoriteJobs = useSelector(state => state.jobs.favoriteJobs)
   const filteredJobs = useSelector(state => state.jobs.filteredJobs)
   const favJobs = filteredJobs.filter((job) => favoriteJobs.includes(job.id))
-  console.log(favJobs);
+  // console.log(favJobs);
   const renderKeepItem = ({ itemData }) => (
     <TouchableOpacity
       onPress={() => {
