@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   },
   bgImage: {
     width: 250,
-    height: 250,
+    height: 180,
     justifyContent: "flex-end",
     resizeMode: "stretch",
   },
