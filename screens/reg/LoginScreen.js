@@ -9,7 +9,6 @@ const LoginScreen = ({ route, navigation }) => {
   const [password, setPassword] = useState('');
   const handleLogin = async () => {
     try {
-      
       await firebase.auth().signInWithEmailAndPassword(email, password);
       navigation.navigate("BottomTabNav");
       // เข้าสู่ระบบสำเร็จ

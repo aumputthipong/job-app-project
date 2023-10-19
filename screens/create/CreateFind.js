@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity,Image} from "react-native";
-// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity,Image,ScrollView} from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 const CreateFind = ({ route, navigation }) => {
@@ -19,7 +18,7 @@ const CreateFind = ({ route, navigation }) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTpyes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing:true,
-      aspect:[4,3],
+      aspect:[12,8],
       quality:1,
     });
 
@@ -31,49 +30,133 @@ const CreateFind = ({ route, navigation }) => {
     }
   };
   if(hasGalleryPermission ===false){
-    return <Text>No access To Internal Storage</Text>
+    return  alert("ไม่ได้รับอนุญาติให้เข้าถึงรูปภาพ");
   }
    
-
-  
 return (
-  // <View style={styles.screen}>
-  //     {/* email */}
-  // <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-  //   <Text style={{ ...styles.text, ...{} }}>ชื่อโพส</Text>
-  // </View>
-  <View style={{flex:1,justifyContent:'center'}}>
-  <Button title="Pick Image" onPress={()=> pickImage() } />
-    {image && <Image source={{uri:image}} style={{flex:1/2}} />}
+  <ScrollView style={{}}>
 
+  <View style={styles.screen}>
+      {/* JobTitle */}
+  <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+    <Text style={{ ...styles.text, ...{} }}>ชื่อโพส</Text>
   </View>
-  /* <TextInput
+   <TextInput
     style={styles.input}
     blurOnSubmit
     autoCapitalize="none"
     autoCorrect={false}
     keyboardType="number-pad"
-    // จำนวนตัวอักษรมากสุด
+    maxLength={20}
+    placeholder="ชื่อโพส"
+  /> 
+  <View>
+  <Button title="Pick Image" onPress={()=> pickImage() } />
+    {image && <Image source={{uri:image}} style={styles.bgImage} />}
+
+  </View>
+
+   {/* ตำแหน่ง*/}
+  <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+    <Text style={{ ...styles.text, ...{} }}>ตำแหน่งที่รับ</Text>
+  </View>
+   <TextInput
+    style={styles.input}
+    blurOnSubmit
+    autoCapitalize="none"
+    autoCorrect={false}
+    keyboardType="number-pad"
     maxLength={20}
     placeholder="ชื่อผู้ใช้"
-    //...เพิ่ม property value และ onChangeText...
-    // value={enteredValue}
-    // onChangeText={numberInputHandler}
-  /> */
-
-
-
+  /> 
+   {/* ตำแหน่ง*/}
+    <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+    <Text style={{ ...styles.text, ...{} }}>หน่วยงาน</Text>
+  </View>
+   <TextInput
+    style={styles.input}
+    blurOnSubmit
+    autoCapitalize="none"
+    autoCorrect={false}
+    keyboardType="number-pad"
+    maxLength={20}
+    placeholder="ชื่อผู้ใช้"
+  />
+  {/* ประเภทการจ้าง (ควรเป็นchoice dropdown ,checkbox)รายเดือน,รายวัน,ต่อชิ้นงาน */}
+  <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+    <Text style={{ ...styles.text, ...{} }}>ประเภทการจ้าง</Text>
+  </View>
+   <TextInput
+    style={styles.input}
+    blurOnSubmit
+    autoCapitalize="none"
+    autoCorrect={false}
+    keyboardType="number-pad"
+    maxLength={20}
+    placeholder="ชื่อผู้ใช้"
+  /> 
+   {/* ค่าจ้าง*/}
+    <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+    <Text style={{ ...styles.text, ...{} }}>ค่าจ้าง</Text>
+  </View>
+   <TextInput
+    style={styles.input}
+    blurOnSubmit
+    autoCapitalize="none"
+    autoCorrect={false}
+    keyboardType="number-pad"
+    maxLength={20}
+    placeholder="ชื่อผู้ใช้"
+  /> 
+  {/*welfareBenefits*/}
+<View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+    <Text style={{ ...styles.text, ...{} }}>สวัสดิการ</Text>
+  </View>
+   <TextInput
+    style={styles.input}
+    blurOnSubmit
+    autoCapitalize="none"
+    autoCorrect={false}
+    keyboardType="number-pad"
+    maxLength={20}
+    placeholder="ชื่อผู้ใช้"
+  /> 
+  <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+    <Text style={{ ...styles.text, ...{} }}>อีเมล</Text>
+  </View>
+   <TextInput
+    style={styles.input}
+    blurOnSubmit
+    autoCapitalize="none"
+    autoCorrect={false}
+    keyboardType="number-pad"
+    maxLength={20}
+    placeholder="ชื่อผู้ใช้"
+  /> 
+  <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
+    <Text style={{ ...styles.text, ...{} }}>เบอร์โทร</Text>
+  </View>
+   <TextInput
+    style={styles.input}
+    blurOnSubmit
+    autoCapitalize="none"
+    autoCorrect={false}
+    keyboardType="number-pad"
+    maxLength={20}
+    placeholder="ชื่อผู้ใช้"
+  /> 
 
 
   
 
-//  <TouchableOpacity style={styles.button}
-//   onPress={() => {
-//     navigation.navigate("Login");
-//   }}>
-//     <Text style={{...styles.text,...{alignSelf:"center",}}}>โพสกหกห</Text>
-//   </TouchableOpacity>
-// </View>
+  <TouchableOpacity style={styles.button}
+   onPress={() => {
+     navigation.navigate("Login");
+   }}>
+     <Text style={{...styles.text,...{alignSelf:"center",}}}>สร้างโพส</Text>
+   </TouchableOpacity>
+ </View>
+ </ScrollView>
 );
 
 
@@ -84,8 +167,8 @@ return (
 
 const styles = StyleSheet.create({
   screen: {
-    paddingTop:"10%",
     flex: 1,
+    paddingTop:"10%",
     justifyContent: "flex-start",
     alignItems: "center",
   },
@@ -120,8 +203,8 @@ const styles = StyleSheet.create({
     // backgroundColor:"red",
   },
   bgImage: {
-    // width: "85%",
-    // height: "95%",
+    width: 250,
+    height: 250,
     justifyContent: "flex-end",
     resizeMode: "stretch",
   },
