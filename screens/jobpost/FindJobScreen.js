@@ -43,15 +43,10 @@ const FindJobScreen = ({ route, navigation }) => {
         {/* เงื่อนไข */}
         {itemData.attributes.map((attribute, index) => (
         <Text style={styles.detailText} key={index}>-{attribute}</Text>
-      ))}
+        ))}
         {/* <Text style={styles.detailText}>-{itemData.Attribute}</Text> */}
     
-        <Text
-          style={{
-            ...styles.detailText,
-            ...{ alignSelf: "flex-start", marginTop: 15 },
-          }}
-        >
+        <Text style={{...styles.detailText,...{ alignSelf: "flex-start", marginTop: 15 },}}>
           29 ก.พ.64
         </Text>
       </View>
@@ -101,7 +96,6 @@ const styles = StyleSheet.create({
     borderBottomColor: "grey",
     borderBottomWidth: 1,
     marginVertical: 10,
-    alignSelf: "left",
     textAlign: "left",
     paddingLeft: 15,
     marginLeft: 15,
@@ -110,7 +104,7 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: "#f9c2ff",
     width: "95%",
-    height: 335,
+    height: 390,
     marginVertical: "2%",
     borderRadius: 10,
     alignSelf: "center",
