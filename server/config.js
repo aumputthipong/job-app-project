@@ -1,6 +1,5 @@
-import * as firebase from "firebase/compat";
+const firebase=require('firebase');
 
-// const serviceAccount = require('creds.json')
 
 const firebaseConfig = {
     apiKey: "AIzaSyBTZjh7pBW2CgvURxkE7htlQRzZy2-eOok",
@@ -12,6 +11,9 @@ const firebaseConfig = {
     measurementId: "G-2Q793VQJ03"
 };
 
-firebase.initializeApp(firebaseConfig);
 
-module.exports={db}
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const JobPost = db.collection("๋JobPosts");
+module.exports = JobPost;

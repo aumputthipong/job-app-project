@@ -1,13 +1,16 @@
 const express = require('express');
 const app = express();
+const cors =require('cors')
+const JobPost = require('./config')
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const {db} = require('./database/firebase.js')
+// const {db} = require('./config.js')
 
-
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(cors())
+// app.use(bodyParser.json());
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) =>{
@@ -30,12 +33,9 @@ app.post("/upload", upload.single('image'),(req,res)=>{
 })
 // addPost
 app.post("/addJobPost", async(req,res)=>{
-  const {name,status} = req.body
-  const JobPostRef = db.collection('people').doc('associates')
-  const res = await JobPostRef.set{
-    // [jobTitle]:status
-
-  }
+  const data = req.body
+    await JobPost.add(data)
+    res.send({msg:"Job Added"});
 })
 
 app.get('/api', (req, res) => {
