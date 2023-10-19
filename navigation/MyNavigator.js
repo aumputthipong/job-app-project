@@ -36,6 +36,10 @@ const MainNavigator = createNativeStackNavigator();
 
 // สร้าง function สำหรับการกำหนด Navigator แต่ละตัว เช่น
 function HomeStack() {
+  const dispatch = useDispatch();
+  const toggleFavoriteHandler = (mealId) => {
+    dispatch(toggleFavorite(mealId));
+  };
   return (
     <HomeNavigator.Navigator
       initialRouteName="HomeScreen"
@@ -70,8 +74,10 @@ function HomeStack() {
         name="FindJobDetailScreen"
         component={FindJobDetailScreen}
         options={({ route }) => ({
-          // title: route.params.title,
-          // id: route.params.id,
+          headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+            <Item title="MealDetail" iconName="ios-star" onPress={() => {toggleFavoriteHandler(route.params.id)}} />
+            </HeaderButtons> ),
         })}
       />
       <HomeNavigator.Screen

@@ -18,7 +18,6 @@ const MyProfileScreen = ({ route, navigation }) => {
   const subTextLength = txt1.length;
 
   return (
-
     <View style={styles.screen}>
 
       {/*1st profileBox */}
@@ -100,7 +99,6 @@ const MyProfileScreen = ({ route, navigation }) => {
       </View>
 
     </View>
-
   );
 };
 
