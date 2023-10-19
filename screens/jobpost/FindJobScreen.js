@@ -44,15 +44,10 @@ const FindJobScreen = ({ route, navigation }) => {
         {/* เงื่อนไข */}
         {itemData.attributes.map((attribute, index) => (
         <Text style={styles.detailText} key={index}>-{attribute}</Text>
-      ))}
+        ))}
         {/* <Text style={styles.detailText}>-{itemData.Attribute}</Text> */}
     
-        <Text
-          style={{
-            ...styles.detailText,
-            ...{ alignSelf: "flex-start", marginTop: 15 },
-          }}
-        >
+        <Text style={{...styles.detailText,...{ alignSelf: "flex-start", marginTop: 15 },}}>
           29 ก.พ.64
         </Text>
       </View>
@@ -60,14 +55,14 @@ const FindJobScreen = ({ route, navigation }) => {
   );
   return (
 
-    <View styles={styles.container}>
+    <View style={styles.container}>
       {/* searchbar */}
       <TextInput
         style={styles.textInput}
         blurOnSubmit
         autoCapitalize="none"
         autoCorrect={false}
-        keyboardType="number-pad"
+        keyboardType="default"
         maxLength={20}
         placeholder="ค้นหา"
         //...เพิ่ม property value และ onChangeText...
@@ -75,12 +70,10 @@ const FindJobScreen = ({ route, navigation }) => {
         // onChangeText={numberInputHandler}
       />
 
-      <Button
-        title="create"
-        onPress={() => {
-          navigation.navigate("CreateFind", {});
-        }}
-      />
+      <TouchableOpacity style={styles.button}>
+        <Text onPress={() => {navigation.navigate("CreateFind", {});}} style={{...{color: "white"}}}>สร้างโพสต์</Text>
+      </TouchableOpacity>
+
       <FlatList
         data={displayedJobs}
         renderItem={({ item }) => {
@@ -112,7 +105,7 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: "#f9c2ff",
     width: "95%",
-    height: 335,
+    height: 390,
     marginVertical: "2%",
     borderRadius: 10,
     alignSelf: "center",
@@ -147,6 +140,15 @@ const styles = StyleSheet.create({
   },
   postHeader: {
     height: "50%",
+  },
+  button: { 
+    backgroundColor: "#5A6BF5",
+    width:"50%",
+    height: 40,
+    borderRadius:10,
+    padding:"2.5%",
+    alignItems: "center",
+    alignSelf:"center",
   },
 });
 

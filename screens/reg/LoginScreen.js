@@ -1,6 +1,5 @@
-
 import React, { useState }  from "react";
-import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity} from "react-native";
+import { View, Button, Text, StyleSheet, TextInput ,TouchableOpacity} from "react-native";
 import firebase from '../../database/firebaseDB';
 import { Ionicons } from "@expo/vector-icons";
 
@@ -27,6 +26,7 @@ const LoginScreen = ({ route, navigation }) => {
   };
   
   return (
+    
     <View style={styles.screen}>
       <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
         <Text style={{ ...styles.text, ...{} }}>อีเมล</Text>
@@ -37,7 +37,7 @@ const LoginScreen = ({ route, navigation }) => {
         autoCapitalize="none"
         autoCorrect={false}
         id="txtEmail"
-        keyboardType="default"
+        keyboardType="email-address"
         onChangeText={(text) => setEmail(text)}
         // จำนวนตัวอักษรมากสุด
         maxLength={20}
@@ -70,9 +70,8 @@ const LoginScreen = ({ route, navigation }) => {
         <Ionicons name={showPassword ? 'eye' : 'eye-off'} size={20} color="black" />
       </TouchableOpacity>
 
-     <TouchableOpacity style={styles.button}
-      >
-        <Button id="btnLog" title="เข้าสู่ระบบ" onPress={handleLogin} style={{...styles.text,...{alignSelf:"center",}}}></Button>
+     <TouchableOpacity style={styles.button}>
+        <Text id="btnLog" onPress={handleLogin} style={{...{alignSelf:"center",color: "black"}}}>เข้าสู่ระบบที่นี่</Text>
       </TouchableOpacity>
 
       <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" ,justifyContent:"center"} }}>
@@ -82,7 +81,6 @@ const LoginScreen = ({ route, navigation }) => {
         navigation.navigate("Register");
       }}>
         <Text style={{...styles.text,...{fontSize:18,marginLeft:10,textDecorationLine:"underline"}}}>สมัครที่นี่</Text>
-
         </TouchableOpacity>
       </View>
     </View>
@@ -110,14 +108,13 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontSize: 15,
   },
-  button: {
-    marginVertical:10,  
+  button: { 
     backgroundColor: "#BEBDFF",
-    color: "red",
     width:"50%",
-    height:"5%",
+    height: 40,
     borderRadius:10,
-    paddingTop:"1.5%"
+    padding:"2%",
+    marginBottom:20,
   },
   postRow: {
     flexDirection: "row",

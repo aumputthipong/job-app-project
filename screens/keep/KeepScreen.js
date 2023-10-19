@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: "#f9c2ff",
     width: "95%",
-    height: 200,
+    height: 185,
     marginVertical: "1%",
     paddingVertical: "5%",
     borderRadius: 10,

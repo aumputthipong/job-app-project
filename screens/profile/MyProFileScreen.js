@@ -8,13 +8,18 @@ import {
   ImageBackground,
   Image,
 } from "react-native";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const MyProfileScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
 
+  const txt1 = "ผมเป็นนักศึกษาจบใหม่ กำลังหางานทำครับ เป็นนักออกแบบเว็บไซต์ UX/UI และUV อยู่ย่านลาดบัง มีแมวเป็นของตัวเอง ขอบคุณครับ";
+  const subTextLength = txt1.length;
+
   return (
-    <ScrollView>
     <View style={styles.screen}>
+
       {/*1st profileBox */}
       <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" } }}>
         <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
@@ -28,52 +33,53 @@ const MyProfileScreen = ({ route, navigation }) => {
             {/* ชื่อ*/}
             <Text style={styles.HeaderText}>คุณจอร์น ซิก จิกซอน</Text>
             {/* อาชีพ */}
-            <Text style={styles.subText}>FullStack Developer at Microsoft</Text>
+            <Text style={{ ...styles.subText, ...{ marginLeft: 15, marginTop: 5 } }}>FullStack Developer at Microsoft</Text>
           </View>
         </View>
-        {/* aboutme */}
-        <Text style={{ ...styles.subTitle, ...{} }}>About Me</Text>
 
+        {/* aboutme */}
+        <Text style={{ ...styles.subTitle, ...{ paddingTop: 15} }}>About Me</Text>
         <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
-          ผมเป็นนักศึกษาจบใหม่ กำลังหางานทำครับ เป็นนักออกแบบเว็บไซต์ UX/UI
-          และUV อยู่ย่านลาดบัง มีแมวเป็นของตัวเอง ขอบคุณครับ
+          ผมเป็นนักศึกษาจบใหม่ กำลังหางานทำครับ เป็นนักออกแบบเว็บไซต์ UX/UI และUV อยู่ย่านลาดบัง มีแมวเป็นของตัวเอง ขอบคุณครับ
         </Text>
       </View>
+
       {/*2 ContactBox */}
       <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
         {/* ช่องทางติดต่อ*/}
         <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
         {/* email */}
         <View style={{ ...styles.postRow, ...{} }}>
-          <Text style={styles.subTitle}>Email:</Text>
+          <Text style={styles.subTitle}><MaterialCommunityIcons name='email' size={20} color="black" /> Email :</Text>
           <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
             640xxx@kmitl.ac.th
           </Text>
         </View>
         {/* เบอร์ */}
         <View style={styles.postRow}>
-          <Text style={styles.subTitle}>เบอร์:</Text>
+          <Text style={styles.subTitle}><MaterialCommunityIcons name='phone' size={20} color="black" /> Phone :</Text>
           <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
             096-xxxx-xxxx
           </Text>
         </View>
         {/* line */}
         <View style={styles.postRow}>
-          <Text style={styles.subTitle}>line</Text>
+          <Text style={styles.subTitle}><FontAwesome5 name='line' size={20} color="black" />  Line : </Text>
           <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
             test123
           </Text>
         </View>
         {/* facebook */}
         <View style={styles.postRow}>
-          <Text style={styles.subTitle}>facebook</Text>
+          <Text style={styles.subTitle}><FontAwesome5 name='facebook' size={20} color="black" /> Facebook : </Text>
           <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
             คุณจอร์นซิกจิกซอน
           </Text>
         </View>
       </View>
+
       {/*3 EducationBox */}
-      <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
+      <View style={{ ...styles.EducationBox, ...{ backgroundColor: "white" } }}>
         {/* ช่องทางติดต่อ*/}
         <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
         {/* email */}
@@ -91,8 +97,8 @@ const MyProfileScreen = ({ route, navigation }) => {
           </Text>
         </View>
       </View>
+
     </View>
-    </ScrollView>
   );
 };
 
@@ -104,27 +110,29 @@ const styles = StyleSheet.create({
     backgroundColor:"#ABA7FA",
   },
   profileBox: {
-    backgroundColor: "#f9c2ff",
     width: "95%",
-    height: "40%",
+    height: "35%",
+    marginTop: "3%",
+    marginBottom: "2%",
+    borderRadius: 10,
+    alignSelf: "center",
+  },
+  contactBox: {
+    width: "95%",
+    height: "30%",
     marginVertical: "2%",
     borderRadius: 10,
     alignSelf: "center",
-
-    // padding: 20
   },
-  contactBox: {
-    backgroundColor: "#f9c2ff",
+  EducationBox: {
     width: "95%",
-    height: "30%",
-    marginVertical: "1%",
+    height: "22.5%",
+    marginVertical: "2%",
     borderRadius: 10,
     alignSelf: "center",
-
-    // padding: 20
   },
   HeaderText: {
-    marginTop: 20,
+    marginTop: 10,
     marginLeft: 15,
     fontSize: 22,
     fontWeight: "bold",
@@ -140,8 +148,7 @@ const styles = StyleSheet.create({
   },
   subText: {
     fontSize: 18,
-    marginHorizontal: 20,
-    // backgroundColor:"blue"
+    marginRight: 20,
   },
   detailText: {
     fontSize: 11,
