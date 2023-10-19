@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,99 +6,123 @@ import {
   StyleSheet,
   ScrollView,
   ImageBackground,
+
   Image,
 } from "react-native";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import firebase from '../../database/firebaseDB';
 
 const MyProfileScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
+  const [userData, setUserData] = useState(null);
+  useEffect(() => {
+    const userId = firebase.auth().currentUser.uid; // รับ UID ของผู้ใช้ที่เข้าสู่ระบบ
+    const userRef = firebase.firestore().collection("User Info").doc(userId); // อ้างอิงไปยังเอกสารของผู้ใช้
 
-  const txt1 = "ผมเป็นนักศึกษาจบใหม่ กำลังหางานทำครับ เป็นนักออกแบบเว็บไซต์ UX/UI และUV อยู่ย่านลาดบัง มีแมวเป็นของตัวเอง ขอบคุณครับ";
-  const subTextLength = txt1.length;
+    userRef.get()
+      .then((doc) => {
+        if (doc.exists) {
+          setUserData(doc.data()); // เซ็ตข้อมูลผู้ใช้ใน state
+        } else {
+          console.log("ไม่พบข้อมูลผู้ใช้");
+          console.log(doc.data())
+        }
+      })
+      .catch((error) => {
+        console.error("เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้", error);
+      });
+  }, []);
 
   return (
-    <View style={styles.screen}>
+    <ScrollView>
+      {userData ? (
+        <View style={styles.screen}>
+          {/*1st profileBox */}
+          <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" } }}>
+            <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
+              <View style={styles.postRow}>
+                <Image
+                  source={require("../../assets/PostPlaceholder.png")}
+                  style={styles.profileImg}
+                ></Image>
+              </View>
+              <View>
+                {/* ชื่อ*/}
+                <Text style={styles.HeaderText}>{userData.firstName} {userData.lastName}</Text>
+                {/* อาชีพ */}
+                <Text style={styles.subText}>{userData.job}</Text>
+              </View>
+            </View>
+            {/* aboutme */}
+            <Text style={{ ...styles.subTitle, ...{} }}>About Me</Text>
 
-      {/*1st profileBox */}
-      <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" } }}>
-        <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
-          <View style={styles.postRow}>
-            <Image
-              source={require("../../assets/PostPlaceholder.png")}
-              style={styles.profileImg}
-            ></Image>
+            <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
+              {userData.aboutme}
+            </Text>
           </View>
-          <View>
-            {/* ชื่อ*/}
-            <Text style={styles.HeaderText}>คุณจอร์น ซิก จิกซอน</Text>
-            {/* อาชีพ */}
-            <Text style={{ ...styles.subText, ...{ marginLeft: 15, marginTop: 5 } }}>FullStack Developer at Microsoft</Text>
+          {/*2 ContactBox */}
+          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
+            {/* ช่องทางติดต่อ*/}
+            <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
+            {/* email */}
+            <View style={{ ...styles.postRow, ...{} }}>
+              <Text style={styles.subTitle}>Email:</Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
+              {userData.email}
+              </Text>
+            </View>
+            {/* เบอร์ */}
+            <View style={styles.postRow}>
+              <Text style={styles.subTitle}>เบอร์:</Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
+                {userData.phone}
+              </Text>
+            </View>
+            {/* line */}
+            <View style={styles.postRow}>
+              <Text style={styles.subTitle}>line</Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
+                {userData.line}
+              </Text>
+            </View>
+            {/* facebook */}
+            <View style={styles.postRow}>
+              <Text style={styles.subTitle}>facebook</Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
+                {userData.facebook}
+              </Text>
+            </View>
           </View>
-        </View>
+          {/*3 EducationBox */}
+          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
+            
+            <Text style={styles.HeaderText}>การศึกษา</Text>
+            
+            <View style={{ ...styles.postRow, ...{} }}>
+              <Text style={styles.subTitle}>ปริญญาตรี :</Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", width: "75%" } }}>
+                {userData.bachelor}
+              </Text>
+            </View>
+            {/* เบอร์ */}
+            <View style={styles.postRow}>
+              <Text style={styles.subTitle}>ปริญญาโท : </Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
+                {userData.master}
+              </Text>
+            </View>
+            <View style={styles.postRow}>
+              <Text style={styles.subTitle}>ปริญญาเอก : </Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
+                {userData.doctoral}
+              </Text>
+            </View>
+          </View>
 
-        {/* aboutme */}
-        <Text style={{ ...styles.subTitle, ...{ paddingTop: 15} }}>About Me</Text>
-        <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
-          ผมเป็นนักศึกษาจบใหม่ กำลังหางานทำครับ เป็นนักออกแบบเว็บไซต์ UX/UI และUV อยู่ย่านลาดบัง มีแมวเป็นของตัวเอง ขอบคุณครับ
-        </Text>
-      </View>
-
-      {/*2 ContactBox */}
-      <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
-        {/* ช่องทางติดต่อ*/}
-        <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
-        {/* email */}
-        <View style={{ ...styles.postRow, ...{} }}>
-          <Text style={styles.subTitle}><MaterialCommunityIcons name='email' size={20} color="black" /> Email :</Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-            640xxx@kmitl.ac.th
-          </Text>
         </View>
-        {/* เบอร์ */}
-        <View style={styles.postRow}>
-          <Text style={styles.subTitle}><MaterialCommunityIcons name='phone' size={20} color="black" /> Phone :</Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-            096-xxxx-xxxx
-          </Text>
-        </View>
-        {/* line */}
-        <View style={styles.postRow}>
-          <Text style={styles.subTitle}><FontAwesome5 name='line' size={20} color="black" />  Line : </Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-            test123
-          </Text>
-        </View>
-        {/* facebook */}
-        <View style={styles.postRow}>
-          <Text style={styles.subTitle}><FontAwesome5 name='facebook' size={20} color="black" /> Facebook : </Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-            คุณจอร์นซิกจิกซอน
-          </Text>
-        </View>
-      </View>
-
-      {/*3 EducationBox */}
-      <View style={{ ...styles.EducationBox, ...{ backgroundColor: "white" } }}>
-        {/* ช่องทางติดต่อ*/}
-        <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
-        {/* email */}
-        <View style={{ ...styles.postRow, ...{} }}>
-          <Text style={styles.subTitle}>ปริญญาตรี :</Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal",width:"75%" } }}>
-          เทคโนโลยีสารสนเทศ แขนง Software Engineer
-          </Text>
-        </View>
-        {/* เบอร์ */}
-        <View style={styles.postRow}>
-          <Text style={styles.subTitle}>ปริญญาโท : </Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal",marginRight:10 } }}>
-          วิศกรรมปลูกผัก
-          </Text>
-        </View>
-      </View>
-
-    </View>
+      ): (
+        <Text>กำลังโหลดข้อมูล...</Text>
+      )}
+    </ScrollView>
   );
 };
 
@@ -107,32 +131,30 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor:"#ABA7FA",
+    backgroundColor: "#ABA7FA",
   },
   profileBox: {
+    backgroundColor: "#f9c2ff",
     width: "95%",
-    height: "35%",
-    marginTop: "3%",
-    marginBottom: "2%",
+    height: "40%",
+    marginVertical: "2%",
     borderRadius: 10,
     alignSelf: "center",
+
+    // padding: 20
   },
   contactBox: {
+    backgroundColor: "#f9c2ff",
     width: "95%",
     height: "30%",
-    marginVertical: "2%",
+    marginVertical: "1%",
     borderRadius: 10,
     alignSelf: "center",
-  },
-  EducationBox: {
-    width: "95%",
-    height: "22.5%",
-    marginVertical: "2%",
-    borderRadius: 10,
-    alignSelf: "center",
+
+    // padding: 20
   },
   HeaderText: {
-    marginTop: 10,
+    marginTop: 20,
     marginLeft: 15,
     fontSize: 22,
     fontWeight: "bold",
@@ -148,7 +170,8 @@ const styles = StyleSheet.create({
   },
   subText: {
     fontSize: 18,
-    marginRight: 20,
+    marginHorizontal: 20,
+    // backgroundColor:"blue"
   },
   detailText: {
     fontSize: 11,
