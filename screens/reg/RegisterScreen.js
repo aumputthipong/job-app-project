@@ -27,7 +27,7 @@ const RegisterScreen = ({ route, navigation }) => {
             firstName,
             lastName,
           };
-          await firebase.firestore().collection("๊User Info").doc(response.user.uid).set(user);
+          await firebase.firestore().collection("User Info").doc(response.user.uid).set(user);
           navigation.navigate("Login");
         }
       } else {
