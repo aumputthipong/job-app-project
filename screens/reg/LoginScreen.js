@@ -9,7 +9,7 @@ const LoginScreen = ({ route, navigation }) => {
   const [password, setPassword] = useState('');
   const handleLogin = async () => {
     try {
-      await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL); // คงให้ลงชื่อเข้าสู่ระบบ
+      // await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL); // คงให้ลงชื่อเข้าสู่ระบบ
       await firebase.auth().signInWithEmailAndPassword(email, password);
       navigation.navigate("BottomTabNav");
       // เข้าสู่ระบบสำเร็จ
