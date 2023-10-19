@@ -163,6 +163,11 @@ const RegisterScreen = ({ route, navigation }) => {
       <Ionicons name={showPassword2 ? 'eye' : 'eye-off'} size={20} color="black" />
     </TouchableOpacity>
 
+
+
+      <Text style={{...styles.text,...{alignSelf:"center",}}}>สมัครสมาชิก</Text>
+
+
    <TouchableOpacity style={styles.button}
     >
       <Button title="ลงทะเบียน" onPress={handleRegistration} />
