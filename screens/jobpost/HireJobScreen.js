@@ -80,13 +80,7 @@ const HireJobScreen = ({ route, navigation }) => {
         keyExtractor={(item) => item.id}
       />
     </View>
-    //     <SafeAreaView style={styles.container}>
-    //     <FlatList
-    //       data={DATA}
-    //       renderItem={({item}) => <Item title={item.title} />}
-    //       keyExtractor={item => item.id}
-    //     />
-    //   </SafeAreaView>
+
   );
 };
 
@@ -120,12 +114,7 @@ const styles = StyleSheet.create({
     color: "#929090",
     marginLeft: 10,
   },
-  // bgImage: {
-  //   width: "100%",
-  //   height: "100%",
-  //   justifyContent: "flex-end",
-  //   resizeMode: "stretch",
-  // },
+
   mealRow: {
     flexDirection: "row",
     backgroundColor: "gray",
@@ -142,5 +131,4 @@ const styles = StyleSheet.create({
     borderRadius: 360,
   },
 });
-
 export default HireJobScreen;
