@@ -10,6 +10,8 @@ import {
   TextInput,
 } from "react-native";
 import { useSelector } from "react-redux";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 const FindJobDetailScreen = ({ route, navigation }) => {
   const jobid = route.params.id;
   const availableJob = useSelector((state) => state.jobs.filteredJobs);
@@ -35,20 +37,20 @@ const FindJobDetailScreen = ({ route, navigation }) => {
         </Text>
         {/* ตำแหน่ง */}
  
-      
-        <Text style={styles.subTitle}>ตำแหน่ง</Text>
+  
+        <Text style={styles.subTitle}>ตำแหน่ง :</Text>
         <Text style={styles.subText}>{displayedJob.position}</Text>
 
         {/* ค่าจ้าง */}
       
-        <Text style={styles.subTitle}>รายละเอียดงาน</Text>
+        <Text style={styles.subTitle}>รายละเอียดงาน :</Text>
         <Text style={styles.subText}>
         {displayedJob.detail}
         </Text>
      {/* ต้องทำเป็นflatlist แสดงคุณสมบัติ */}
         {/* คุณสมบัติ */}
 
-        <Text style={styles.subTitle}>คุณสมบัติ:</Text>
+        <Text style={styles.subTitle}>คุณสมบัติ :</Text>
 
       {/* เงื่อนไข */}
       {displayedJob.attributes.map((attribute, index) => (
@@ -58,11 +60,11 @@ const FindJobDetailScreen = ({ route, navigation }) => {
 
         {/* ระยะงาน */}
   
-        <Text style={styles.subTitle}>ระยะเวลางาน:</Text>
+        <Text style={styles.subTitle}>ระยะเวลางาน :</Text>
         <Text style={styles.subText}>{displayedJob.position}</Text>
         {/* ค่าจ้าง */}
 
-        <Text style={styles.subTitle}>ค่าจ้าง:</Text>
+        <Text style={styles.subTitle}>ค่าจ้าง :</Text>
         <Text style={styles.subText}>{displayedJob.wages} บาท/{displayedJob.employmentType}</Text>
 
         {/* สวัสดิการ */}
@@ -72,9 +74,8 @@ const FindJobDetailScreen = ({ route, navigation }) => {
       ))}
         {/* ช่องทางติดต่อ */}
         <Text style={styles.subTitle}>ช่องทางติดต่อ</Text>
-        <Text style={styles.subText}>Email: {displayedJob.email}</Text>
-
-        <Text style={styles.subText}>เบอร์โทร: {displayedJob.phone}</Text>
+        <Text style={styles.subText}><MaterialCommunityIcons name='email' size={20} color="black" /> Email: {displayedJob.email}</Text>
+        <Text style={styles.subText}><MaterialCommunityIcons name='phone' size={20} color="black" /> เบอร์โทร: {displayedJob.phone}</Text>
 
 {/* กล่องคอมเม้น */}
         <Text style={{ ...styles.subText, ...{ marginTop: 30 } }}>
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    
+    backgroundColor:"#ABA7FA",
   },
   jobTitle:{
     marginTop: 20,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,91 +6,123 @@ import {
   StyleSheet,
   ScrollView,
   ImageBackground,
+
   Image,
 } from "react-native";
+import firebase from '../../database/firebaseDB';
 
 const MyProfileScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
+  const [userData, setUserData] = useState(null);
+  useEffect(() => {
+    const userId = firebase.auth().currentUser.uid; // รับ UID ของผู้ใช้ที่เข้าสู่ระบบ
+    const userRef = firebase.firestore().collection("User Info").doc(userId); // อ้างอิงไปยังเอกสารของผู้ใช้
+
+    userRef.get()
+      .then((doc) => {
+        if (doc.exists) {
+          setUserData(doc.data()); // เซ็ตข้อมูลผู้ใช้ใน state
+        } else {
+          console.log("ไม่พบข้อมูลผู้ใช้");
+          console.log(doc.data())
+        }
+      })
+      .catch((error) => {
+        console.error("เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้", error);
+      });
+  }, []);
 
   return (
-    <View style={styles.screen}>
-      {/*1st profileBox */}
-      <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" } }}>
-        <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
-          <View style={styles.postRow}>
-            <Image
-              source={require("../../assets/PostPlaceholder.png")}
-              style={styles.profileImg}
-            ></Image>
-          </View>
-          <View>
-            {/* ชื่อ*/}
-            <Text style={styles.HeaderText}>คุณจอร์น ซิก จิกซอน</Text>
-            {/* อาชีพ */}
-            <Text style={styles.subText}>FullStack Developer at Microsoft</Text>
-          </View>
-        </View>
-        {/* aboutme */}
-        <Text style={{ ...styles.subTitle, ...{} }}>About Me</Text>
+    <ScrollView>
+      {userData ? (
+        <View style={styles.screen}>
+          {/*1st profileBox */}
+          <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" } }}>
+            <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
+              <View style={styles.postRow}>
+                <Image
+                  source={require("../../assets/PostPlaceholder.png")}
+                  style={styles.profileImg}
+                ></Image>
+              </View>
+              <View>
+                {/* ชื่อ*/}
+                <Text style={styles.HeaderText}>{userData.firstName} {userData.lastName}</Text>
+                {/* อาชีพ */}
+                <Text style={styles.subText}>{userData.job}</Text>
+              </View>
+            </View>
+            {/* aboutme */}
+            <Text style={{ ...styles.subTitle, ...{} }}>About Me</Text>
 
-        <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
-          ผมเป็นนักศึกษาจบใหม่ กำลังหางานทำครับ เป็นนักออกแบบเว็บไซต์ UX/UI
-          และUV อยู่ย่านลาดบัง มีแมวเป็นของตัวเอง ขอบคุณครับ
-        </Text>
-      </View>
-      {/*2 ContactBox */}
-      <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
-        {/* ช่องทางติดต่อ*/}
-        <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
-        {/* email */}
-        <View style={{ ...styles.postRow, ...{} }}>
-          <Text style={styles.subTitle}>Email:</Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-            640xxx@kmitl.ac.th
-          </Text>
+            <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
+              {userData.aboutme}
+            </Text>
+          </View>
+          {/*2 ContactBox */}
+          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
+            {/* ช่องทางติดต่อ*/}
+            <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
+            {/* email */}
+            <View style={{ ...styles.postRow, ...{} }}>
+              <Text style={styles.subTitle}>Email:</Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
+              {userData.email}
+              </Text>
+            </View>
+            {/* เบอร์ */}
+            <View style={styles.postRow}>
+              <Text style={styles.subTitle}>เบอร์:</Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
+                {userData.phone}
+              </Text>
+            </View>
+            {/* line */}
+            <View style={styles.postRow}>
+              <Text style={styles.subTitle}>line</Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
+                {userData.line}
+              </Text>
+            </View>
+            {/* facebook */}
+            <View style={styles.postRow}>
+              <Text style={styles.subTitle}>facebook</Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
+                {userData.facebook}
+              </Text>
+            </View>
+          </View>
+          {/*3 EducationBox */}
+          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
+            
+            <Text style={styles.HeaderText}>การศึกษา</Text>
+            
+            <View style={{ ...styles.postRow, ...{} }}>
+              <Text style={styles.subTitle}>ปริญญาตรี :</Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", width: "75%" } }}>
+                {userData.bachelor}
+              </Text>
+            </View>
+            {/* เบอร์ */}
+            <View style={styles.postRow}>
+              <Text style={styles.subTitle}>ปริญญาโท : </Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
+                {userData.master}
+              </Text>
+            </View>
+            <View style={styles.postRow}>
+              <Text style={styles.subTitle}>ปริญญาเอก : </Text>
+              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
+                {userData.doctoral}
+              </Text>
+            </View>
+          </View>
+
         </View>
-        {/* เบอร์ */}
-        <View style={styles.postRow}>
-          <Text style={styles.subTitle}>เบอร์:</Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-            096-xxxx-xxxx
-          </Text>
-        </View>
-        {/* line */}
-        <View style={styles.postRow}>
-          <Text style={styles.subTitle}>line</Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-            test123
-          </Text>
-        </View>
-        {/* facebook */}
-        <View style={styles.postRow}>
-          <Text style={styles.subTitle}>facebook</Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-            คุณจอร์นซิกจิกซอน
-          </Text>
-        </View>
-      </View>
-      {/*3 EducationBox */}
-      <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
-        {/* ช่องทางติดต่อ*/}
-        <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
-        {/* email */}
-        <View style={{ ...styles.postRow, ...{} }}>
-          <Text style={styles.subTitle}>ปริญญาตรี :</Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal",width:"75%" } }}>
-          เทคโนโลยีสารสนเทศ แขนง Software Engineer
-          </Text>
-        </View>
-        {/* เบอร์ */}
-        <View style={styles.postRow}>
-          <Text style={styles.subTitle}>ปริญญาโท : </Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal",marginRight:10 } }}>
-          วิศกรรมปลูกผัก
-          </Text>
-        </View>
-      </View>
-    </View>
+      ): (
+        <Text>กำลังโหลดข้อมูล...</Text>
+      )}
+    </ScrollView>
   );
 };
 
@@ -99,7 +131,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor:"#ABA7FA",
+    backgroundColor: "#ABA7FA",
   },
   profileBox: {
     backgroundColor: "#f9c2ff",
