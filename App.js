@@ -2,12 +2,12 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { createStore, combineReducers } from "redux";
-import mealsReducer from "./store/reducers/jobsReducer";
+import jobsReducer from "./store/reducers/jobsReducer";
 import { Provider } from "react-redux";
 import MyNavigator from "./navigation/MyNavigator";
 // ทำrootreducer เชื่อมกับทุกreducer
 const rootReducer = combineReducers({
-  jobs: mealsReducer
+  jobs: jobsReducer
   })
 //สร้างstore กลาง 
 const store = createStore(rootReducer);

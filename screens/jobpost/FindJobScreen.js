@@ -16,31 +16,11 @@ import firebase from '../../database/firebaseDB';
 
 
 
+
 const FindJobScreen = ({ route, navigation }) => {
-  // const [jobPosts, setJobPosts] = useState([]);
-  // useEffect(() => {
-
-  //   const jobPostsCollection = firebase.firestore().collection('JobPosts');
-
-  //   // Attach a listener to get the data
-  //   const unsubscribe = jobPostsCollection.onSnapshot((querySnapshot) => {
-  //     const posts = [];
-  //     querySnapshot.forEach((doc) => {
-  //       // Get data from each document
-  //       const data = doc.data();
-  //       posts.push(data);
-  //     });
-
-  //     // Update the state with the data from Firestore
-  //     setJobPosts(posts);
-  //   });
-
-  //   // Clean up the listener when the component unmounts
-  //   return () => unsubscribe();
-  // }, []);
 
   const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
-  console.log(displayedJobs[0])
+  // console.log(displayedJobs[0])
   const renderJobItem = ({ itemData }) => (
     <TouchableOpacity
 

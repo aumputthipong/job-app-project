@@ -15,3 +15,30 @@ jobPostsCollection.get().then((querySnapshot) => {
     JOBS.push(jobWithId);
   });
 });
+
+export const setupJobPostsListener = () => {
+  return jobPostsCollection.onSnapshot((snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      const jobId = change.doc.id;
+      const jobData = change.doc.data();
+      const jobWithId = { id: jobId, ...jobData };
+
+      if (change.type === "added") {
+        // Handle new job post
+        JOBS.push(jobWithId);
+      } else if (change.type === "modified") {
+        // Handle modified job post
+        const index = JOBS.findIndex((job) => job.id === jobId);
+        if (index !== -1) {
+          JOBS[index] = jobWithId;
+        }
+      } else if (change.type === "removed") {
+        // Handle removed job post
+        const index = JOBS.findIndex((job) => job.id === jobId);
+        if (index !== -1) {
+          JOBS.splice(index, 1);
+        }
+      }
+    });
+  });
+};

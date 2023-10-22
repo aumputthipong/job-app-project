@@ -3,7 +3,6 @@ import { TOGGLE_FAVORITE } from "../actions/jobAction";
 import { LINK_JOB } from "../actions/jobAction";
 
 
-
 const initialState = {
     jobs: JOBS,
     filteredJobs:JOBS ,
@@ -11,7 +10,7 @@ const initialState = {
     favoriteJobs: []
     };
 
-    const mealsReducer = (state = initialState, action) => {
+    const jobsReducer = (state = initialState, action) => {
         switch (action.type) {
             case TOGGLE_FAVORITE:
                 
@@ -43,4 +42,4 @@ const initialState = {
         }
     }
     
-    export default mealsReducer;
+    export default jobsReducer;
