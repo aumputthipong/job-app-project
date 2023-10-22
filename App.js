@@ -6,6 +6,7 @@ import jobsReducer from "./store/reducers/jobsReducer";
 import { Provider } from "react-redux";
 import MyNavigator from "./navigation/MyNavigator";
 
+
 const rootReducer = combineReducers({
   jobs: jobsReducer
   })
