@@ -6,31 +6,98 @@ import {
   StyleSheet,
   ScrollView,
   ImageBackground,
-
+  Modal,
+  TextInput,
+  TouchableOpacity,
   Image,
+  
 } from "react-native";
 import firebase from '../../database/firebaseDB';
 
+
 const MyProfileScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
+  const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState(null);
-  useEffect(() => {
-    const userId = firebase.auth().currentUser.uid; // รับ UID ของผู้ใช้ที่เข้าสู่ระบบ
-    const userRef = firebase.firestore().collection("User Info").doc(userId); // อ้างอิงไปยังเอกสารของผู้ใช้
+
+  const [editFirstName, setEditFirstName] = useState('');
+  const [editLastName, setEditLastName] = useState('');
+  const [editJob, setEditJob] = useState('');
+  const [editAboutMe, setEditAboutMe] = useState('');
+  const [editEmail, setEditEmail] = useState('');
+  const [editPhone, setEditPhone] = useState('');
+  const [editLine, setEditLine] = useState('');
+  const [editFacebook, setEditFacebook] = useState('');
+  const [editBachelor, setEditBachelor] = useState('');
+  const [editMaster, setEditMaster] = useState('');
+  const [editDoctoral, setEditDoctoral] = useState('');
+
+  const userId = firebase.auth().currentUser.uid; // รับ UID ของผู้ใช้ที่เข้าสู่ระบบ
+  const startEditing = () => {
+    setIsEditing(true);
+
+    // กำหนดข้อมูลใน popup เป็นค่าปัจจุบัน
+    setEditFirstName(userData.firstName);
+    setEditLastName(userData.lastName);
+    setEditJob(userData.job);
+    setEditAboutMe(userData.aboutme);
+    setEditEmail(userData.email);
+    setEditPhone(userData.phone);
+    setEditLine(userData.line);
+    setEditFacebook(userData.facebook);
+    setEditBachelor(userData.bachelor);
+    setEditMaster(userData.master);
+    setEditDoctoral(userData.doctoral);
+    // กำหนดข้อมูลอื่น ๆ ที่คุณต้องการแก้ไข
+    // ...
+  };
+  const finishEditing = () => {
+    setIsEditing(false);
+    const updatedData = {
+      firstName: editFirstName,
+      lastName: editLastName,
+      job: editJob,
+      aboutme: editAboutMe,
+      email: editEmail,
+      phone: editPhone,
+      line: editLine,
+      facebook: editFacebook,
+      bachelor: editBachelor,
+      master: editMaster,
+      doctoral: editDoctoral,
+      // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการอัพเดท
+      // ...
+    };
+
+    firebase.firestore().collection('User Info').doc(userId).update(updatedData)
+      .then(() => {
+        console.log('อัพเดทข้อมูลสำเร็จ');
+        // ไม่ต้องเรียก finishEditing() อีกที่นี่
+        getUserData();
+      })
+      .catch((error) => {
+        console.error('เกิดข้อผิดพลาดในการอัพเดทข้อมูล:', error);
+      });
+  };
+  const getUserData = () => {
+    const userRef = firebase.firestore().collection("User Info").doc(userId);
 
     userRef.get()
       .then((doc) => {
         if (doc.exists) {
-          setUserData(doc.data()); // เซ็ตข้อมูลผู้ใช้ใน state
+          setUserData(doc.data());
         } else {
           console.log("ไม่พบข้อมูลผู้ใช้");
-          console.log(doc.data())
         }
       })
       .catch((error) => {
         console.error("เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้", error);
       });
+  };
+  useEffect(() => {
+    getUserData(); // เรียกใน useEffect แรก
   }, []);
+  
 
   return (
     <ScrollView>
@@ -51,6 +118,7 @@ const MyProfileScreen = ({ route, navigation }) => {
                 {/* อาชีพ */}
                 <Text style={styles.subText}>{userData.job}</Text>
               </View>
+              <Button title="แก้ไข" onPress={startEditing} />
             </View>
             {/* aboutme */}
             <Text style={{ ...styles.subTitle, ...{} }}>About Me</Text>
@@ -117,11 +185,81 @@ const MyProfileScreen = ({ route, navigation }) => {
               </Text>
             </View>
           </View>
-
         </View>
       ): (
         <Text>กำลังโหลดข้อมูล...</Text>
       )}
+      {isEditing && (
+      <Modal animationType="slide" transparent={true} visible={isEditing}>
+      <View style={styles.modalBackground}>
+        <View style={styles.modalView}>
+          <Text>Edit Profile</Text>
+          <TextInput
+            placeholder="First Name"
+            value={editFirstName}
+            onChangeText={text => setEditFirstName(text)}
+          />
+          <TextInput
+            placeholder="Last Name"
+            value={editLastName}
+            onChangeText={text => setEditLastName(text)}
+          />
+          <TextInput
+            placeholder="Job"
+            value={editJob}
+            onChangeText={text => setEditJob(text)}
+          />
+          <TextInput
+            placeholder="About Me"
+            value={editAboutMe}
+            onChangeText={text => setEditAboutMe(text)}
+          />
+          <TextInput
+            placeholder="Email"
+            value={editEmail}
+            onChangeText={text => setEditEmail(text)}
+          />
+          <TextInput
+            placeholder="Phone"
+            value={editPhone}
+            onChangeText={text => setEditPhone(text)}
+          />
+          <TextInput
+            placeholder="Line"
+            value={editLine}
+            onChangeText={text => setEditLine(text)}
+          />
+          <TextInput
+            placeholder="Facebook"
+            value={editFacebook}
+            onChangeText={text => setEditFacebook(text)}
+          />
+          <TextInput
+            placeholder="Bachelor"
+            value={editBachelor}
+            onChangeText={text => setEditBachelor(text)}
+          />
+          <TextInput
+            placeholder="Master"
+            value={editMaster}
+            onChangeText={text => setEditMaster(text)}
+          />
+          <TextInput
+            placeholder="Doctoral"
+            value={editDoctoral}
+            onChangeText={text => setEditDoctoral(text)}
+          />
+          <Button title="Save" onPress={finishEditing} />
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setIsEditing(false)}
+          >
+            <Text style={styles.closeButtonText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+    )}
     </ScrollView>
   );
 };
@@ -208,6 +346,25 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 360,
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)', // สีสแครมหลังหน้า
+  },
+  modalView: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+  },
+  closeButton: {
+    marginTop: 10,
+    alignSelf: 'flex-end',
+  },
+  closeButtonText: {
+    color: 'red',
   },
 });
 
