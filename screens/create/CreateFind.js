@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, Alert } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios';
 import firebase from '../../database/firebaseDB';
 // Now you can use Firebase services in your component
 
@@ -39,7 +38,7 @@ const CreateFind = ({ route, navigation }) => {
       });
 
       if (!result.canceled) {
-        setImage(result.uri);
+        setImage(result.assets[0].uri);
       }
     }
   };
@@ -48,12 +47,31 @@ const CreateFind = ({ route, navigation }) => {
     const uploadUri = image;
     if (uploadUri) {
       let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
-      setUploading(true);
+  
       try {
-        await firebase.storage().ref(filename).put(uploadUri);
-        setUploading(false);
-        Alert.alert('Image Upload', 'Your upload was successful');
-        setImage(null);
+        const response = await fetch(uploadUri);
+        const blob = await response.blob();
+        const uploadTask = firebase.storage().ref().child(`images/${filename}`).put(blob);
+  
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            // Handle upload progress if needed
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(`Upload is ${progress}% done`);
+          },
+          (error) => {
+            // Handle upload error
+            console.error('Upload Error: ', error);
+          },
+          () => {
+            // Upload completed successfully, get the download URL
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+              // Save the download URL to Firestore or use it as needed
+              console.log('File available at', downloadURL);
+            });
+          }
+        );
       } catch (e) {
         console.log(e);
       }
