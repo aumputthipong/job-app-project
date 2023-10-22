@@ -54,7 +54,7 @@ const HireJobScreen = ({ route, navigation }) => {
         {/* รายละเอียด */}
 
   
-        <Text style={styles.detailText}>รับออกแบบตึกใบหยก ตึกโหล ตึกโป๊ะ ตึกตึก !Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
+        <Text style={styles.detailText}>รับออกแบบตึกใบหยก ตึกโหล ตึกโป๊ะ ตึกตึก !Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
  </Text>
         <Text
           style={{

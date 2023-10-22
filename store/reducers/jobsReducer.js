@@ -1,8 +1,11 @@
 import { JOBS } from "../../data/dummy-data";
 import { TOGGLE_FAVORITE } from "../actions/jobAction";
 import { LINK_JOB } from "../actions/jobAction";
+
+
+
 const initialState = {
-    jobs: JOBS ,
+    jobs: JOBS,
     filteredJobs:JOBS ,
     selectedJob:JOBS[0] ,
     favoriteJobs: []

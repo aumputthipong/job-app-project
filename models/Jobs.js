@@ -1,3 +1,4 @@
+
 class Job {
   constructor(
     id,
