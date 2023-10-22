@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import firebase from '../../database/firebaseDB';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from "@expo/vector-icons";
 
 const MyProfileScreen = ({ route, navigation }) => {
@@ -191,7 +192,7 @@ const MyProfileScreen = ({ route, navigation }) => {
       <ScrollView>
       <View style={styles.modalBackground}>
         <View style={styles.modalView}>
-        <Text style={{ ...{ alignSelf: 'center'} }}>Edit Profile</Text>
+        <Text style={{ ...{ alignSelf: 'center', fontSize: 20 } }}>Edit Profile</Text>
           <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setIsEditing(false)}
