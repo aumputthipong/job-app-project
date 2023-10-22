@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, Alert } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import firebase from '../../database/firebaseDB';
+import { SelectList } from 'react-native-dropdown-select-list'
 // Now you can use Firebase services in your component
 
 
@@ -52,7 +53,7 @@ const CreateFind = ({ route, navigation }) => {
         const response = await fetch(uploadUri);
         const blob = await response.blob();
         const uploadTask = firebase.storage().ref().child(`images/${filename}`).put(blob);
-  
+        
         uploadTask.on(
           'state_changed',
           (snapshot) => {
@@ -66,9 +67,25 @@ const CreateFind = ({ route, navigation }) => {
           },
           () => {
             // Upload completed successfully, get the download URL
-            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            uploadTask.snapshot.ref.getDownloadURL().then(async(downloadURL) => {
               // Save the download URL to Firestore or use it as needed
               console.log('File available at', downloadURL);
+              const post = {
+                jobTitle,
+                position,
+                agency,
+                attributes,
+                welfareBenefits,
+                imageUrl: downloadURL,
+                wage,
+                category,
+                employmentType,
+                // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
+              };
+              const postRef = firebase.firestore().collection('JobPosts');
+              const docRef = await postRef.add(post);
+              console.log('Post created with ID: ', docRef.id);
+              navigation.navigate('FindJobScreen');
             });
           }
         );
@@ -79,21 +96,74 @@ const CreateFind = ({ route, navigation }) => {
       console.log('No image to upload');
     }
   };
+
+  const categorydata = [
+    {key:'1', value:'งานบัญชี'},
+    {key:'2', value:'งานทรัพยากรบุคคล'},
+    {key:'3', value:'งานธนาคาร'},
+    {key:'4', value:'งานสุขภาพ'},
+    {key:'5', value:'งานก่อสร้าง'},
+    {key:'6', value:'งานออกแบบ'},
+    {key:'7', value:'งานไอที'},
+    {key:'8', value:'งานการศึกษา'},
+]
+const emptypedata = [
+  {key:'1', value:'รายเดือน'},
+  {key:'2', value:'รายวัน'},
+  {key:'3', value:'ต่อชิ้นงาน'},
+]
 return (
   <ScrollView style={{}}>
 
 <View style={{ padding: 20 }}>
-        <Text>Job Title</Text>
+        <Text>หัวข้องาน</Text>
         <TextInput
           value={jobTitle}
           onChangeText={setJobTitle}
-          placeholder="Enter job title"
+          placeholder="หัวข้องาน"
+          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+        />
+    <Text>ตำแหน่งที่รับ</Text>
+<TextInput
+          value={position}
+          onChangeText={setPosition}
+          placeholder="ตำแหน่ง/อาชีพ"
+          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+        />
+    <Text>บริษัท</Text>
+<TextInput
+          value={agency}
+          onChangeText={setAgency}
+          placeholder="บริษัท"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
 
         {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, marginBottom: 10 }} />}
         <Button title="Pick Image" onPress={pickImage} />
+        <Text>ประเภทงาน</Text>
+        <SelectList 
+        setSelected={(val) => setCategory(val)} 
+        data={categorydata} 
+        placeholder='ประเภทของงาน'
+        save="value"
+      />
 
+    <Text>ประเภทการจ้าง</Text>
+        <SelectList 
+        setSelected={(val) => setEmploymentType(val)} 
+        data={emptypedata} 
+        placeholder='ประเภทการจ้าง'
+        save="value"
+      />
+
+<Text>ค่าจ้าง</Text>
+<TextInput
+          value={wage}
+          onChangeText={setWage}
+          placeholder="฿บาท"
+          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+        />
+    
         <Button title="Submit Post" onPress={submitPost} />
       </View>
 
