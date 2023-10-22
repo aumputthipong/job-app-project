@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,11 +12,35 @@ import {
 } from "react-native";
 import { useSelector,useDispatch } from "react-redux";
 import {LINK_JOB} from "../../store/actions/jobAction"
+import firebase from '../../database/firebaseDB';
+
+
 
 const FindJobScreen = ({ route, navigation }) => {
+  // const [jobPosts, setJobPosts] = useState([]);
+  // useEffect(() => {
+
+  //   const jobPostsCollection = firebase.firestore().collection('JobPosts');
+
+  //   // Attach a listener to get the data
+  //   const unsubscribe = jobPostsCollection.onSnapshot((querySnapshot) => {
+  //     const posts = [];
+  //     querySnapshot.forEach((doc) => {
+  //       // Get data from each document
+  //       const data = doc.data();
+  //       posts.push(data);
+  //     });
+
+  //     // Update the state with the data from Firestore
+  //     setJobPosts(posts);
+  //   });
+
+  //   // Clean up the listener when the component unmounts
+  //   return () => unsubscribe();
+  // }, []);
 
   const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
-
+  console.log(displayedJobs[0])
   const renderJobItem = ({ itemData }) => (
     <TouchableOpacity
 
@@ -45,7 +69,6 @@ const FindJobScreen = ({ route, navigation }) => {
         {itemData.attributes.map((attribute, index) => (
         <Text style={styles.detailText} key={index}>-{attribute}</Text>
         ))}
-        {/* <Text style={styles.detailText}>-{itemData.Attribute}</Text> */}
     
         <Text style={{...styles.detailText,...{ alignSelf: "flex-start", marginTop: 15 },}}>
           29 ก.พ.64

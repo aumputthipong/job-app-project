@@ -17,6 +17,7 @@ const MyProfileScreen = ({ route, navigation }) => {
   useEffect(() => {
     const userId = firebase.auth().currentUser.uid; // รับ UID ของผู้ใช้ที่เข้าสู่ระบบ
     const userRef = firebase.firestore().collection("User Info").doc(userId); // อ้างอิงไปยังเอกสารของผู้ใช้
+
     userRef.get()
       .then((doc) => {
         if (doc.exists) {

@@ -1,3 +1,4 @@
+
 class JobPost {
     constructor(
       id,
