@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import firebase from '../../database/firebaseDB';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 import { Ionicons } from "@expo/vector-icons";
 
 const MyProfileScreen = ({ route, navigation }) => {
