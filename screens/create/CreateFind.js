@@ -1,8 +1,14 @@
 import React, { useState,useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity,Image,ScrollView} from "react-native";
+import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity,Image,ScrollView, Alert} from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import firebase from '../../database/firebaseDB';
+import storage from '@react-native-firebase/storage';
+
+// Now you can use Firebase services in your component
+
+
+
 const CreateFind = ({ route, navigation }) => {
   const [jobTitle, setJobTitle] = useState('');
   const [position, setPosition] = useState('');
@@ -23,6 +29,7 @@ const CreateFind = ({ route, navigation }) => {
 
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [transferred, setTransferred] = useState(0);
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -70,7 +77,7 @@ const CreateFind = ({ route, navigation }) => {
 
   const createPost = async () => {
     try {
-      // 1. อัปโหลดรูปภาพ
+      // 1. อัปโหลดรูปภาพไปยัง Firebase Storage
       if (image) {
         setUploading(true);
         const response = await fetch(image);
@@ -88,7 +95,7 @@ const CreateFind = ({ route, navigation }) => {
           agency,
           attributes,
           welfareBenefits,
-          imageUrl,
+          imageUrl, // เพิ่ม URL รูปภาพที่ได้จาก Firebase Storage
           // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
         };
   
@@ -110,9 +117,21 @@ const CreateFind = ({ route, navigation }) => {
   };
   
   
-  
-  
-  
+  const submitPost= async()=> {
+    const uploadUri = image;
+    let filename = uploadUri.substring(uploadUri.lastIndexOf('/')+1);
+    setUploading(true);
+    try{
+      await storage().ref(filename).putFile(uploadUri);
+      setUploading(false);
+      Alert.alert('Image Upload',"Your upload successful");
+    }catch(e){
+      console.log(e);
+    }
+
+    setImage(null);
+
+  }
   
   
   
@@ -241,6 +260,7 @@ return (
 
   <TouchableOpacity style={styles.button}
     onPress={createPost}>
+    {/* // onPress={submitPost}> */}
      <Text style={{...styles.text,...{alignSelf:"center",}}}>สร้างโพส</Text>
    </TouchableOpacity>
  </View>
