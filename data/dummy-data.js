@@ -1,12 +1,13 @@
-// import Category from "../models/category";
 import firebase from "../database/firebaseDB";
 
-import Job from "../models/Jobs";
 
 export const JOBS = [];
 const jobPostsCollection = firebase.firestore().collection('JobPosts');
 
-jobPostsCollection.get().then((querySnapshot) => {
+// Create a real-time listener to fetch and update data when it changes
+jobPostsCollection.onSnapshot((querySnapshot) => {
+  JOBS.length = 0; // Clear the existing data
+
   querySnapshot.forEach((doc) => {
     const jobData = doc.data();
     const jobId = doc.id;
@@ -16,29 +17,9 @@ jobPostsCollection.get().then((querySnapshot) => {
   });
 });
 
-export const setupJobPostsListener = () => {
-  return jobPostsCollection.onSnapshot((snapshot) => {
-    snapshot.docChanges().forEach((change) => {
-      const jobId = change.doc.id;
-      const jobData = change.doc.data();
-      const jobWithId = { id: jobId, ...jobData };
-
-      if (change.type === "added") {
-        // Handle new job post
-        JOBS.push(jobWithId);
-      } else if (change.type === "modified") {
-        // Handle modified job post
-        const index = JOBS.findIndex((job) => job.id === jobId);
-        if (index !== -1) {
-          JOBS[index] = jobWithId;
-        }
-      } else if (change.type === "removed") {
-        // Handle removed job post
-        const index = JOBS.findIndex((job) => job.id === jobId);
-        if (index !== -1) {
-          JOBS.splice(index, 1);
-        }
-      }
-    });
-  });
-};
+// Optionally, you can also handle any errors that occur during the real-time listener
+jobPostsCollection.onSnapshot((querySnapshot) => {
+  // Handle changes as before
+}, (error) => {
+  console.error("Error getting real-time updates: ", error);
+});

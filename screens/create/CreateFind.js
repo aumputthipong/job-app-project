@@ -25,15 +25,23 @@ const CreateFind = ({ route, navigation }) => {
   const [uploading, setUploading] = useState(false);
 
   const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+    if (status !== 'granted') {
+      alert('Permission to access media library is required.');
+      return;
+    }
+  
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
-
-    if (!result.cancelled) {
-      setImage(result.uri);
+  
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      // const imageUrl = result.assets[0].uri;
     }
   };
 
@@ -44,12 +52,15 @@ const CreateFind = ({ route, navigation }) => {
       const blob = await response.blob();
       const imageName = `${Date.now()}`;
       const ref = firebase.storage().ref().child(`images/${imageName}`);
-
-      await ref.put(blob);
-      const imageUrl = await ref.getDownloadURL();
-
-      // เก็บ URL ของรูปภาพใน Firebase Realtime Database หรือ Firestore ตามที่คุณใช้
-
+  
+      try {
+        await ref.put(blob);
+        const imageUrl = await ref.getDownloadURL();
+        setImageUrl(imageUrl);
+      } catch (error) {
+        console.error('Error uploading image: ', error);
+      }
+  
       setUploading(false);
       setImage(null);
     }
@@ -59,28 +70,52 @@ const CreateFind = ({ route, navigation }) => {
 
   const createPost = async () => {
     try {
-      const post = {
-        jobTitle,
-        position,
-        agency,
-        attributes,
-        welfareBenefits,
-        // Add other state variables here...
-      };
-
-      // Access the Firestore collection and add a new document
-      const postRef = firebase.firestore().collection('JobPosts');
-      const docRef = await postRef.add(post);
-
-      console.log('Post created with ID: ', docRef.id);
-
-      // Navigate to the desired screen after creating the post
-      navigation.navigate('FindJobScreen');
+      // 1. อัปโหลดรูปภาพ
+      if (image) {
+        setUploading(true);
+        const response = await fetch(image);
+        const blob = await response.blob();
+        const imageName = `${Date.now()}`;
+        const ref = firebase.storage().ref().child(`images/${imageName}`);
+  
+        await ref.put(blob);
+        const imageUrl = await ref.getDownloadURL();
+  
+        // 2. สร้าง post object พร้อม URL รูปภาพ
+        const post = {
+          jobTitle,
+          position,
+          agency,
+          attributes,
+          welfareBenefits,
+          imageUrl,
+          // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
+        };
+  
+        // 3. สร้างโพสต์โดยใช้ post object ที่สร้างขึ้น
+        const postRef = firebase.firestore().collection('JobPosts');
+        const docRef = await postRef.add(post);
+  
+        console.log('Post created with ID: ', docRef.id);
+  
+        // 4. Navigate ไปยังหน้าที่ต้องการหลังจากสร้างโพสต์เรียบร้อย
+        navigation.navigate('FindJobScreen');
+      } else {
+        // ไม่มีรูปภาพที่ต้องการอัปโหลด
+        console.error('No image to upload');
+      }
     } catch (error) {
       console.error('Error creating post: ', error);
     }
   };
-
+  
+  
+  
+  
+  
+  
+  
+  
 
 return (
   <ScrollView style={{}}>
@@ -106,12 +141,6 @@ return (
 <TouchableOpacity style={styles.button} onPress={pickImage}>  
   <Text style={styles.buttonText}>เลือกรูปภาพ</Text>
 </TouchableOpacity>
-
-{image && (
-  <TouchableOpacity style={styles.button} onPress={uploadImage} disabled={uploading}>
-    <Text style={styles.buttonText}>อัปโหลดรูปภาพ</Text>
-  </TouchableOpacity>
-)}
 
   </View>
 
