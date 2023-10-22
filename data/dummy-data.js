@@ -1,12 +1,13 @@
-// import Category from "../models/category";
 import firebase from "../database/firebaseDB";
 
-import Job from "../models/Jobs";
 
 export const JOBS = [];
 const jobPostsCollection = firebase.firestore().collection('JobPosts');
 
-jobPostsCollection.get().then((querySnapshot) => {
+// Create a real-time listener to fetch and update data when it changes
+jobPostsCollection.onSnapshot((querySnapshot) => {
+  JOBS.length = 0; // Clear the existing data
+
   querySnapshot.forEach((doc) => {
     const jobData = doc.data();
     const jobId = doc.id;
@@ -14,4 +15,11 @@ jobPostsCollection.get().then((querySnapshot) => {
     const jobWithId = { id: jobId, ...jobData };
     JOBS.push(jobWithId);
   });
+});
+
+// Optionally, you can also handle any errors that occur during the real-time listener
+jobPostsCollection.onSnapshot((querySnapshot) => {
+  // Handle changes as before
+}, (error) => {
+  console.error("Error getting real-time updates: ", error);
 });

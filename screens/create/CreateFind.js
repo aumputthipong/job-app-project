@@ -1,38 +1,141 @@
 import React, { useState,useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity,Image,ScrollView} from "react-native";
+import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity,Image,ScrollView, Alert} from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
+import firebase from '../../database/firebaseDB';
+import storage from '@react-native-firebase/storage';
+
+// Now you can use Firebase services in your component
+
+
+
 const CreateFind = ({ route, navigation }) => {
+  const [jobTitle, setJobTitle] = useState('');
+  const [position, setPosition] = useState('');
+  const [agency, setAgency] = useState('');
+  const [attributes, setAttributes] = useState([]);
+  const [category, setCategory] = useState('');
+  const [detail, setDetail] = useState('');
+  const [email, setEmail] = useState('');
+  const [employmentType, setEmploymentType] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [phone ,setPhone] = useState('');
+  const [wage ,setWage] = useState(0);
+  const [welfareBenefits ,setWelfareBenefits] = useState([]);
+  const [workperiod ,setWorkperiod] = useState('');
+
   
 
-  const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
-  const[image,setImage]= useState(null);
-  useEffect(()=>{
-    (async()=>{
-      const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      setHasGalleryPermission(galleryStatus.status === 'granted');
-    })();
-  },[]);
 
-  const pickImage = async() =>{
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTpyes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing:true,
-      aspect:[12,8],
-      quality:1,
+  const [image, setImage] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [transferred, setTransferred] = useState(0);
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+    if (status !== 'granted') {
+      alert('Permission to access media library is required.');
+      return;
+    }
+  
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
-
-    console.log(result);
-    if(!result.canceled){
-      if (result.assets && result.assets.length > 0) {
-        setImage(result.assets[0].uri);
-      }
+  
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      // const imageUrl = result.assets[0].uri;
     }
   };
-  if(hasGalleryPermission ===false){
-    return  alert("ไม่ได้รับอนุญาติให้เข้าถึงรูปภาพ");
+
+  const uploadImage = async () => {
+    if (image) {
+      setUploading(true);
+      const response = await fetch(image);
+      const blob = await response.blob();
+      const imageName = `${Date.now()}`;
+      const ref = firebase.storage().ref().child(`images/${imageName}`);
+  
+      try {
+        await ref.put(blob);
+        const imageUrl = await ref.getDownloadURL();
+        setImageUrl(imageUrl);
+      } catch (error) {
+        console.error('Error uploading image: ', error);
+      }
+  
+      setUploading(false);
+      setImage(null);
+    }
+  };
+
+ 
+
+  const createPost = async () => {
+    try {
+      // 1. อัปโหลดรูปภาพไปยัง Firebase Storage
+      if (image) {
+        setUploading(true);
+        const response = await fetch(image);
+        const blob = await response.blob();
+        const imageName = `${Date.now()}`;
+        const ref = firebase.storage().ref().child(`images/${imageName}`);
+  
+        await ref.put(blob);
+        const imageUrl = await ref.getDownloadURL();
+  
+        // 2. สร้าง post object พร้อม URL รูปภาพ
+        const post = {
+          jobTitle,
+          position,
+          agency,
+          attributes,
+          welfareBenefits,
+          imageUrl, // เพิ่ม URL รูปภาพที่ได้จาก Firebase Storage
+          // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
+        };
+  
+        // 3. สร้างโพสต์โดยใช้ post object ที่สร้างขึ้น
+        const postRef = firebase.firestore().collection('JobPosts');
+        const docRef = await postRef.add(post);
+  
+        console.log('Post created with ID: ', docRef.id);
+  
+        // 4. Navigate ไปยังหน้าที่ต้องการหลังจากสร้างโพสต์เรียบร้อย
+        navigation.navigate('FindJobScreen');
+      } else {
+        // ไม่มีรูปภาพที่ต้องการอัปโหลด
+        console.error('No image to upload');
+      }
+    } catch (error) {
+      console.error('Error creating post: ', error);
+    }
+  };
+  
+  
+  const submitPost= async()=> {
+    const uploadUri = image;
+    let filename = uploadUri.substring(uploadUri.lastIndexOf('/')+1);
+    setUploading(true);
+    try{
+      await storage().ref(filename).putFile(uploadUri);
+      setUploading(false);
+      Alert.alert('Image Upload',"Your upload successful");
+    }catch(e){
+      console.log(e);
+    }
+
+    setImage(null);
+
   }
-   
+  
+  
+  
+
 return (
   <ScrollView style={{}}>
 
@@ -47,12 +150,16 @@ return (
     autoCapitalize="none"
     autoCorrect={false}
     keyboardType="number-pad"
+    onChangeText={(jobTitle) => setJobTitle(jobTitle)}
     maxLength={20}
     placeholder="ชื่อโพส"
   /> 
   <View>
-  <Button title="Pick Image" onPress={()=> pickImage() } />
-    {image && <Image source={{uri:image}} style={styles.bgImage} />}
+  {image && <Image source={{ uri: image }} style={styles.bgImage} />}
+
+<TouchableOpacity style={styles.button} onPress={pickImage}>  
+  <Text style={styles.buttonText}>เลือกรูปภาพ</Text>
+</TouchableOpacity>
 
   </View>
 
@@ -66,10 +173,11 @@ return (
     autoCapitalize="none"
     autoCorrect={false}
     keyboardType="number-pad"
+    onChangeText={(position) => setPosition(position)}
     maxLength={20}
     placeholder="ชื่อผู้ใช้"
   /> 
-   {/* ตำแหน่ง*/}
+   {/* หน่วยงาน*/}
     <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
     <Text style={{ ...styles.text, ...{} }}>หน่วยงาน</Text>
   </View>
@@ -79,6 +187,7 @@ return (
     autoCapitalize="none"
     autoCorrect={false}
     keyboardType="number-pad"
+    onChangeText={(agency) => setAgency(agency)}
     maxLength={20}
     placeholder="ชื่อผู้ใช้"
   />
@@ -150,9 +259,8 @@ return (
   
 
   <TouchableOpacity style={styles.button}
-   onPress={() => {
-     navigation.navigate("Login");
-   }}>
+    onPress={createPost}>
+    {/* // onPress={submitPost}> */}
      <Text style={{...styles.text,...{alignSelf:"center",}}}>สร้างโพส</Text>
    </TouchableOpacity>
  </View>
@@ -207,6 +315,15 @@ const styles = StyleSheet.create({
     height: 180,
     justifyContent: "flex-end",
     resizeMode: "stretch",
+  },
+  button: { 
+    backgroundColor: "#5A6BF5",
+    width:"50%",
+    height: 40,
+    borderRadius:10,
+    padding:"2.5%",
+    alignItems: "center",
+    alignSelf:"center",
   },
 });
 
