@@ -1,10 +1,8 @@
-import React, { useState,useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity,Image,ScrollView, Alert} from "react-native";
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, Alert } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios';
 import firebase from '../../database/firebaseDB';
-import storage from '@react-native-firebase/storage';
-
+import { SelectList } from 'react-native-dropdown-select-list'
 // Now you can use Firebase services in your component
 
 
@@ -24,246 +22,151 @@ const CreateFind = ({ route, navigation }) => {
   const [welfareBenefits ,setWelfareBenefits] = useState([]);
   const [workperiod ,setWorkperiod] = useState('');
 
-  
-
+    const [uploading, setUploading] = useState(false);
 
   const [image, setImage] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [transferred, setTransferred] = useState(0);
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    
     if (status !== 'granted') {
-      alert('Permission to access media library is required.');
-      return;
-    }
-  
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-  
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      // const imageUrl = result.assets[0].uri;
+      Alert.alert('Permission needed', 'Please allow access to your media library to pick an image.');
+    } else {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      }
     }
   };
 
-  const uploadImage = async () => {
-    if (image) {
-      setUploading(true);
-      const response = await fetch(image);
-      const blob = await response.blob();
-      const imageName = `${Date.now()}`;
-      const ref = firebase.storage().ref().child(`images/${imageName}`);
+  const submitPost = async () => {
+    const uploadUri = image;
+    if (uploadUri) {
+      let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
   
       try {
-        await ref.put(blob);
-        const imageUrl = await ref.getDownloadURL();
-        setImageUrl(imageUrl);
-      } catch (error) {
-        console.error('Error uploading image: ', error);
-      }
-  
-      setUploading(false);
-      setImage(null);
-    }
-  };
-
- 
-
-  const createPost = async () => {
-    try {
-      // 1. อัปโหลดรูปภาพไปยัง Firebase Storage
-      if (image) {
-        setUploading(true);
-        const response = await fetch(image);
+        const response = await fetch(uploadUri);
         const blob = await response.blob();
-        const imageName = `${Date.now()}`;
-        const ref = firebase.storage().ref().child(`images/${imageName}`);
-  
-        await ref.put(blob);
-        const imageUrl = await ref.getDownloadURL();
-  
-        // 2. สร้าง post object พร้อม URL รูปภาพ
-        const post = {
-          jobTitle,
-          position,
-          agency,
-          attributes,
-          welfareBenefits,
-          imageUrl, // เพิ่ม URL รูปภาพที่ได้จาก Firebase Storage
-          // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
-        };
-  
-        // 3. สร้างโพสต์โดยใช้ post object ที่สร้างขึ้น
-        const postRef = firebase.firestore().collection('JobPosts');
-        const docRef = await postRef.add(post);
-  
-        console.log('Post created with ID: ', docRef.id);
-  
-        // 4. Navigate ไปยังหน้าที่ต้องการหลังจากสร้างโพสต์เรียบร้อย
-        navigation.navigate('FindJobScreen');
-      } else {
-        // ไม่มีรูปภาพที่ต้องการอัปโหลด
-        console.error('No image to upload');
+        const uploadTask = firebase.storage().ref().child(`images/${filename}`).put(blob);
+        // abcdes
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            // Handle upload progress if needed
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(`Upload is ${progress}% done`);
+          },
+          (error) => {
+            // Handle upload error
+            console.error('Upload Error: ', error);
+          },
+          () => {
+            // Upload completed successfully, get the download URL
+            uploadTask.snapshot.ref.getDownloadURL().then(async(downloadURL) => {
+              // Save the download URL to Firestore or use it as needed
+              console.log('File available at', downloadURL);
+              const post = {
+                jobTitle,
+                position,
+                agency,
+                attributes,
+                welfareBenefits,
+                imageUrl: downloadURL,
+                wage,
+                category,
+                employmentType,
+                // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
+              };
+              const postRef = firebase.firestore().collection('JobPosts');
+              const docRef = await postRef.add(post);
+              console.log('Post created with ID: ', docRef.id);
+              navigation.navigate('FindJobScreen');
+            });
+          }
+        );
+      } catch (e) {
+        console.log(e);
       }
-    } catch (error) {
-      console.error('Error creating post: ', error);
+    } else {
+      console.log('No image to upload');
     }
   };
-  
-  
-  const submitPost= async()=> {
-    const uploadUri = image;
-    let filename = uploadUri.substring(uploadUri.lastIndexOf('/')+1);
-    setUploading(true);
-    try{
-      await storage().ref(filename).putFile(uploadUri);
-      setUploading(false);
-      Alert.alert('Image Upload',"Your upload successful");
-    }catch(e){
-      console.log(e);
-    }
 
-    setImage(null);
-
-  }
-  
-  
-  
-
+  const categorydata = [
+    {key:'1', value:'งานบัญชี'},
+    {key:'2', value:'งานทรัพยากรบุคคล'},
+    {key:'3', value:'งานธนาคาร'},
+    {key:'4', value:'งานสุขภาพ'},
+    {key:'5', value:'งานก่อสร้าง'},
+    {key:'6', value:'งานออกแบบ'},
+    {key:'7', value:'งานไอที'},
+    {key:'8', value:'งานการศึกษา'},
+]
+const emptypedata = [
+  {key:'1', value:'รายเดือน'},
+  {key:'2', value:'รายวัน'},
+  {key:'3', value:'ต่อชิ้นงาน'},
+]
 return (
   <ScrollView style={{}}>
 
-  <View style={styles.screen}>
-      {/* JobTitle */}
-  <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-    <Text style={{ ...styles.text, ...{} }}>ชื่อโพส</Text>
-  </View>
-   <TextInput
-    style={styles.input}
-    blurOnSubmit
-    autoCapitalize="none"
-    autoCorrect={false}
-    keyboardType="number-pad"
-    onChangeText={(jobTitle) => setJobTitle(jobTitle)}
-    maxLength={20}
-    placeholder="ชื่อโพส"
-  /> 
-  <View>
-  {image && <Image source={{ uri: image }} style={styles.bgImage} />}
+<View style={{ padding: 20 }}>
+        <Text>หัวข้องาน</Text>
+        <TextInput
+          value={jobTitle}
+          onChangeText={setJobTitle}
+          placeholder="หัวข้องาน"
+          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+        />
+    <Text>ตำแหน่งที่รับ</Text>
+<TextInput
+          value={position}
+          onChangeText={setPosition}
+          placeholder="ตำแหน่ง/อาชีพ"
+          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+        />
+    <Text>บริษัท</Text>
+<TextInput
+          value={agency}
+          onChangeText={setAgency}
+          placeholder="บริษัท"
+          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+        />
 
-<TouchableOpacity style={styles.button} onPress={pickImage}>  
-  <Text style={styles.buttonText}>เลือกรูปภาพ</Text>
-</TouchableOpacity>
+        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, marginBottom: 10 }} />}
+        <Button title="Pick Image" onPress={pickImage} />
+        <Text>ประเภทงาน</Text>
+        <SelectList 
+        setSelected={(val) => setCategory(val)} 
+        data={categorydata} 
+        placeholder='ประเภทของงาน'
+        save="value"
+      />
 
-  </View>
+    <Text>ประเภทการจ้าง</Text>
+        <SelectList 
+        setSelected={(val) => setEmploymentType(val)} 
+        data={emptypedata} 
+        placeholder='ประเภทการจ้าง'
+        save="value"
+      />
 
-   {/* ตำแหน่ง*/}
-  <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-    <Text style={{ ...styles.text, ...{} }}>ตำแหน่งที่รับ</Text>
-  </View>
-   <TextInput
-    style={styles.input}
-    blurOnSubmit
-    autoCapitalize="none"
-    autoCorrect={false}
-    keyboardType="number-pad"
-    onChangeText={(position) => setPosition(position)}
-    maxLength={20}
-    placeholder="ชื่อผู้ใช้"
-  /> 
-   {/* หน่วยงาน*/}
-    <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-    <Text style={{ ...styles.text, ...{} }}>หน่วยงาน</Text>
-  </View>
-   <TextInput
-    style={styles.input}
-    blurOnSubmit
-    autoCapitalize="none"
-    autoCorrect={false}
-    keyboardType="number-pad"
-    onChangeText={(agency) => setAgency(agency)}
-    maxLength={20}
-    placeholder="ชื่อผู้ใช้"
-  />
-  {/* ประเภทการจ้าง (ควรเป็นchoice dropdown ,checkbox)รายเดือน,รายวัน,ต่อชิ้นงาน */}
-  <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-    <Text style={{ ...styles.text, ...{} }}>ประเภทการจ้าง</Text>
-  </View>
-   <TextInput
-    style={styles.input}
-    blurOnSubmit
-    autoCapitalize="none"
-    autoCorrect={false}
-    keyboardType="number-pad"
-    maxLength={20}
-    placeholder="ชื่อผู้ใช้"
-  /> 
-   {/* ค่าจ้าง*/}
-    <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-    <Text style={{ ...styles.text, ...{} }}>ค่าจ้าง</Text>
-  </View>
-   <TextInput
-    style={styles.input}
-    blurOnSubmit
-    autoCapitalize="none"
-    autoCorrect={false}
-    keyboardType="number-pad"
-    maxLength={20}
-    placeholder="ชื่อผู้ใช้"
-  /> 
-  {/*welfareBenefits*/}
-<View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-    <Text style={{ ...styles.text, ...{} }}>สวัสดิการ</Text>
-  </View>
-   <TextInput
-    style={styles.input}
-    blurOnSubmit
-    autoCapitalize="none"
-    autoCorrect={false}
-    keyboardType="number-pad"
-    maxLength={20}
-    placeholder="ชื่อผู้ใช้"
-  /> 
-  <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-    <Text style={{ ...styles.text, ...{} }}>อีเมล</Text>
-  </View>
-   <TextInput
-    style={styles.input}
-    blurOnSubmit
-    autoCapitalize="none"
-    autoCorrect={false}
-    keyboardType="number-pad"
-    maxLength={20}
-    placeholder="ชื่อผู้ใช้"
-  /> 
-  <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
-    <Text style={{ ...styles.text, ...{} }}>เบอร์โทร</Text>
-  </View>
-   <TextInput
-    style={styles.input}
-    blurOnSubmit
-    autoCapitalize="none"
-    autoCorrect={false}
-    keyboardType="number-pad"
-    maxLength={20}
-    placeholder="ชื่อผู้ใช้"
-  /> 
+<Text>ค่าจ้าง</Text>
+<TextInput
+          value={wage}
+          onChangeText={setWage}
+          placeholder="฿บาท"
+          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+        />
+    
+        <Button title="Submit Post" onPress={submitPost} />
+      </View>
 
-
-  
-
-  <TouchableOpacity style={styles.button}
-    onPress={createPost}>
-    {/* // onPress={submitPost}> */}
-     <Text style={{...styles.text,...{alignSelf:"center",}}}>สร้างโพส</Text>
-   </TouchableOpacity>
- </View>
  </ScrollView>
 );
 
