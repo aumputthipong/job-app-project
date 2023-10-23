@@ -53,7 +53,7 @@ const CreateFind = ({ route, navigation }) => {
         const response = await fetch(uploadUri);
         const blob = await response.blob();
         const uploadTask = firebase.storage().ref().child(`images/${filename}`).put(blob);
-        
+        // abcdes
         uploadTask.on(
           'state_changed',
           (snapshot) => {
