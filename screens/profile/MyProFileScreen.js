@@ -4,7 +4,6 @@ import {
   Text,
   Button,
   StyleSheet,
-  ScrollView,
   ImageBackground,
   Modal,
   TextInput,
@@ -16,6 +15,7 @@ import firebase from '../../database/firebaseDB';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from "@expo/vector-icons";
+import { ScrollView } from 'react-native-virtualized-view'
 
 const MyProfileScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
@@ -164,6 +164,7 @@ const MyProfileScreen = ({ route, navigation }) => {
   
 
   return (
+    
     <View style={styles.screen}>
       {userData ? (
          <View>
@@ -181,16 +182,16 @@ const MyProfileScreen = ({ route, navigation }) => {
                {/* อาชีพ */}
                <Text style={styles.subText}>{userData.job}</Text>
              </View>
-             <FontAwesome5 name={'edit'} size={22} onPress={startEditing} style={{...{ paddingLeft: 70, paddingTop: 10} }}/>
+             <FontAwesome5 name={'edit'} size={22} onPress={startEditing} style={{...{ left: 320, top: 10, position: 'absolute'} }}/>
              
            </View>
            {/* aboutme */}
-           <FontAwesome5 name={'edit'} size={22} onPress={pickImageAndUpload} style={{...{ paddingLeft: 80} }} />
-           <Text style={{ ...styles.subTitle, ...{ marginTop: 10 } }}>About Me</Text>
+           <Text style={{ ...styles.subTitle, ...{ marginTop: 20 } }}>About Me</Text>
            <Text style={{ ...styles.subText, ...{ marginLeft: 20} }}>
              {userData.aboutme}
            </Text>
-           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 310, top: 90} }}/>
+           <FontAwesome5 name={'camera'} size={22} onPress={pickImageAndUpload} style={{...{ left: 70, top: 70, position: 'absolute'} }} />
+           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 317.5, top: 232.5, position: 'absolute'} }}/>
          </View>
          {/*2 ContactBox */}
          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
@@ -407,7 +408,7 @@ const styles = StyleSheet.create({
   },
   subText: {
     fontSize: 18,
-    marginHorizontal: 20,
+    marginHorizontal:15,
     // backgroundColor:"blue"
   },
   detailText: {

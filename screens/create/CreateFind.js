@@ -303,7 +303,7 @@ const CreateFind = ({ route, navigation }) => {
           />
 
           <TouchableOpacity
-            style={{ ...styles.button, ...{ width: "20%", marginleft: "5" } }}
+            style={{ ...styles.button, ...{ width: "20%", marginleft: "50" } }}
             onPress={benefitAdd}
           >
             <Text style={{ ...{ color: "white" } }}>เพิ่ม</Text>

@@ -81,12 +81,11 @@ const HireJobScreen = ({ route, navigation }) => {
         // value={enteredValue}
         // onChangeText={numberInputHandler}
       />
-      <Button
-        title="create"
-        onPress={() => {
-          navigation.navigate("CreateHire", {});
-        }}
-      />
+
+      <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("CreateHire", {});}}>
+        <Text  style={{...{color: "white"}}}>สร้างโพสต์</Text>
+      </TouchableOpacity>
+
       <FlatList
         data={DATA}
         renderItem={({ item }) => <Item title={item.title} />}

@@ -60,7 +60,7 @@ const NotificationScreen = ({route, navigation}) => {
   );
   return (
 
-    <View styles={styles.container}>
+    <View style={styles.container}>
       <FlatList
         data={displayedJobs}
         renderItem={({ item }) => {
@@ -89,8 +89,6 @@ const NotificationScreen = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
     backgroundColor:"#ABA7FA",
   },
 
