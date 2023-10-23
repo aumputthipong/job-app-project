@@ -13,6 +13,8 @@ import { useSelector } from "react-redux";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const FindJobDetailScreen = ({ route, navigation }) => {
+
+
   const jobid = route.params.id;
   const availableJob = useSelector((state) => state.jobs.filteredJobs);
   const displayedJob = availableJob.find(job => job.id == jobid);
