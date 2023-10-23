@@ -114,7 +114,7 @@ const MyProfileScreen = ({ route, navigation }) => {
                {/* อาชีพ */}
                <Text style={styles.subText}>{userData.job}</Text>
              </View>
-             <FontAwesome5 name={'edit'} size={22} onPress={startEditing} style={{...{ paddingLeft: 70, paddingTop: 10} }}/>
+             <FontAwesome5 name={'edit'} size={22} onPress={startEditing} style={{...{ left: 317.5, top: 10, position: 'absolute'} }}/>
              
            </View>
            {/* aboutme */}
@@ -122,7 +122,7 @@ const MyProfileScreen = ({ route, navigation }) => {
            <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
              {userData.aboutme}
            </Text>
-           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 310, top: 90} }}/>
+           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 312.5, top: 230, position: 'absolute'} }}/>
          </View>
          {/*2 ContactBox */}
          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
@@ -163,22 +163,25 @@ const MyProfileScreen = ({ route, navigation }) => {
            <Text style={styles.HeaderText}>การศึกษา</Text>
            
            <View style={{ ...styles.postRow, ...{} }}>
-             <Text style={styles.subTitle}>ปริญญาตรี :</Text>
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", width: "75%" } }}>
+             <Text style={styles.subTitle}>ปริญญาตรี : 
+             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
                {userData.bachelor}
+             </Text>
              </Text>
            </View>
            {/* เบอร์ */}
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาโท : </Text>
+             <Text style={styles.subTitle}>ปริญญาโท : 
              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
                {userData.master}
              </Text>
+             </Text>
            </View>
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาเอก : </Text>
+             <Text style={styles.subTitle}>ปริญญาเอก : 
              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
                {userData.doctoral}
+             </Text>
              </Text>
            </View>
          </View>
@@ -233,7 +236,7 @@ const MyProfileScreen = ({ route, navigation }) => {
               setEditData({ ...editData, aboutme: text })
             }
           />
-          <Text>About Me</Text>
+          <Text>Email</Text>
           <TextInput
           style={styles.txtinput}
             placeholder="Email"
@@ -314,7 +317,7 @@ const styles = StyleSheet.create({
   },
   contactBox: {
     width: 350,
-    height: "28.5%",
+    height: "29%",
     marginVertical: "1%",
     borderRadius: 10,
     alignSelf: "center",
