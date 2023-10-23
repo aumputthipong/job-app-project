@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 import firebase from '../../database/firebaseDB';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -33,11 +34,76 @@ const MyProfileScreen = ({ route, navigation }) => {
     bachelor: '',
     master: '',
     doctoral: '',
+    
   };
 
   const [editData, setEditData] = useState(initialEditData);
-
+  const [image, setImage] = useState(null);
   const userId = firebase.auth().currentUser.uid;
+
+  const pickImageAndUpload = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', 'Please allow access to your media library to pick an image.');
+    } else {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      submitImg(result.assets[0].uri);
+
+      }
+    }
+  };
+
+  const submitImg = async (uploadUri) => {
+    if (uploadUri) {
+      let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
+
+      try {
+        const response = await fetch(uploadUri);
+        const blob = await response.blob();
+        const uploadTask = firebase.storage().ref().child(`profiles/${filename}`).put(blob);
+
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(`Upload is ${progress}% done`);
+          },
+          (error) => {
+            console.error('Upload Error: ', error);
+          },
+          () => {
+            uploadTask.snapshot.ref.getDownloadURL().then(async (downloadURL) => {
+              const img = {
+                imageUrl: downloadURL,
+              };
+              const userRef = firebase.firestore().collection('User Info').doc(userId);
+              await userRef.update(img)
+              .then(() => {
+                console.log('อัพเดทข้อมูลสำเร็จ');
+                getUserData();
+              })
+              .catch((error) => {
+                console.error('เกิดข้อผิดพลาดในการอัพเดทข้อมูล:', error);
+              });
+            });
+          }
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      console.log('No image to upload');
+    }
+  };
+
 
   const startEditing = () => {
     setIsEditing(true);
@@ -105,8 +171,9 @@ const MyProfileScreen = ({ route, navigation }) => {
          <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" } }}>
            <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
              <View style={styles.postRow}>
-             <Image source={require("../../assets/PostPlaceholder.png")} style={styles.profileImg}></Image>
-          
+             <Image source={{
+              uri: userData.imageUrl || "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}} style={styles.profileImg}></Image>
+             
              </View>
              <View>
                {/* ชื่อ*/}
@@ -114,15 +181,16 @@ const MyProfileScreen = ({ route, navigation }) => {
                {/* อาชีพ */}
                <Text style={styles.subText}>{userData.job}</Text>
              </View>
-             <FontAwesome5 name={'edit'} size={22} onPress={startEditing} style={{...{ left: 317.5, top: 10, position: 'absolute'} }}/>
+             <FontAwesome5 name={'edit'} size={22} onPress={startEditing} style={{...{ paddingLeft: 70, paddingTop: 10} }}/>
              
            </View>
            {/* aboutme */}
-           <Text style={{ ...styles.subTitle, ...{} }}>About Me</Text>
-           <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
+           <FontAwesome5 name={'edit'} size={22} onPress={pickImageAndUpload} style={{...{ paddingLeft: 80} }} />
+           <Text style={{ ...styles.subTitle, ...{ marginTop: 10 } }}>About Me</Text>
+           <Text style={{ ...styles.subText, ...{ marginLeft: 20} }}>
              {userData.aboutme}
            </Text>
-           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 312.5, top: 230, position: 'absolute'} }}/>
+           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 310, top: 90} }}/>
          </View>
          {/*2 ContactBox */}
          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>

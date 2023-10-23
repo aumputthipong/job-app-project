@@ -74,8 +74,8 @@ const FindJobScreen = ({ route, navigation }) => {
         // onChangeText={numberInputHandler}
       />
 
-      <TouchableOpacity style={styles.button}>
-        <Text onPress={() => {navigation.navigate("CreateFind", {});}} style={{...{color: "white"}}}>สร้างโพสต์</Text>
+      <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("CreateFind", {});}}>
+        <Text  style={{...{color: "white"}}}>สร้างโพสต์</Text>
       </TouchableOpacity>
 
       <FlatList
