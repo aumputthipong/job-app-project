@@ -14,7 +14,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
-
+// ก่อนพัง
 const EditHire = ({ route, navigation }) => {
 
 const hireid = route.params.id;
