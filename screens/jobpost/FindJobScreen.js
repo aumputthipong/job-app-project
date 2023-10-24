@@ -31,11 +31,11 @@ const FindJobScreen = ({ route, navigation }) => {
     >
       <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
         <View style={{ ...styles.postRow, ...styles.postHeader }}>
-          <ImageBackground
+          <Image
             source={{
               uri: itemData.imageUrl}}
             style={styles.bgImage}
-          ></ImageBackground>
+          ></Image>
           
         </View>
         {/* ชื่อหน่วยงาน */}

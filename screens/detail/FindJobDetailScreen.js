@@ -8,6 +8,7 @@ import {
   ScrollView,
   Image,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -18,17 +19,21 @@ const FindJobDetailScreen = ({ route, navigation }) => {
   const jobid = route.params.id;
   const availableJob = useSelector((state) => state.jobs.filteredJobs);
   const displayedJob = availableJob.find(job => job.id == jobid);
-  // console.log("display index :"+displayedJob)
+  // console.log("display index :"+displayedJob[0])
 
   return (
     <View style={styles.screen}>
       <ScrollView style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
+
         <View style={{ ...styles.postRow, ...styles.postHeader }}>
           <ImageBackground
-            source={require("../../assets/PostPlaceholder.png")}
+            source={{uri: displayedJob.imageUrl}}
             style={styles.bgImage}
           ></ImageBackground>
         </View>
+        <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("EditFind", {});}}>
+          <Text  style={{...{color: "white"}}}>แก้ไข</Text>
+        </TouchableOpacity>
          {/* ชื่อหน่วยงาน */}
          <Text style={styles.jobTitle} >
           {displayedJob.jobTitle}
@@ -126,7 +131,7 @@ const FindJobDetailScreen = ({ route, navigation }) => {
             <Text style={{ ...styles.subTitle, ...{ marginTop: 10 } }}>
               คุณจอร์น สิก จิก ซอน
             </Text>
-            <Text style={{ ...styles.subText, ...{} }}>สุดยอดฮาฟฟู้ว</Text>
+            <Text style={{ ...styles.subText, ...{ paddingBottom:75,} }}>สุดยอดฮาฟฟู้ว</Text>
           </View>
         </View>
     
@@ -140,8 +145,8 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: "flex-start",
-    alignItems: "center",
     backgroundColor:"#ABA7FA",
+    
   },
   jobTitle:{
     marginTop: 20,
@@ -158,6 +163,7 @@ const styles = StyleSheet.create({
     marginVertical: "2%",
     borderRadius: 10,
     alignSelf: "center",
+   
     
     // padding: 20
   },
@@ -217,6 +223,15 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 360,
+  },
+  button: {
+    backgroundColor: "#5A6BF5",
+    width: "50%",
+    height: 40,
+    borderRadius: 10,
+    padding: "2.5%",
+    alignItems: "center",
+    alignSelf: "center",
   },
 });
 

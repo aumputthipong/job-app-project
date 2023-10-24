@@ -14,9 +14,8 @@ import { ScrollView } from 'react-native-virtualized-view'
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
-// Now you can use Firebase services in your component
 
-const CreateFind = ({ route, navigation }) => {
+const EditHire = ({ route, navigation }) => {
   const [jobTitle, setJobTitle] = useState("");
   const [position, setPosition] = useState("");
   const [agency, setAgency] = useState("");
@@ -88,7 +87,7 @@ const CreateFind = ({ route, navigation }) => {
               .getDownloadURL()
               .then(async (downloadURL) => {
                 // Save the download URL to Firestore or use it as needed
-                const postById = firebase.auth().currentUser.uid;
+                const postById = docRef.id;
                 console.log("File available at", downloadURL);
                 const post = {
                   jobTitle,
@@ -128,12 +127,6 @@ const CreateFind = ({ route, navigation }) => {
     { key: "7", value: "งานไอที" },
     { key: "8", value: "งานการศึกษา" },
   ];
-  const emptypedata = [
-    { key: "1", value: "รายเดือน" },
-    { key: "2", value: "รายวัน" },
-    { key: "3", value: "ต่อชิ้นงาน" },
-  ];
-  // สำหรับใส่attribute
   const [inputText, setInputText] = useState("");
   // welfareBenefit
   const [inputText2, setInputText2] = useState("");
@@ -214,13 +207,6 @@ const CreateFind = ({ route, navigation }) => {
           save="value"
         />
 
-        <Text>ประเภทการจ้าง</Text>
-        <SelectList
-          setSelected={(val) => setEmploymentType(val)}
-          data={emptypedata}
-          placeholder="ประเภทการจ้าง"
-          save="value"
-        />
 
         <Text>ค่าจ้าง</Text>
         <TextInput
@@ -303,7 +289,7 @@ const CreateFind = ({ route, navigation }) => {
           />
 
           <TouchableOpacity
-            style={{ ...styles.button, ...{ width: "20%", marginleft: "50" } }}
+            style={{ ...styles.button, ...{ width: "20%", marginleft: "5" } }}
             onPress={benefitAdd}
           >
             <Text style={{ ...{ color: "white" } }}>เพิ่ม</Text>
@@ -373,4 +359,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateFind;
+export default EditHire;

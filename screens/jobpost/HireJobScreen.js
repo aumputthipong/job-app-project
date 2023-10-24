@@ -44,9 +44,14 @@ const HireJobScreen = ({ route, navigation }) => {
             style={{...styles.profileImg,...{}}}
           ></Image>
         {/* ชื่อหน่วยงาน */}
-        <Text style={styles.title}>KMITL</Text>
+        <View>
+        <Text style={styles.title}>คุณสมพงษ์</Text>
+        <Text    style={{...styles.title,...{}}}>KMITL</Text>
         {/* ตำแหน่ง */}
         <Text style={styles.subText}>Frontend Dev</Text>
+
+        </View>
+        </View>
 
         {/* ค่าจ้าง */}
         {/* <Text style={styles.subText}>สามารถต่อรองเงินเดือนได้</Text> */}
@@ -146,9 +151,10 @@ const styles = StyleSheet.create({
   },
   mealRow: {
     flexDirection: "row",
-    backgroundColor: "gray",
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10
+
+    borderRadius:10,
+    marginBottom:10,
+
   },
   mealHeader: {
     height: "42.5%",

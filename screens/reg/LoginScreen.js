@@ -69,10 +69,10 @@ const LoginScreen = ({ route, navigation }) => {
         <Ionicons name={showPassword ? 'eye' : 'eye-off'} size={20} color="black" />
       </TouchableOpacity>
 
-     <TouchableOpacity style={styles.button}>
-        <Text id="btnLog" onPress={handleLogin} style={{...{alignSelf:"center",color: "black"}}}>เข้าสู่ระบบที่นี่</Text>
+     <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text id="btnLog"  style={{...{alignSelf:"center",color: "black"}}}>เข้าสู่ระบบที่นี่</Text>
       </TouchableOpacity>
-
+ 
       <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%" ,justifyContent:"center"} }}>
 
         <Text style={{...styles.text,...{fontSize:18,color:"blue",marginLeft:20}}}>ยังไม่มีบัญชีใช่ไหม</Text>
