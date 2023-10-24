@@ -14,7 +14,7 @@ import { ScrollView } from 'react-native-virtualized-view'
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
-
+// ก่อนพัง
 const EditHire = ({ route, navigation }) => {
   const [jobTitle, setJobTitle] = useState("");
   const [position, setPosition] = useState("");
