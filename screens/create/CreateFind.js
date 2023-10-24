@@ -9,8 +9,9 @@ import {
   Image,
   Alert,
   FlatList,
+  ScrollView
 } from "react-native";
-import { ScrollView } from 'react-native-virtualized-view'
+// import { ScrollView } from 'react-native-virtualized-view'
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
@@ -27,9 +28,9 @@ const CreateFind = ({ route, navigation }) => {
   const [employmentType, setEmploymentType] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [phone, setPhone] = useState("");
-  const [wage, setWage] = useState(0);
+  const [wage, setWage] = useState("");
   const [welfareBenefits, setWelfareBenefits] = useState([]);
-  const [workperiod, setWorkperiod] = useState("");
+
 
   const [uploading, setUploading] = useState(false);
 
@@ -100,6 +101,8 @@ const CreateFind = ({ route, navigation }) => {
                   wage,
                   category,
                   employmentType,
+                  email,
+                  phone,
                   postById,
                   // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
                 };
@@ -230,13 +233,6 @@ const CreateFind = ({ route, navigation }) => {
           keyboardType="numeric"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
-        <Text>ระยะเวลาจ้าง</Text>
-        <TextInput
-          value={workperiod}
-          onChangeText={setWorkperiod}
-          placeholder="เวลา"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-        />
         <Text>ช่องทางติดต่อ</Text>
         <TextInput
           value={email}
@@ -252,16 +248,18 @@ const CreateFind = ({ route, navigation }) => {
         />
         {/* attribute */}
         <Text>คุณสมบัติ</Text>
-        <FlatList
-            data={attributes}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text>{`${index + 1}. ${item}`}</Text>
-              <Button title="ลบ" onPress={() => attriDel(index)} />
-            </View>
-            )}
-          />
+        {attributes.map((attribute, index) => (
+           <View
+           style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text style={styles.subText} key={index}>{`${index + 1}. ${attribute}`}</Text>
+        {/* ปุ่มลบ */}
+        <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}} onPress={() => attriDel(index)} >
+        <Text  style={{...{color: "white"}}}>ลบ</Text>
+      </TouchableOpacity>
+        </View>
+      ))}
+       
+      
  <View style={styles.postRow}>
       <TextInput
         placeholder="คุณสมบัติ"
@@ -277,7 +275,16 @@ const CreateFind = ({ route, navigation }) => {
 
         {/* สวัสดิการ */}
         <Text>สวัสดิการ </Text>
-        <FlatList
+        {welfareBenefits.map((welfareBenefit, index) => (
+          <View
+          style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text style={styles.subText}>{`${index + 1}. ${welfareBenefit}`}</Text>
+        <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}} onPress={() => BenefitDel(index)} >
+        <Text  style={{...{color: "white"}}}>ลบ</Text>
+      </TouchableOpacity>
+        </View>
+      ))}
+        {/* <FlatList
           data={welfareBenefits}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
@@ -288,7 +295,7 @@ const CreateFind = ({ route, navigation }) => {
               <Button title="ลบ" onPress={() => BenefitDel(index)} />
             </View>
           )}
-        />
+        /> */}
         <View style={styles.postRow}>
           <TextInput
             placeholder="สวัสดิการ"
