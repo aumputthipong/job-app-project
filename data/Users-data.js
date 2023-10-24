@@ -1,7 +1,7 @@
 import firebase from "../database/firebaseDB";
 
 export const USERS = [];
-const usersCollection = firebase.firestore().collection('User Info').update();
+const usersCollection = firebase.firestore().collection('User Info');
 
 // Create a real-time listener to fetch and update data when it changes
 usersCollection.onSnapshot((querySnapshot) => {

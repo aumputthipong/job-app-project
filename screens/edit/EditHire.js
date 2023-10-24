@@ -9,46 +9,29 @@ import {
   Image,
   Alert,
   FlatList,
-  ScrollView,
 } from "react-native";
+import { ScrollView } from 'react-native-virtualized-view'
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
 // ก่อนพัง
 const EditHire = ({ route, navigation }) => {
-
-const hireid = route.params.id;
+  const hireid = route.params.id;
 
   const [hireTitle, setHireTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [detail, setDetail] = useState("");
-  const [email, setEmail] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [phone, setPhone] = useState("");
-  const [image, setImage] = useState(null);
-  const [postData, setPostData] = useState(null);
-  
+const [category, setCategory] = useState("");
+const [detail, setDetail] = useState("");
+const [email, setEmail] = useState("");
+const [imageUrl, setImageUrl] = useState("");
+const [phone, setPhone] = useState("");
+const [image, setImage] = useState(null);
+const [postData, setPostData] = useState(null);
 
-  const hirePostsRef = firebase.firestore().collection("HirePosts").doc(hireid);
+  const [uploading, setUploading] = useState(false);
 
-// hirePostsRef.get().then((doc) => {
-//   if (doc.exists) {
-//     const hirename = doc.data().hirename;
-//     // ตอนนี้คุณมีค่าของฟิลด์ hirename
-//     console.log(hirename);
-//   } else {
-//     console.log("ไม่พบเอกสารที่ต้องการ");
-//   }
-// }).catch((error) => {
-//   console.error("เกิดข้อผิดพลาดในการดึงข้อมูล: ", error);
-// });
 
-//   useEffect(() => {
-//     getUserData();
-//   }, []);
 
   const pickImage = async () => {
-    // อนุญาตให้เข้าถึงไลบรารีสื่อมัลติมีเดีย
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       Alert.alert(
@@ -59,12 +42,12 @@ const hireid = route.params.id;
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [210, 297], // สัดส่วนของ A4
+        aspect: [4, 3],
         quality: 1,
       });
 
       if (!result.canceled) {
-        setImage(result.uri);
+        setImage(result.assets[0].uri);
       }
     }
   };
@@ -131,7 +114,6 @@ const hireid = route.params.id;
       console.log("Please fill in all the required fields.");
     }
   };
-
   const categorydata = [
     { key: "1", value: "งานบัญชี" },
     { key: "2", value: "งานทรัพยากรบุคคล" },
@@ -142,24 +124,6 @@ const hireid = route.params.id;
     { key: "7", value: "งานไอที" },
     { key: "8", value: "งานการศึกษา" },
   ];
-
-  const deletePost = async () => {
-    try {
-      // Delete the post document from Firestore
-      await firebase.firestore().collection("HirePosts").doc(hireid).delete();
-  
-      // If there is an image associated with the post, delete it from storage
-      if (imageUrl) {
-        const imageRef = firebase.storage().refFromURL(imageUrl);
-        await imageRef.delete();
-      }
-  
-      console.log("Post deleted");
-      navigation.navigate("HireJobScreen");
-    } catch (error) {
-      console.error("Error deleting post:", error);
-    }
-  };
   return (
     <ScrollView style={{}}>
       <View style={{ padding: 20 }}>
@@ -236,6 +200,23 @@ const hireid = route.params.id;
       </View>
     </ScrollView>
   );
+};
+const deletePost = async () => {
+  try {
+    // Delete the post document from Firestore
+    await firebase.firestore().collection("HirePosts").doc(hireid).delete();
+
+    // If there is an image associated with the post, delete it from storage
+    if (imageUrl) {
+      const imageRef = firebase.storage().refFromURL(imageUrl);
+      await imageRef.delete();
+    }
+
+    console.log("Post deleted");
+    navigation.navigate("HireJobScreen");
+  } catch (error) {
+    console.error("Error deleting post:", error);
+  }
 };
 
 const styles = StyleSheet.create({
