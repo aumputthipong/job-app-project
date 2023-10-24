@@ -4,16 +4,18 @@ import {
   Text,
   Button,
   StyleSheet,
-  ScrollView,
   ImageBackground,
   Modal,
   TextInput,
   TouchableOpacity,
   Image,
-  
 } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 import firebase from '../../database/firebaseDB';
-
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Ionicons } from "@expo/vector-icons";
+import { ScrollView } from 'react-native-virtualized-view'
 
 const MyProfileScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
@@ -32,11 +34,76 @@ const MyProfileScreen = ({ route, navigation }) => {
     bachelor: '',
     master: '',
     doctoral: '',
+    
   };
 
   const [editData, setEditData] = useState(initialEditData);
-
+  const [image, setImage] = useState(null);
   const userId = firebase.auth().currentUser.uid;
+
+  const pickImageAndUpload = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', 'Please allow access to your media library to pick an image.');
+    } else {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      submitImg(result.assets[0].uri);
+
+      }
+    }
+  };
+
+  const submitImg = async (uploadUri) => {
+    if (uploadUri) {
+      let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
+
+      try {
+        const response = await fetch(uploadUri);
+        const blob = await response.blob();
+        const uploadTask = firebase.storage().ref().child(`profiles/${filename}`).put(blob);
+
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(`Upload is ${progress}% done`);
+          },
+          (error) => {
+            console.error('Upload Error: ', error);
+          },
+          () => {
+            uploadTask.snapshot.ref.getDownloadURL().then(async (downloadURL) => {
+              const img = {
+                imageUrl: downloadURL,
+              };
+              const userRef = firebase.firestore().collection('User Info').doc(userId);
+              await userRef.update(img)
+              .then(() => {
+                console.log('อัพเดทข้อมูลสำเร็จ');
+                getUserData();
+              })
+              .catch((error) => {
+                console.error('เกิดข้อผิดพลาดในการอัพเดทข้อมูล:', error);
+              });
+            });
+          }
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      console.log('No image to upload');
+    }
+  };
+
 
   const startEditing = () => {
     setIsEditing(true);
@@ -97,17 +164,17 @@ const MyProfileScreen = ({ route, navigation }) => {
   
 
   return (
-    <ScrollView>
+    
+    <View style={styles.screen}>
       {userData ? (
-         <View style={styles.screen}>
+         <View>
          {/*1st profileBox */}
          <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" } }}>
-         <Button title="ออกจากระบบ" onPress={handleLogout} />
            <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
              <View style={styles.postRow}>
-             <Image source={require("../../assets/PostPlaceholder.png")} style={styles.profileImg}></Image>
-           
-           
+             <Image source={{
+              uri: userData.imageUrl || "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}} style={styles.profileImg}></Image>
+             
              </View>
              <View>
                {/* ชื่อ*/}
@@ -115,14 +182,16 @@ const MyProfileScreen = ({ route, navigation }) => {
                {/* อาชีพ */}
                <Text style={styles.subText}>{userData.job}</Text>
              </View>
-             <Button title="แก้ไข" onPress={startEditing} />
+             <FontAwesome5 name={'edit'} size={22} onPress={startEditing} style={{...{ left: 320, top: 10, position: 'absolute'} }}/>
+             
            </View>
            {/* aboutme */}
-           <Text style={{ ...styles.subTitle, ...{} }}>About Me</Text>
- 
-           <Text style={{ ...styles.subText, ...{ marginLeft: 20 } }}>
+           <Text style={{ ...styles.subTitle, ...{ marginTop: 20 } }}>About Me</Text>
+           <Text style={{ ...styles.subText, ...{ marginLeft: 20} }}>
              {userData.aboutme}
            </Text>
+           <FontAwesome5 name={'camera'} size={22} onPress={pickImageAndUpload} style={{...{ left: 70, top: 70, position: 'absolute'} }} />
+           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 317.5, top: 232.5, position: 'absolute'} }}/>
          </View>
          {/*2 ContactBox */}
          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
@@ -130,55 +199,58 @@ const MyProfileScreen = ({ route, navigation }) => {
            <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
            {/* email */}
            <View style={{ ...styles.postRow, ...{} }}>
-             <Text style={styles.subTitle}>Email:</Text>
+             <Text style={styles.subTitle}><FontAwesome5 name={'user'}  size={20} />  Email :</Text>
              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
              {userData.email}
              </Text>
            </View>
            {/* เบอร์ */}
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>เบอร์:</Text>
+             <Text style={styles.subTitle}><FontAwesome5 name={'phone'}  size={20} /> Phone :</Text>
              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
                {userData.phone}
              </Text>
            </View>
            {/* line */}
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>line</Text>
+             <Text style={styles.subTitle}><FontAwesome5 name={'line'}  size={22} /> Line :</Text>
              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
                {userData.line}
              </Text>
            </View>
            {/* facebook */}
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>facebook</Text>
+             <Text style={styles.subTitle}><FontAwesome5 name={'facebook'}  size={20} /> Facebook :</Text>
              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
                {userData.facebook}
              </Text>
            </View>
          </View>
          {/*3 EducationBox */}
-         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
+         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white", height: "25%", position: 'relative' } }}>
            
            <Text style={styles.HeaderText}>การศึกษา</Text>
            
            <View style={{ ...styles.postRow, ...{} }}>
-             <Text style={styles.subTitle}>ปริญญาตรี :</Text>
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", width: "75%" } }}>
+             <Text style={styles.subTitle}>ปริญญาตรี : 
+             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
                {userData.bachelor}
+             </Text>
              </Text>
            </View>
            {/* เบอร์ */}
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาโท : </Text>
+             <Text style={styles.subTitle}>ปริญญาโท : 
              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
                {userData.master}
              </Text>
+             </Text>
            </View>
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาเอก : </Text>
+             <Text style={styles.subTitle}>ปริญญาเอก : 
              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
                {userData.doctoral}
+             </Text>
              </Text>
            </View>
          </View>
@@ -189,65 +261,91 @@ const MyProfileScreen = ({ route, navigation }) => {
       )}
       {isEditing && (
       <Modal animationType="slide" transparent={true} visible={isEditing}>
+      <ScrollView>
       <View style={styles.modalBackground}>
         <View style={styles.modalView}>
-          <Text>Edit Profile</Text>
+        <Text style={{ ...{ alignSelf: 'center', fontSize: 20 } }}>Edit Profile</Text>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setIsEditing(false)}
+          >
+            <FontAwesome name={'remove'}  size={20} />
+          </TouchableOpacity>
+          <Text>ชื่อจริง</Text>
           <TextInput
+            style={styles.txtinput}
             placeholder="First Name"
             value={editData.firstName}
             onChangeText={(text) =>
               setEditData({ ...editData, firstName: text })
             }
           />
+          <Text>นามสกุล</Text>
           <TextInput
+            style={styles.txtinput}
             placeholder="Last Name"
             value={editData.lastName}
             onChangeText={(text) =>
               setEditData({ ...editData, lastName: text })
             }
           />
+          <Text>อาชีพ</Text>
           <TextInput
+          style={styles.txtinput}
             placeholder="Job"
             value={editData.job}
             onChangeText={(text) => setEditData({ ...editData, job: text })}
           />
+          <Text>About Me</Text>
           <TextInput
+          style={styles.txtinput}
             placeholder="About Me"
             value={editData.aboutme}
             onChangeText={(text) =>
               setEditData({ ...editData, aboutme: text })
             }
           />
+          <Text>Email</Text>
           <TextInput
+          style={styles.txtinput}
             placeholder="Email"
             value={editData.email}
             onChangeText={(text) => setEditData({ ...editData, email: text })}
           />
+          <Text>เบอร์โทร</Text>
           <TextInput
+          style={styles.txtinput}
             placeholder="Phone"
             value={editData.phone}
             onChangeText={(text) => setEditData({ ...editData, phone: text })}
           />
+          <Text>Line</Text>
           <TextInput
+          style={styles.txtinput}
             placeholder="Line"
             value={editData.line}
             onChangeText={(text) => setEditData({ ...editData, line: text })}
           />
+          <Text>Facebook</Text>
           <TextInput
+          style={styles.txtinput}
             placeholder="Facebook"
             value={editData.facebook}
             onChangeText={(text) =>
               setEditData({ ...editData, facebook: text })
             }
           />
+          <Text>การศึกษา</Text>
           <TextInput
+          style={styles.txtinput}
             placeholder="Bachelor"
             value={editData.bachelor}
             onChangeText={(text) =>
               setEditData({ ...editData, bachelor: text })
             }
-          />
+          ></TextInput>
           <TextInput
+          style={styles.txtinput}
             placeholder="Master"
             value={editData.master}
             onChangeText={(text) =>
@@ -255,24 +353,20 @@ const MyProfileScreen = ({ route, navigation }) => {
             }
           />
           <TextInput
+          style={styles.txtinput}
             placeholder="Doctoral"
             value={editData.doctoral}
             onChangeText={(text) =>
               setEditData({ ...editData, doctoral: text })
             }
           />
-          <Button title="Save" onPress={finishEditing} />
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setIsEditing(false)}
-          >
-            <Text style={styles.closeButtonText}>Cancel</Text>
-          </TouchableOpacity>
+          <Text style={{...styles.saveButton,...{}}} title="Save" onPress={finishEditing}>Save</Text>
         </View>
       </View>
+      </ScrollView>
     </Modal>
     )}
-    </ScrollView>
+    </View>
   );
 };
 
@@ -284,27 +378,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#ABA7FA",
   },
   profileBox: {
-    backgroundColor: "#f9c2ff",
-    width: "95%",
-    height: "40%",
+    width: 350,
+    height: 270,
     marginVertical: "2%",
     borderRadius: 10,
     alignSelf: "center",
-
-    // padding: 20
   },
   contactBox: {
-    backgroundColor: "#f9c2ff",
-    width: "95%",
-    height: "30%",
+    width: 350,
+    height: "29%",
     marginVertical: "1%",
     borderRadius: 10,
     alignSelf: "center",
-
-    // padding: 20
   },
   HeaderText: {
-    marginTop: 20,
+    marginTop: 10,
     marginLeft: 15,
     fontSize: 22,
     fontWeight: "bold",
@@ -320,7 +408,7 @@ const styles = StyleSheet.create({
   },
   subText: {
     fontSize: 18,
-    marginHorizontal: 20,
+    marginHorizontal:15,
     // backgroundColor:"blue"
   },
   detailText: {
@@ -341,17 +429,6 @@ const styles = StyleSheet.create({
   postHeader: {
     height: "30%",
   },
-  input: {
-    width: 200,
-    textAlign: "center",
-    height: 30,
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-    marginVertical: 10,
-    alignSelf: "center",
-    textAlign: "left",
-    marginLeft: 15,
-  },
   profileImg: {
     marginTop: 10,
     marginLeft: 10,
@@ -370,14 +447,39 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     width: '80%',
+    height: 'auto',
+  },
+  txtinput: {
+    width: "100%",
+    paddingHorizontal: 10,
+    height: 40,
+    borderColor: "grey",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginVertical: 10,
+    textAlign: "left",
+    backgroundColor: "white",
+    shadowColor: "black",
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
+    elevation: 5,
   },
   closeButton: {
-    marginTop: 10,
     alignSelf: 'flex-end',
+    bottom: 25
   },
-  closeButtonText: {
-    color: 'red',
-  },
+  saveButton: {
+    backgroundColor: "#BEBDFF",
+    width:"50%",
+    height: 40,
+    borderRadius:10,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: "white",
+    alignSelf: "center",
+    fontSize : 18
+  }
 });
 
 export default MyProfileScreen;

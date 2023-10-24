@@ -39,7 +39,6 @@ const HireJobScreen = ({ route, navigation }) => {
       }}
     >
       <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
-        <View style={{ ...styles.mealRow,...styles.mealHeader }}>
         <Image
             source={require("../../assets/PostPlaceholder.png")}
             style={{...styles.profileImg,...{}}}
@@ -50,8 +49,10 @@ const HireJobScreen = ({ route, navigation }) => {
         <Text    style={{...styles.title,...{}}}>KMITL</Text>
         {/* ตำแหน่ง */}
         <Text style={styles.subText}>Frontend Dev</Text>
+
         </View>
         </View>
+
         {/* ค่าจ้าง */}
         {/* <Text style={styles.subText}>สามารถต่อรองเงินเดือนได้</Text> */}
         {/* รายละเอียด */}
@@ -86,16 +87,15 @@ const HireJobScreen = ({ route, navigation }) => {
         // onChangeText={numberInputHandler}
       />
 
-      <TouchableOpacity style={styles.button}>
-        <Text onPress={() => {navigation.navigate("CreateHire", {});}} style={{...{color: "white"}}}>สร้างโพสต์</Text>
+      <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("CreateHire", {});}}>
+        <Text  style={{...{color: "white"}}}>สร้างโพสต์</Text>
       </TouchableOpacity>
 
       <FlatList
         data={DATA}
-        renderItem={({item}) => <Item title={item.title} />}
-        keyExtractor={item => item.id}
+        renderItem={({ item }) => <Item title={item.title} />}
+        keyExtractor={(item) => item.id}
       />
-     
 
     </View>
 
@@ -122,11 +122,15 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: "#f9c2ff",
     width: "95%",
-    height: 175,
+    height: 225,
     marginVertical: "2%",
     borderRadius: 10,
     alignSelf: "center",
-    // padding: 20
+    shadowColor: "black",
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
+    elevation: 5,
   },
   title: {
     marginLeft: 15,
@@ -143,18 +147,17 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 11,
     color: "#929090",
-    marginLeft: 10,
-
+    margin: 10,
   },
-
   mealRow: {
     flexDirection: "row",
-    // backgroundColor: "gray",
+
     borderRadius:10,
     marginBottom:10,
+
   },
   mealHeader: {
-    height: 80,
+    height: "42.5%",
     width:"100%",
   },
   profileImg: {
