@@ -15,6 +15,9 @@ import {
 import { useSelector,useDispatch } from "react-redux";
 const HireJobScreen = ({ route, navigation }) => {
   const displayedHires = useSelector((state) => state.hires.filteredHires);
+  const displayedUsers = useSelector((state) => state.users.users);
+  console.log(displayedUsers)
+
   //   const {step, title} = route.params;
   const DATA = [
     {

@@ -6,11 +6,13 @@ import jobsReducer from "./store/reducers/jobsReducer";
 import { Provider } from "react-redux";
 import MyNavigator from "./navigation/MyNavigator";
 import hiresReducer from "./store/reducers/hireReducer";
+import usersReducer from "./store/reducers/usersReducer";
 
 
 const rootReducer = combineReducers({
   jobs: jobsReducer,
   hires: hiresReducer,
+  users:usersReducer,
   })
 
 const store = createStore(rootReducer);
