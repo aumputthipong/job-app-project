@@ -16,30 +16,15 @@ import { useSelector,useDispatch } from "react-redux";
 const HireJobScreen = ({ route, navigation }) => {
   const displayedHires = useSelector((state) => state.hires.filteredHires);
   const displayedUsers = useSelector((state) => state.users.users);
-  console.log(displayedUsers)
+  (post)=>{
 
-  //   const {step, title} = route.params;
-  const DATA = [
-    {
-      id: "1",
-      Agency: "KMITL",
-      position: "Frontend Dev",
-    },
-    {
-      id: "2",
-      Agency: "KMITL",
-      position: "Frontend Dev",
-    },
-    {
-      id: "3",
-      Agency: "KMITL",
-      position: "Frontend Dev",
-    },
-  ];
+  }
+  // console.log(displayedHires)
   const renderHireItem = ({ itemData}) => (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("HireJobDetailScreen");
+        navigation.navigate("HireJobDetailScreen",{
+          id:itemData.id});
       }}
     >
       <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
@@ -50,14 +35,14 @@ const HireJobScreen = ({ route, navigation }) => {
         ></Image>
         {/* ชื่อหน่วยงาน */}
         <View style={{paddingTop:10}}>
-          <Text style={styles.title}>{itemData.hireTitle}</Text>
+          <Text style={styles.title}>ชื่อคน</Text>
       
           {/* ตำแหน่ง */}
-          <Text style={styles.subText}>Frontend Dev</Text>
+          <Text style={styles.subText}>อาชีพ</Text>
         </View>
         </View>
        
-        <Text style={styles.title}>รับจัดทำสวน</Text>
+        <Text style={styles.title}>{itemData.hireTitle}</Text>
         {/* รายละเอียด */}
         <Text style={styles.detailText}>
         {itemData.detail}
