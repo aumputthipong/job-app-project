@@ -45,9 +45,12 @@ const HireJobScreen = ({ route, navigation }) => {
             style={{...styles.profileImg,...{}}}
           ></Image>
         {/* ชื่อหน่วยงาน */}
-        <Text style={styles.title}>KMITL</Text>
+        <View>
+        <Text style={styles.title}>คุณสมพงษ์</Text>
+        <Text    style={{...styles.title,...{}}}>KMITL</Text>
         {/* ตำแหน่ง */}
         <Text style={styles.subText}>Frontend Dev</Text>
+        </View>
         </View>
         {/* ค่าจ้าง */}
         {/* <Text style={styles.subText}>สามารถต่อรองเงินเดือนได้</Text> */}
@@ -69,19 +72,6 @@ const HireJobScreen = ({ route, navigation }) => {
   );
   return (
     <View style={styles.container}>
-
-      <Button
-        title="create"
-        onPress={() => {
-          navigation.navigate("CreateHire", {});
-        }}
-      />
-      <FlatList
-        data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
-        keyExtractor={(item) => item.id}
-      />
-
       {/* searchbar */}
       <TextInput
         style={styles.textInput}
@@ -124,7 +114,6 @@ const styles = StyleSheet.create({
     borderBottomColor: "grey",
     borderBottomWidth: 1,
     marginVertical: 10,
-    alignSelf: "left",
     textAlign: "left",
     paddingLeft: 15,
     marginLeft: 15,
@@ -160,7 +149,9 @@ const styles = StyleSheet.create({
 
   mealRow: {
     flexDirection: "row",
-    backgroundColor: "gray",
+    // backgroundColor: "gray",
+    borderRadius:10,
+    marginBottom:10,
   },
   mealHeader: {
     height: 80,

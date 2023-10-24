@@ -35,6 +35,7 @@ const RegisterScreen = ({ route, navigation }) => {
       }
     } catch (error) {
       // การลงทะเบียนไม่สำเร็จ
+      alert(error)
       console.error(error);
     }
   }
@@ -152,10 +153,8 @@ const RegisterScreen = ({ route, navigation }) => {
 
 
    <TouchableOpacity style={styles.button}
-    onPress={() => {
-      navigation.navigate("Login");
-    }}>
-      <Text onPress={handleRegistration} style={{...styles.text,...{alignSelf:"center",}}}>ลงทะเบียน</Text>
+ onPress={handleRegistration}>
+      <Text  style={{...styles.text,...{alignSelf:"center",}}}>ลงทะเบียน</Text>
     </TouchableOpacity>
 
     <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent:"center" } }}>
