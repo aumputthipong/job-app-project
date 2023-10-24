@@ -89,6 +89,8 @@ const CreateHire = ({ route, navigation }) => {
                   category,
                   detail,
                   postById,
+                  phone,
+                  email,
                   createdAt: new Date(), 
                   // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
                 };

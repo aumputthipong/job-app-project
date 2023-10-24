@@ -23,17 +23,15 @@ const FindJobDetailScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <ScrollView style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
 
+      <ScrollView style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
         <View style={{ ...styles.postRow, ...styles.postHeader }}>
           <ImageBackground
             source={{uri: displayedJob.imageUrl}}
             style={styles.bgImage}
           ></ImageBackground>
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("EditFind", {});}}>
-          <Text  style={{...{color: "white"}}}>แก้ไข</Text>
-        </TouchableOpacity>
+    
          {/* ชื่อหน่วยงาน */}
          <Text style={styles.jobTitle} >
           {displayedJob.jobTitle}
@@ -137,6 +135,12 @@ const FindJobDetailScreen = ({ route, navigation }) => {
     
     
       </ScrollView>
+      <TouchableOpacity style={styles.editbutton} onPress={() => {navigation.navigate("EditFind", {});}}>
+          <Text  style={{...{color: "white"}}}>แก้ไข</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.editbutton} onPress={() => {navigation.navigate("EditFind", {});}}>
+          <Text  style={{...{color: "white"}}}>แก้ไข</Text>
+        </TouchableOpacity>
     </View>
   );
 };
@@ -232,6 +236,19 @@ const styles = StyleSheet.create({
     padding: "2.5%",
     alignItems: "center",
     alignSelf: "center",
+  },
+  editbutton: {
+    position:"absolute",
+    bottom: 20, 
+    right: 20,
+    backgroundColor: "#5A6BF5",
+    width: 75,
+    height: 75,
+    borderRadius:25,
+    padding: "2.5%",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
   },
 });
 
