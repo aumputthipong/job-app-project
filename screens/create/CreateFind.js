@@ -104,6 +104,7 @@ const CreateFind = ({ route, navigation }) => {
                   email,
                   phone,
                   postById,
+                  createdAt: new Date(), 
                   // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
                 };
                 const postRef = firebase.firestore().collection("JobPosts");
