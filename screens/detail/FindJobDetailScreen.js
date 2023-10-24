@@ -135,12 +135,11 @@ const FindJobDetailScreen = ({ route, navigation }) => {
     
     
       </ScrollView>
-      <TouchableOpacity style={styles.editbutton} onPress={() => {navigation.navigate("EditFind", {});}}>
+      <TouchableOpacity style={styles.editbutton} onPress={() => {navigation.navigate("EditFind", {
+      id: displayedJob.id});}}>
           <Text  style={{...{color: "white"}}}>แก้ไข</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.editbutton} onPress={() => {navigation.navigate("EditFind", {});}}>
-          <Text  style={{...{color: "white"}}}>แก้ไข</Text>
-        </TouchableOpacity>
+
     </View>
   );
 };

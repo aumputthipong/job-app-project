@@ -9,32 +9,46 @@ import {
   Image,
   Alert,
   FlatList,
+  ScrollView,
 } from "react-native";
-import { ScrollView } from 'react-native-virtualized-view'
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
 
 const EditHire = ({ route, navigation }) => {
-  const [jobTitle, setJobTitle] = useState("");
-  const [position, setPosition] = useState("");
-  const [agency, setAgency] = useState("");
-  const [attributes, setAttributes] = useState([]);
+
+const hireid = route.params.id;
+
+  const [hireTitle, setHireTitle] = useState("");
   const [category, setCategory] = useState("");
   const [detail, setDetail] = useState("");
   const [email, setEmail] = useState("");
-  const [employmentType, setEmploymentType] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [phone, setPhone] = useState("");
-  const [wage, setWage] = useState(0);
-  const [welfareBenefits, setWelfareBenefits] = useState([]);
-  const [workperiod, setWorkperiod] = useState("");
-
-  const [uploading, setUploading] = useState(false);
-
   const [image, setImage] = useState(null);
+  const [postData, setPostData] = useState(null);
+  
+
+  const hirePostsRef = firebase.firestore().collection("HirePosts").doc(hireid);
+
+// hirePostsRef.get().then((doc) => {
+//   if (doc.exists) {
+//     const hirename = doc.data().hirename;
+//     // ตอนนี้คุณมีค่าของฟิลด์ hirename
+//     console.log(hirename);
+//   } else {
+//     console.log("ไม่พบเอกสารที่ต้องการ");
+//   }
+// }).catch((error) => {
+//   console.error("เกิดข้อผิดพลาดในการดึงข้อมูล: ", error);
+// });
+
+//   useEffect(() => {
+//     getUserData();
+//   }, []);
 
   const pickImage = async () => {
+    // อนุญาตให้เข้าถึงไลบรารีสื่อมัลติมีเดีย
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       Alert.alert(
@@ -45,75 +59,76 @@ const EditHire = ({ route, navigation }) => {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4, 3],
+        aspect: [210, 297], // สัดส่วนของ A4
         quality: 1,
       });
 
       if (!result.canceled) {
-        setImage(result.assets[0].uri);
+        setImage(result.uri);
       }
     }
   };
 
   const submitPost = async () => {
-    const uploadUri = image;
-    if (uploadUri) {
-      let filename = uploadUri.substring(uploadUri.lastIndexOf("/") + 1);
-
-      try {
-        const response = await fetch(uploadUri);
-        const blob = await response.blob();
-        const uploadTask = firebase
-          .storage()
-          .ref()
-          .child(`images/${filename}`)
-          .put(blob);
-        // abcdes
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            // Handle upload progress if needed
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log(`Upload is ${progress}% done`);
-          },
-          (error) => {
-            // Handle upload error
-            console.error("Upload Error: ", error);
-          },
-          () => {
-            // Upload completed successfully, get the download URL
-            uploadTask.snapshot.ref
-              .getDownloadURL()
-              .then(async (downloadURL) => {
-                // Save the download URL to Firestore or use it as needed
-                const postById = docRef.id;
-                console.log("File available at", downloadURL);
-                const post = {
-                  jobTitle,
-                  position,
-                  agency,
-                  attributes,
-                  welfareBenefits,
-                  imageUrl: downloadURL,
-                  wage,
-                  category,
-                  employmentType,
-                  postById,
-                  // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
-                };
-                const postRef = firebase.firestore().collection("JobPosts");
-                const docRef = await postRef.add(post);
-                console.log("Post created with ID: ", docRef.id);
-                navigation.navigate("FindJobScreen");
+    // Ensure that you have valid data before updating
+    if (hireTitle && detail && email && phone && category) {
+      // Prepare the data to update in Firestore
+      const updatedData = {
+        hireTitle,
+        detail,
+        email,
+        phone,
+        category,
+      };
+  
+      // If a new image was selected, upload it and get the URL
+      if (image) {
+        let filename = image.substring(image.lastIndexOf("/") + 1);
+  
+        try {
+          const response = await fetch(image);
+          const blob = await response.blob();
+          const uploadTask = firebase
+            .storage()
+            .ref()
+            .child(`images/${filename}`)
+            .put(blob);
+  
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log(`Upload is ${progress}% done`);
+            },
+            (error) => {
+              console.error("Upload Error: ", error);
+            },
+            () => {
+              uploadTask.snapshot.ref.getDownloadURL().then(async (downloadURL) => {
+                // Update the Firestore document with the new data and image URL
+                const postRef = firebase.firestore().collection("HirePosts").doc(hireid);
+                await postRef.update({
+                  ...updatedData,
+                  resumeUrl: downloadURL,
+                });
+                console.log("Post updated");
+                navigation.navigate("HireJobScreen");
               });
-          }
-        );
-      } catch (e) {
-        console.log(e);
+            }
+          );
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        // If no new image was selected, update Firestore without the image URL
+        const postRef = firebase.firestore().collection("HirePosts").doc(hireid);
+        await postRef.update(updatedData);
+        console.log("Post updated");
+        navigation.navigate("HireJobScreen");
       }
     } else {
-      console.log("No image to upload");
+      console.log("Please fill in all the required fields.");
     }
   };
 
@@ -127,56 +142,35 @@ const EditHire = ({ route, navigation }) => {
     { key: "7", value: "งานไอที" },
     { key: "8", value: "งานการศึกษา" },
   ];
-  const [inputText, setInputText] = useState("");
-  // welfareBenefit
-  const [inputText2, setInputText2] = useState("");
-  const attriAdd = () => {
-    if (inputText.trim() !== "") {
-      setAttributes([...attributes, inputText]);
-      setInputText(""); // ล้าง TextInput
-    }
-  };
-  const attriDel = (index) => {
-    const newData = [...attributes];
-    newData.splice(index, 1);
-    setAttributes(newData);
-  };
 
-  const benefitAdd = () => {
-    if (inputText2.trim() !== "") {
-      setWelfareBenefits([...welfareBenefits, inputText2]);
-      setInputText2(""); // ล้าง TextInput
+  const deletePost = async () => {
+    try {
+      // Delete the post document from Firestore
+      await firebase.firestore().collection("HirePosts").doc(hireid).delete();
+  
+      // If there is an image associated with the post, delete it from storage
+      if (imageUrl) {
+        const imageRef = firebase.storage().refFromURL(imageUrl);
+        await imageRef.delete();
+      }
+  
+      console.log("Post deleted");
+      navigation.navigate("HireJobScreen");
+    } catch (error) {
+      console.error("Error deleting post:", error);
     }
-  };
-  const BenefitDel = (index) => {
-    const newData = [...welfareBenefits];
-    newData.splice(index, 1);
-    setWelfareBenefits(newData);
   };
   return (
     <ScrollView style={{}}>
       <View style={{ padding: 20 }}>
-        <Text>หัวข้องาน</Text>
+        <Text>หัวโพส</Text>
         <TextInput
-          value={jobTitle}
-          onChangeText={setJobTitle}
+          value={hireTitle}
+          onChangeText={setHireTitle}
           placeholder="หัวข้องาน"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
-        <Text>ตำแหน่งที่รับ</Text>
-        <TextInput
-          value={position}
-          onChangeText={setPosition}
-          placeholder="ตำแหน่ง/อาชีพ"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-        />
-        <Text>บริษัท</Text>
-        <TextInput
-          value={agency}
-          onChangeText={setAgency}
-          placeholder="บริษัท"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-        />
+
 
         <Text>รายละเอียด</Text>
         <TextInput
@@ -185,7 +179,7 @@ const EditHire = ({ route, navigation }) => {
           placeholder="เวลา"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
-        <Text>รูปโพส</Text>
+        <Text>รูปResume</Text>
         {image && (
           <Image
             source={{ uri: image }}
@@ -208,21 +202,7 @@ const EditHire = ({ route, navigation }) => {
         />
 
 
-        <Text>ค่าจ้าง</Text>
-        <TextInput
-          value={wage}
-          onChangeText={setWage}
-          placeholder="บาท"
-          keyboardType="numeric"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-        />
-        <Text>ระยะเวลาจ้าง</Text>
-        <TextInput
-          value={workperiod}
-          onChangeText={setWorkperiod}
-          placeholder="เวลา"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-        />
+
         <Text>ช่องทางติดต่อ</Text>
         <TextInput
           value={email}
@@ -236,71 +216,23 @@ const EditHire = ({ route, navigation }) => {
           placeholder="เบอร์โทร"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
-        {/* attribute */}
-        <Text>คุณสมบัติ</Text>
-        <FlatList
-            data={attributes}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text>{`${index + 1}. ${item}`}</Text>
-              <Button title="ลบ" onPress={() => attriDel(index)} />
-            </View>
-            )}
-          />
- <View style={styles.postRow}>
-      <TextInput
-        placeholder="คุณสมบัติ"
-        value={inputText}
-        onChangeText={(text) => setInputText(text)}
-        style={{ borderWidth: 1, padding: 10, marginBottom: 10 ,width:"75%"}}
-      />
-     
-     <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}}  onPress={attriAdd} >
-        <Text  style={{...{color: "white"}}}>เพิ่ม</Text>
-      </TouchableOpacity>
-      </View>
 
-        {/* สวัสดิการ */}
-        <Text>สวัสดิการ </Text>
-        <FlatList
-          data={welfareBenefits}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <Text>{`${index + 1}. ${item}`}</Text>
-              <Button title="ลบ" onPress={() => BenefitDel(index)} />
-            </View>
-          )}
-        />
-        <View style={styles.postRow}>
-          <TextInput
-            placeholder="สวัสดิการ"
-            value={inputText2}
-            onChangeText={(text) => setInputText2(text)}
-            style={{
-              borderWidth: 1,
-              padding: 10,
-              marginBottom: 10,
-              width: "75%",
-            }}
-          />
 
-          <TouchableOpacity
-            style={{ ...styles.button, ...{ width: "20%", marginleft: "5" } }}
-            onPress={benefitAdd}
-          >
-            <Text style={{ ...{ color: "white" } }}>เพิ่ม</Text>
-          </TouchableOpacity>   
-        </View>
+        
+
         <TouchableOpacity
           style={{ ...styles.button, ...{ width: "80%", marginleft: "5" } }}
           onPress={submitPost}
         >
-          <Text style={{ ...{ color: "white" } }}>สร้างโพสต์</Text>
+          <Text style={{ ...{ color: "white" } }}>แก้ไข</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+  style={{ ...styles.button, ...{ backgroundColor: "red" } }}
+  onPress={deletePost}
+>
+  <Text style={{ color: "white" }}>Delete Post</Text>
+</TouchableOpacity>
       </View>
     </ScrollView>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button, StyleSheet,ScrollView ,Image} from "react-native";
+import { View, Text, Button, StyleSheet,ScrollView ,Image,TouchableOpacity} from "react-native";
 import { useSelector } from "react-redux";
 const HireJobDetailScreen = ({route, navigation}) => {
 
@@ -28,7 +28,11 @@ const hireid = route.params.id;
     <Text>ช่องทางติดต่อ</Text>
     <Text>{displayedHire.phone}</Text>
     <Text>{displayedHire.email}</Text>
-        
+    <TouchableOpacity style={styles.editbutton} onPress={() => {navigation.navigate("EditHire", {
+      id: displayedHire.id});}}>
+          <Text  style={{...{color: "white"}}}>แก้ไข</Text>
+        </TouchableOpacity>
+
   </ScrollView>
   );
 };
@@ -43,6 +47,19 @@ const styles = StyleSheet.create({
     width: 75,
     height: 75,
     borderRadius: 360,
+  },
+  editbutton: {
+    position:"absolute",
+    bottom: 20, 
+    right: 20,
+    backgroundColor: "#5A6BF5",
+    width: 75,
+    height: 75,
+    borderRadius:25,
+    padding: "2.5%",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
   },
 });
 

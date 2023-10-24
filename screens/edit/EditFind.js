@@ -26,9 +26,9 @@ const EditFind = ({ route, navigation }) => {
   const [employmentType, setEmploymentType] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [phone, setPhone] = useState("");
-  const [wage, setWage] = useState(0);
+  const [wage, setWage] = useState("");
   const [welfareBenefits, setWelfareBenefits] = useState([]);
-  const [workperiod, setWorkperiod] = useState("");
+
 
   const [uploading, setUploading] = useState(false);
 
@@ -87,7 +87,7 @@ const EditFind = ({ route, navigation }) => {
               .getDownloadURL()
               .then(async (downloadURL) => {
                 // Save the download URL to Firestore or use it as needed
-                const postById = docRef.id;
+                const postById = firebase.auth().currentUser.uid;
                 console.log("File available at", downloadURL);
                 const post = {
                   jobTitle,
@@ -99,7 +99,10 @@ const EditFind = ({ route, navigation }) => {
                   wage,
                   category,
                   employmentType,
+                  email,
+                  phone,
                   postById,
+                  createdAt: new Date(), 
                   // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
                 };
                 const postRef = firebase.firestore().collection("JobPosts");
@@ -127,6 +130,12 @@ const EditFind = ({ route, navigation }) => {
     { key: "7", value: "งานไอที" },
     { key: "8", value: "งานการศึกษา" },
   ];
+  const emptypedata = [
+    { key: "1", value: "รายเดือน" },
+    { key: "2", value: "รายวัน" },
+    { key: "3", value: "ต่อชิ้นงาน" },
+  ];
+  // สำหรับใส่attribute
   const [inputText, setInputText] = useState("");
   // welfareBenefit
   const [inputText2, setInputText2] = useState("");
@@ -207,6 +216,13 @@ const EditFind = ({ route, navigation }) => {
           save="value"
         />
 
+        <Text>ประเภทการจ้าง</Text>
+        <SelectList
+          setSelected={(val) => setEmploymentType(val)}
+          data={emptypedata}
+          placeholder="ประเภทการจ้าง"
+          save="value"
+        />
 
         <Text>ค่าจ้าง</Text>
         <TextInput
@@ -214,13 +230,6 @@ const EditFind = ({ route, navigation }) => {
           onChangeText={setWage}
           placeholder="บาท"
           keyboardType="numeric"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-        />
-        <Text>ระยะเวลาจ้าง</Text>
-        <TextInput
-          value={workperiod}
-          onChangeText={setWorkperiod}
-          placeholder="เวลา"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
         <Text>ช่องทางติดต่อ</Text>
@@ -238,16 +247,18 @@ const EditFind = ({ route, navigation }) => {
         />
         {/* attribute */}
         <Text>คุณสมบัติ</Text>
-        <FlatList
-            data={attributes}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text>{`${index + 1}. ${item}`}</Text>
-              <Button title="ลบ" onPress={() => attriDel(index)} />
-            </View>
-            )}
-          />
+        {attributes.map((attribute, index) => (
+           <View
+           style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text style={styles.subText} key={index}>{`${index + 1}. ${attribute}`}</Text>
+        {/* ปุ่มลบ */}
+        <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}} onPress={() => attriDel(index)} >
+        <Text  style={{...{color: "white"}}}>ลบ</Text>
+      </TouchableOpacity>
+        </View>
+      ))}
+       
+      
  <View style={styles.postRow}>
       <TextInput
         placeholder="คุณสมบัติ"
@@ -263,7 +274,16 @@ const EditFind = ({ route, navigation }) => {
 
         {/* สวัสดิการ */}
         <Text>สวัสดิการ </Text>
-        <FlatList
+        {welfareBenefits.map((welfareBenefit, index) => (
+          <View
+          style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text style={styles.subText}>{`${index + 1}. ${welfareBenefit}`}</Text>
+        <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}} onPress={() => BenefitDel(index)} >
+        <Text  style={{...{color: "white"}}}>ลบ</Text>
+      </TouchableOpacity>
+        </View>
+      ))}
+        {/* <FlatList
           data={welfareBenefits}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
@@ -274,7 +294,7 @@ const EditFind = ({ route, navigation }) => {
               <Button title="ลบ" onPress={() => BenefitDel(index)} />
             </View>
           )}
-        />
+        /> */}
         <View style={styles.postRow}>
           <TextInput
             placeholder="สวัสดิการ"
@@ -289,7 +309,7 @@ const EditFind = ({ route, navigation }) => {
           />
 
           <TouchableOpacity
-            style={{ ...styles.button, ...{ width: "20%", marginleft: "5" } }}
+            style={{ ...styles.button, ...{ width: "20%", marginleft: "50" } }}
             onPress={benefitAdd}
           >
             <Text style={{ ...{ color: "white" } }}>เพิ่ม</Text>
