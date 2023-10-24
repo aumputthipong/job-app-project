@@ -9,26 +9,20 @@ import {
   Image,
   Alert,
   FlatList,
+  ScrollView,
 } from "react-native";
-import { ScrollView } from 'react-native-virtualized-view'
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
 
 const CreateHire = ({ route, navigation }) => {
-  const [jobTitle, setJobTitle] = useState("");
-  const [position, setPosition] = useState("");
-  const [agency, setAgency] = useState("");
-  const [attributes, setAttributes] = useState([]);
+  const [hireTitle, setHireTitle] = useState("");
   const [category, setCategory] = useState("");
   const [detail, setDetail] = useState("");
   const [email, setEmail] = useState("");
-  const [employmentType, setEmploymentType] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [phone, setPhone] = useState("");
-  const [wage, setWage] = useState(0);
-  const [welfareBenefits, setWelfareBenefits] = useState([]);
-  const [workperiod, setWorkperiod] = useState("");
+
 
   const [uploading, setUploading] = useState(false);
 
@@ -87,25 +81,21 @@ const CreateHire = ({ route, navigation }) => {
               .getDownloadURL()
               .then(async (downloadURL) => {
                 // Save the download URL to Firestore or use it as needed
-                const postById = docRef.id;
+                const postById = firebase.auth().currentUser.uid;
                 console.log("File available at", downloadURL);
                 const post = {
-                  jobTitle,
-                  position,
-                  agency,
-                  attributes,
-                  welfareBenefits,
-                  imageUrl: downloadURL,
-                  wage,
+                  hireTitle,
+                  resumeUrl: downloadURL,
                   category,
-                  employmentType,
+                  detail,
                   postById,
+                  createdAt: new Date(), 
                   // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
                 };
-                const postRef = firebase.firestore().collection("JobPosts");
+                const postRef = firebase.firestore().collection("HirePosts");
                 const docRef = await postRef.add(post);
                 console.log("Post created with ID: ", docRef.id);
-                navigation.navigate("FindJobScreen");
+                navigation.navigate("HireJobScreen");
               });
           }
         );
@@ -127,56 +117,17 @@ const CreateHire = ({ route, navigation }) => {
     { key: "7", value: "งานไอที" },
     { key: "8", value: "งานการศึกษา" },
   ];
-  const [inputText, setInputText] = useState("");
-  // welfareBenefit
-  const [inputText2, setInputText2] = useState("");
-  const attriAdd = () => {
-    if (inputText.trim() !== "") {
-      setAttributes([...attributes, inputText]);
-      setInputText(""); // ล้าง TextInput
-    }
-  };
-  const attriDel = (index) => {
-    const newData = [...attributes];
-    newData.splice(index, 1);
-    setAttributes(newData);
-  };
-
-  const benefitAdd = () => {
-    if (inputText2.trim() !== "") {
-      setWelfareBenefits([...welfareBenefits, inputText2]);
-      setInputText2(""); // ล้าง TextInput
-    }
-  };
-  const BenefitDel = (index) => {
-    const newData = [...welfareBenefits];
-    newData.splice(index, 1);
-    setWelfareBenefits(newData);
-  };
   return (
     <ScrollView style={{}}>
       <View style={{ padding: 20 }}>
-        <Text>หัวข้องาน</Text>
+        <Text>หัวโพส</Text>
         <TextInput
-          value={jobTitle}
-          onChangeText={setJobTitle}
+          value={hireTitle}
+          onChangeText={setHireTitle}
           placeholder="หัวข้องาน"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
-        <Text>ตำแหน่งที่รับ</Text>
-        <TextInput
-          value={position}
-          onChangeText={setPosition}
-          placeholder="ตำแหน่ง/อาชีพ"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-        />
-        <Text>บริษัท</Text>
-        <TextInput
-          value={agency}
-          onChangeText={setAgency}
-          placeholder="บริษัท"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-        />
+
 
         <Text>รายละเอียด</Text>
         <TextInput
@@ -185,7 +136,7 @@ const CreateHire = ({ route, navigation }) => {
           placeholder="เวลา"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
-        <Text>รูปโพส</Text>
+        <Text>รูปResume</Text>
         {image && (
           <Image
             source={{ uri: image }}
@@ -208,21 +159,7 @@ const CreateHire = ({ route, navigation }) => {
         />
 
 
-        <Text>ค่าจ้าง</Text>
-        <TextInput
-          value={wage}
-          onChangeText={setWage}
-          placeholder="บาท"
-          keyboardType="numeric"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-        />
-        <Text>ระยะเวลาจ้าง</Text>
-        <TextInput
-          value={workperiod}
-          onChangeText={setWorkperiod}
-          placeholder="เวลา"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-        />
+
         <Text>ช่องทางติดต่อ</Text>
         <TextInput
           value={email}
@@ -236,65 +173,10 @@ const CreateHire = ({ route, navigation }) => {
           placeholder="เบอร์โทร"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
-        {/* attribute */}
-        <Text>คุณสมบัติ</Text>
-        <FlatList
-            data={attributes}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text>{`${index + 1}. ${item}`}</Text>
-              <Button title="ลบ" onPress={() => attriDel(index)} />
-            </View>
-            )}
-          />
- <View style={styles.postRow}>
-      <TextInput
-        placeholder="คุณสมบัติ"
-        value={inputText}
-        onChangeText={(text) => setInputText(text)}
-        style={{ borderWidth: 1, padding: 10, marginBottom: 10 ,width:"75%"}}
-      />
-     
-     <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}}  onPress={attriAdd} >
-        <Text  style={{...{color: "white"}}}>เพิ่ม</Text>
-      </TouchableOpacity>
-      </View>
 
-        {/* สวัสดิการ */}
-        <Text>สวัสดิการ </Text>
-        <FlatList
-          data={welfareBenefits}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <Text>{`${index + 1}. ${item}`}</Text>
-              <Button title="ลบ" onPress={() => BenefitDel(index)} />
-            </View>
-          )}
-        />
-        <View style={styles.postRow}>
-          <TextInput
-            placeholder="สวัสดิการ"
-            value={inputText2}
-            onChangeText={(text) => setInputText2(text)}
-            style={{
-              borderWidth: 1,
-              padding: 10,
-              marginBottom: 10,
-              width: "75%",
-            }}
-          />
 
-          <TouchableOpacity
-            style={{ ...styles.button, ...{ width: "20%", marginleft: "5" } }}
-            onPress={benefitAdd}
-          >
-            <Text style={{ ...{ color: "white" } }}>เพิ่ม</Text>
-          </TouchableOpacity>   
-        </View>
+        
+
         <TouchableOpacity
           style={{ ...styles.button, ...{ width: "80%", marginleft: "5" } }}
           onPress={submitPost}

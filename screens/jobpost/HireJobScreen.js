@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,8 +12,9 @@ import {
   ScrollView,
   TextInput,
 } from "react-native";
-
+import { useSelector,useDispatch } from "react-redux";
 const HireJobScreen = ({ route, navigation }) => {
+  const displayedHires = useSelector((state) => state.hires.filteredHires);
   //   const {step, title} = route.params;
   const DATA = [
     {
@@ -32,31 +33,31 @@ const HireJobScreen = ({ route, navigation }) => {
       position: "Frontend Dev",
     },
   ];
-  const Item = ({ Agency }) => (
+  const renderHireItem = ({ itemData}) => (
     <TouchableOpacity
       onPress={() => {
         navigation.navigate("HireJobDetailScreen");
       }}
     >
       <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
+      <View style={styles.postRow}>
         <Image
           source={require("../../assets/PostPlaceholder.png")}
           style={{ ...styles.profileImg, ...{} }}
         ></Image>
         {/* ชื่อหน่วยงาน */}
-        <View>
-          <Text style={styles.title}>คุณสมพงษ์</Text>
-          <Text style={{ ...styles.title, ...{} }}>KMITL</Text>
+        <View style={{paddingTop:10}}>
+          <Text style={styles.title}>{itemData.hireTitle}</Text>
+      
           {/* ตำแหน่ง */}
           <Text style={styles.subText}>Frontend Dev</Text>
         </View>
-        {/* ค่าจ้าง */}
-        {/* <Text style={styles.subText}>สามารถต่อรองเงินเดือนได้</Text> */}
+        </View>
+       
+        <Text style={styles.title}>รับจัดทำสวน</Text>
         {/* รายละเอียด */}
         <Text style={styles.detailText}>
-          รับออกแบบตึกใบหยก ตึกโหล ตึกโป๊ะ ตึกตึก !Lorem ipsum dolor sit amet,
-          consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+        {itemData.detail}
         </Text>
         <Text
           style={{
@@ -95,9 +96,11 @@ const HireJobScreen = ({ route, navigation }) => {
       </TouchableOpacity>
 
       <FlatList
-        data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
-        keyExtractor={(item) => item.id}
+        data={displayedHires}
+        renderItem={({ item }) => {
+          return renderHireItem({ itemData: item });
+        }}
+        keyExtractor={(item) => item.id.toString()} // Use toString() to ensure the key is a string
       />
     </View>
   );
@@ -146,20 +149,22 @@ const styles = StyleSheet.create({
   },
 
   detailText: {
-    fontSize: 11,
+    fontSize: 13,
     color: "#929090",
     margin: 10,
   },
-  mealRow: {
+  postRow: {
     flexDirection: "row",
-
+    paddingTop:10,
     borderRadius: 10,
     marginBottom: 10,
   },
-  mealHeader: {
+  postHeader: {
     height: "42.5%",
     width: "100%",
+
   },
+  
   profileImg: {
     marginTop: 10,
     marginLeft: 10,
