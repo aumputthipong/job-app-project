@@ -16,37 +16,38 @@ import { useSelector,useDispatch } from "react-redux";
 const HireJobScreen = ({ route, navigation }) => {
   const displayedHires = useSelector((state) => state.hires.filteredHires);
   const displayedUsers = useSelector((state) => state.users.users);
-  (post)=>{
+
+  function WhoOwner(post){displayedUsers.find(user => user.id ==post.postById )
 
   }
-  // console.log(displayedHires)
-  const renderHireItem = ({ itemData}) => (
-    <TouchableOpacity
+  const renderHireItem = ({ item}) => {
+    const user = displayedUsers.find((user) => user.id === item.postById);
+    return(
+      <TouchableOpacity
       onPress={() => {
-        navigation.navigate("HireJobDetailScreen",{
-          id:itemData.id});
+        navigation.navigate("HireJobDetailScreen", { id: item.id });
       }}
     >
       <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
-      <View style={styles.postRow}>
-        <Image
-          source={require("../../assets/PostPlaceholder.png")}
-          style={{ ...styles.profileImg, ...{} }}
-        ></Image>
-        {/* ชื่อหน่วยงาน */}
-        <View style={{paddingTop:10}}>
-          <Text style={styles.title}>ชื่อคน</Text>
-      
-          {/* ตำแหน่ง */}
-          <Text style={styles.subText}>อาชีพ</Text>
+        <View style={styles.postRow}>
+          <Image
+            source={{uri: user.imageUrl}}
+            style={{ ...styles.profileImg, ...{} }}
+          ></Image>
+          {/* ชื่อหน่วยงาน */}
+          <View style={{ paddingTop: 10 }}>
+            {user && (
+              <Text style={styles.title}>{user.firstName} {user.lastName}</Text>
+            )}
+
+            {/* ตำแหน่ง */}
+            <Text style={styles.subText}>{user.job}</Text>
+          </View>
         </View>
-        </View>
-       
-        <Text style={styles.title}>{itemData.hireTitle}</Text>
+
+        <Text style={styles.title}>{item.hireTitle}</Text>
         {/* รายละเอียด */}
-        <Text style={styles.detailText}>
-        {itemData.detail}
-        </Text>
+        <Text style={styles.detailText}>{item.detail}</Text>
         <Text
           style={{
             ...styles.detailText,
@@ -57,7 +58,8 @@ const HireJobScreen = ({ route, navigation }) => {
         </Text>
       </View>
     </TouchableOpacity>
-  );
+    );
+        };
   return (
     <View style={styles.container}>
       {/* searchbar */}
@@ -85,10 +87,8 @@ const HireJobScreen = ({ route, navigation }) => {
 
       <FlatList
         data={displayedHires}
-        renderItem={({ item }) => {
-          return renderHireItem({ itemData: item });
-        }}
-        keyExtractor={(item) => item.id.toString()} // Use toString() to ensure the key is a string
+        renderItem={renderHireItem}
+        keyExtractor={(item) => item.id.toString()}
       />
     </View>
   );
