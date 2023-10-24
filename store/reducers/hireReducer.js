@@ -1,4 +1,4 @@
-import { HIRES } from "../../data/dummy-data";
+import { HIRES } from "../../data/Hires-data";
 // import { TOGGLE_FAVORITE } from "../actions/jobAction";
 // import { LINK_JOB } from "../actions/jobAction";
 

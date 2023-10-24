@@ -1,4 +1,4 @@
-import { JOBS } from "../../data/dummy-data";
+import { JOBS } from "../../data/Jobs-data";
 import { TOGGLE_FAVORITE } from "../actions/jobAction";
 import { LINK_JOB } from "../actions/jobAction";
 
