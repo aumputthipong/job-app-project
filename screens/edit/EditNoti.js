@@ -22,6 +22,9 @@ import { useDispatch } from "react-redux";
   const EditNoti = ({ navigation }) => {
     const dispatch = useDispatch();
     const userId = firebase.auth().currentUser.uid;
+    
+    console.log(imageUrl)
+
     const [selected, setSelected] = useState([]);
   
   
