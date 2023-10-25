@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React,{useEffect,useState } from "react";
 import {
   View,
   Text,
@@ -9,39 +9,27 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useSelector } from "react-redux";
+import { useNavigation, useIsFocused ,useFocusEffect } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from "../../database/firebaseDB";
-import { BackHandler } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const FindJobDetailScreen = ({ route, navigation }) => {
+  const [isFavorite, setIsFavorite] = useState(false); 
 
-
-  // ...
-  
-  // สร้างฟังก์ชันสำหรับการจัดการกับการกดปุ่ม Back
-  const handleBackButton = () => {
-    // ทำสิ่งที่คุณต้องการทำเมื่อกดปุ่ม Back ที่นี่
-    // ตัวอย่าง: navigation.navigate('หน้าที่คุณต้องการไป');
-    return true; // ส่งค่า true เพื่อยกเลิกการปิดแอพพลิเคชัน (ถ้าคุณไม่ต้องการให้แอพปิด)
-  };
-  
-  // ใช้ useEffect เพื่อรับการเรียกฟังก์ชัน handleBackButton ขณะที่คอมโพเนนต์โหลดและถอดออก
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
-  
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
-    };
-  }, []);
-  
   const jobid = route.params.id;
   const availableJob = useSelector((state) => state.jobs.filteredJobs);
   const displayedJob = availableJob.find(job => job.id == jobid);
 
   const currentUserId = firebase.auth().currentUser.uid;
 
-  console.log(jobid)
+  // console.log(jobid)
+  const toggleFavorite = () => {
+    setIsFavorite((prevIsFavorite) => !prevIsFavorite);
+  };
 
   return (
     <View style={styles.screen}>
@@ -53,6 +41,14 @@ const FindJobDetailScreen = ({ route, navigation }) => {
             style={styles.bgImage}
           ></ImageBackground>
         </View>
+        {/* ปุ่มfav */}
+      {/* <TouchableOpacity onPress={toggleFavorite}>
+          <Icon
+            name={isFavorite ? 'heart' : 'heart-outline'}
+            size={30}
+            color={isFavorite ? 'red' : 'black'}
+          />
+        </TouchableOpacity> */}
     
          {/* ชื่อหน่วยงาน */}
          <Text style={styles.jobTitle} >
@@ -92,7 +88,7 @@ const FindJobDetailScreen = ({ route, navigation }) => {
         {/* ค่าจ้าง */}
 
         <Text style={styles.subTitle}>ค่าจ้าง :</Text>
-        <Text style={styles.subText}>{displayedJob.wages} บาท/{displayedJob.employmentType}</Text>
+        <Text style={styles.subText}>{displayedJob.wage} บาท/{displayedJob.employmentType}</Text>
 
         {/* สวัสดิการ */}
         <Text style={styles.subTitle}>สวัสดิการ</Text>

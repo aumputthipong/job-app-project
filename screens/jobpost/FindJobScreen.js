@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useCallback} from "react";
 import {
   View,
   Text,
@@ -9,17 +9,26 @@ import {
   Image,
   FlatList,
   TextInput,
+  Alert,
 } from "react-native";
+import { useNavigation, useIsFocused ,useFocusEffect } from '@react-navigation/native';
 import { useSelector,useDispatch } from "react-redux";
 import {LINK_JOB} from "../../store/actions/jobAction"
-import firebase from '../../database/firebaseDB';
+import firebase from "../../database/firebaseDB";
 
 
 
 
 const FindJobScreen = ({ route, navigation }) => {
 
+  const currentUserId = firebase.auth().currentUser.uid;
+  const filteredJobs = useSelector((state) => state.jobs.filteredJobs);
+  const [filteredJobsKey, setFilteredJobsKey] = useState(0);
+
+ 
+
   const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
+  
 
   const renderJobItem = ({ itemData }) => (
 
@@ -62,9 +71,9 @@ const FindJobScreen = ({ route, navigation }) => {
     
   );
 
-  useEffect(() => {
+  // useEffect(() => {
     
-  }, []);
+  // }, []);
   
 
   return (

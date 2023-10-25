@@ -12,6 +12,7 @@ const initialState = {
 
     const hiresReducer = (state = initialState, action) => {
         switch (action.type) {
+   
             default:
                 return state;
         }
