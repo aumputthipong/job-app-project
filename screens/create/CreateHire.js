@@ -122,12 +122,12 @@ const CreateHire = ({ route, navigation }) => {
   return (
     <ScrollView style={{}}>
       <View style={{ padding: 20 }}>
-        <Text>หัวโพส</Text>
+        <Text>หัวข้อโพสหางาน</Text>
         <TextInput
           value={hireTitle}
           onChangeText={setHireTitle}
-          placeholder="หัวข้องาน"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          placeholder="หัวข้อโพสหางาน"
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
 
 
@@ -135,10 +135,10 @@ const CreateHire = ({ route, navigation }) => {
         <TextInput
           value={detail}
           onChangeText={setDetail}
-          placeholder="เวลา"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          placeholder="รายละเอียดโพสต์หางาน"
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
-        <Text>รูปResume</Text>
+        <Text style={{marginBottom: 10}}>รูปResume</Text>
         {image && (
           <Image
             source={{ uri: image }}
@@ -152,7 +152,7 @@ const CreateHire = ({ route, navigation }) => {
           <Text style={{ ...{ color: "white" } }}>เพิ่มรูปภาพโพสต์</Text>
         </TouchableOpacity>
 
-        <Text>ประเภทงาน</Text>
+        <Text style={{marginVertical: 10}}>ประเภทงาน</Text>
         <SelectList
           setSelected={(val) => setCategory(val)}
           data={categorydata}
@@ -162,18 +162,18 @@ const CreateHire = ({ route, navigation }) => {
 
 
 
-        <Text>ช่องทางติดต่อ</Text>
+        <Text style={{marginTop: 10}}>ช่องทางติดต่อ</Text>
         <TextInput
           value={email}
           onChangeText={setEmail}
           placeholder="อีเมล"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <TextInput
           value={phone}
           onChangeText={setPhone}
           placeholder="เบอร์โทร"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
 
 

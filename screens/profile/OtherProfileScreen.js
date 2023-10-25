@@ -47,14 +47,14 @@ const OtherProfileScreen = ({ route, navigation }) => {
           ...{ marginTop: 25, alignItems: "flex-start", height: 450 },
         }}
       >
-        <Text style={{ ...styles.jobTitle, ...{ fontSize: 20 } }}>
+        <Text style={{ ...styles.jobTitle, ...{ fontSize: 25 ,fontWeight:"600"  } }}>
           About Me
         </Text>
         <Text style={{ ...styles.subTitle, ...{ fontSize: 15 } }}>
           {displayedUser.aboutme}
         </Text>
 
-        <Text style={{ ...styles.jobTitle, ...{ fontSize: 20 } }}>Contact</Text>
+        <Text style={{ ...styles.jobTitle, ...{ fontSize: 25 ,fontWeight:"600"  } }}>ช่องทางติดต่อ</Text>
         <View style={{ ...styles.postRow, ...{} }}>
           <Text style={styles.subTitle}>
             <FontAwesome5 name={"user"} size={20} /> Email :
@@ -101,29 +101,23 @@ const OtherProfileScreen = ({ route, navigation }) => {
         <Text style={{ ...styles.jobTitle, ...{ fontSize: 25 ,fontWeight:"600" } }}>การศึกษา</Text>
         
           <Text style={{...styles.subTitle,...{fontWeight: "500" }}}>
-            ปริญญาตรี :
+            ปริญญาตรี : <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>{displayedUser.email}</Text>
           </Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-            {displayedUser.email}
-          </Text>
+          
      
         {/* โท*/}
         
           <Text style={{...styles.subTitle,...{fontWeight: "500" }}}>
-             ปริญญาโท :
+             ปริญญาโท : <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>{displayedUser.master}</Text>
           </Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-            {displayedUser.master}
-          </Text>
+          
       
         {/* เอก */}
         
-          <Text sstyle={{...styles.subTitle,...{fontWeight: "500" }}}>
-            ปริญญาเอก :
+          <Text style={{...styles.subTitle,...{fontWeight: "500" }}}>
+            ปริญญาเอก : <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>{displayedUser.doctoral}</Text>
           </Text>
-          <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-            {displayedUser.doctoral}
-          </Text>
+          
  
       </View>
     </ScrollView>

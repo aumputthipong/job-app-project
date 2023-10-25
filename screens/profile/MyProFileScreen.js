@@ -187,7 +187,7 @@ const MyProfileScreen = ({ route, navigation }) => {
                {/* อาชีพ */}
                <Text style={styles.subText}>{userData.job}</Text>
              </View>
-             <FontAwesome5 name={'edit'} size={23} onPress={startEditing} style={{...{ left: 320, top: 10, position: 'absolute'} }}/>
+             <FontAwesome5 name={'edit'} size={24} onPress={startEditing} style={{...{ left: 317.5, top: 10, position: 'absolute'} }}/>
              
            </View>
            {/* aboutme */}
@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
   },
   createbutton: {
     position:"absolute",
-    bottom: 20, 
+    bottom: 15, 
     right: 30,
     backgroundColor: "#5A6BF5",
     width: 45,

@@ -147,10 +147,8 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
     }}>
     <Text style={{...styles.title,...{color:"white"}}}>{postOwner.firstName} {postOwner.lastName}</Text>
     </TouchableOpacity>
-    <Text style={styles.subTitle}>{postOwner.job}</Text>
+    <Text style={styles.subTitle}> {postOwner.job}</Text>
         </View>
-
-
     </View>
         
     {
@@ -163,8 +161,8 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
         </TouchableOpacity>
       )}
     <Text style={{...styles.jobTitle,...{fontSize:25,color:"#421BDF"}}}>{displayedHire.hireTitle}</Text>
-    <Text style={{...styles.subText,...{fontSize:17}}}>รายละเอียดงาน</Text>
-    <Text style={{...styles.subText,...{fontSize:17}}}>{displayedHire.detail}</Text>
+    <Text style={{...styles.subText,...{fontSize:17, fontWeight: 'bold', marginTop: 10}}}>รายละเอียดโพสต์หางาน : <Text style={{...styles.subText,...{fontSize:17, fontWeight: 'normal'}}}>{displayedHire.detail}</Text></Text>
+    
 
         {/* ช่องทางติดต่อ */}
         <Text style={styles.subTitle}>ช่องทางติดต่อ</Text>
