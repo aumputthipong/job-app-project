@@ -1,4 +1,4 @@
-import { JOBS,FAVORITEJOBS } from "../../data/Jobs-data";
+import { JOBS,FAVORITEJOBS, COMMENTS } from "../../data/Jobs-data";
 import { TOGGLE_FAVORITE } from "../actions/jobAction";
 import { LINK_JOB } from "../actions/jobAction";
 import firebase from "../../database/firebaseDB";
@@ -7,7 +7,8 @@ const initialState = {
     jobs: JOBS,
     filteredJobs:JOBS ,
     selectedJob:JOBS[0] ,
-    favoriteJobs: FAVORITEJOBS
+    favoriteJobs: FAVORITEJOBS,
+    comments:COMMENTS,
     };
 
     const jobsReducer = (state = initialState, action) => {

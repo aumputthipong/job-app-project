@@ -51,3 +51,26 @@ FavjobPostsCollection.onSnapshot((querySnapshot) => {
 }, (error) => {
   console.error("Error getting real-time FavjobPosts updates: ", error);
 });
+
+export const COMMENTS = [];
+const commentJobCollection = firebase.firestore().collection('JobComments');
+
+// Create a real-time listener to fetch and update data when it changes
+commentJobCollection.onSnapshot((querySnapshot) => {
+  COMMENTS.length = 0; // Clear the existing data
+
+  querySnapshot.forEach((doc) => {
+    const commentData = doc.data();
+    const commentId = doc.id;
+    // Include the document ID as part of the data
+    const commentWithId = { id: commentId, ...commentData };
+    COMMENTS.push(commentWithId);
+  });
+});
+
+// Optionally, you can also handle any errors that occur during the real-time listener
+commentJobCollection.onSnapshot((querySnapshot) => {
+  // Handle changes as before
+}, (error) => {
+  console.error("Error getting real-time FavjobPosts updates: ", error);
+});

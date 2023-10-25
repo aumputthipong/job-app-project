@@ -19,17 +19,51 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const FindJobDetailScreen = ({ route, navigation }) => {
   const [isFavorite, setIsFavorite] = useState(false); 
-
+  const [commentBox, setCommentBox] = useState(""); 
   const jobid = route.params.id;
   const availableJob = useSelector((state) => state.jobs.filteredJobs);
   const displayedJob = availableJob.find(job => job.id == jobid);
-
   const currentUserId = firebase.auth().currentUser.uid;
+  
+  const availableUser = useSelector((state) => state.users.users);
+  const availableComment= useSelector((state) => state.jobs.comments);
+  const thisPostComment = availableComment.filter((comment=> comment.postId ==jobid))
+  const thisFliteredPostComment = thisPostComment.map(comment => {
+  const user = availableUser.find(user => user.id === comment.userId);
+  return {
+    ...comment, 
+    userId: user.id,
+    userImage: user.imageUrl,
+    userfistName: user.firstName,
+    userlastName: user.lastName, 
+  };
+});
 
-  // console.log(jobid)
+const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
+console.log(currentUserImg.imageUrl)
   const toggleFavorite = () => {
     setIsFavorite((prevIsFavorite) => !prevIsFavorite);
   };
+  const sentComment = ()=>{
+    if (commentBox.trim() !== "") {
+  
+      // ล้าง TextInput
+      firebase.firestore().collection("JobComments").add({
+        postId: jobid,
+        userId: currentUserId,
+        comment: commentBox,
+      })
+      .then(() => {
+        console.log('Job added to comment on Firebase');
+      })
+      .catch((error) => {
+        console.error('Error adding job to favorites: ', error);
+      });
+      setCommentBox("");
+    }
+  }
+    
+  
 
   return (
     <View style={styles.screen}>
@@ -107,7 +141,7 @@ const FindJobDetailScreen = ({ route, navigation }) => {
         {/* ช่องพิมพ์คอมเม้น + รูปโปรไฟล์ */}
         <View style={{...styles.postRow,...{ marginVertical:10,}}}>
         <Image
-            source={require("../../assets/PostPlaceholder.png")}
+            source={{uri:currentUserImg.imageUrl|| "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}}
             style={{...styles.profileImg,...{}}}
           ></Image>
         <TextInput
@@ -115,41 +149,36 @@ const FindJobDetailScreen = ({ route, navigation }) => {
           blurOnSubmit
           autoCapitalize="none"
           autoCorrect={false}
-          keyboardType="number-pad"
-          maxLength={2}
+          value={commentBox}
+          onChangeText={(text) => setCommentBox(text)}
+          maxLength={30}
+          numberOfLines={3}
           placeholder="แสดงความคิดเห็น"
-          //...เพิ่ม property value และ onChangeText...
-          // value={enteredValue}
-          // onChangeText={numberInputHandler}
         />
+        {/* ปุ่มส่งคอมเม้น */}
+         <TouchableOpacity style={{marginTop:20,marginLeft:10}} onPress={sentComment} >
+          <MaterialCommunityIcons name='send' size={20} color="black" />
+          </TouchableOpacity>
         </View>
 {/* ต้องทำเป็นflatlist แสดงคอมเม้น */}
         {/* คอมเม้นทางบ้าน */}
-        <View style={{...styles.postRow,...{ marginVertical:10,}}}>
+        {thisFliteredPostComment.map((comment, index) => (
+       
+ 
+        <View style={{...styles.postRow,...{ marginVertical:10,}}}key={index}>
           <Image
-            source={require("../../assets/PostPlaceholder.png")}
+            source={{uri:    currentUserImg.imageUrl || "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}}
             style={{...styles.profileImg,...{}}}
           ></Image>
           <View>
             <Text style={{ ...styles.subTitle, ...{ marginTop: 10 } }}>
-              คุณจอร์น สิก จิก ซอน
+             {comment.userfistName} {comment.userlastName}
             </Text>
-            <Text style={{ ...styles.subText, ...{} }}>สุดยอดฮาฟฟู้ว</Text>
+            <Text style={{ ...styles.subText, ...{} }}>   {comment.comment} </Text>
           </View>
         </View>
-            {/* คอมเม้นทางบ้าน */}
-        <View style={{...styles.postRow,...{}}}>
-          <Image
-            source={require("../../assets/PostPlaceholder.png")}
-            style={{...styles.profileImg,...{}}}
-          ></Image>
-          <View>
-            <Text style={{ ...styles.subTitle, ...{ marginTop: 10 } }}>
-              คุณจอร์น สิก จิก ซอน
-            </Text>
-            <Text style={{ ...styles.subText, ...{ paddingBottom:75,} }}>สุดยอดฮาฟฟู้ว</Text>
-          </View>
-        </View>
+             ))}
+      
     
     
       </ScrollView>
@@ -157,7 +186,7 @@ const FindJobDetailScreen = ({ route, navigation }) => {
   {currentUserId === displayedJob.postById&& (
       <TouchableOpacity style={styles.editbutton} onPress={() => {navigation.navigate("EditFind", {
       id: displayedJob.id});}}>
-          <Text  style={{...{color: "white"}}}><MaterialCommunityIcons name='comment-edit-outline' size={20} color="white" />แก้ไข</Text>
+          <MaterialCommunityIcons name='comment-edit-outline' size={25} color="white" />
         </TouchableOpacity>
         )}
     </View>
@@ -186,7 +215,7 @@ const styles = StyleSheet.create({
     marginVertical: "2%",
     borderRadius: 10,
     alignSelf: "center",
-   
+    paddingBottom:"20%",
     
     // padding: 20
   },
@@ -234,7 +263,7 @@ const styles = StyleSheet.create({
     height: 200,
   },
   input: {
-    width: 200,
+    width: 250,
     textAlign: "center",
     height: 30,
     borderBottomColor: "grey",
@@ -262,17 +291,18 @@ const styles = StyleSheet.create({
   },
   editbutton: {
     position:"absolute",
-    bottom: 20, 
+    top: 20, 
     right: 20,
     backgroundColor: "#5A6BF5",
-    width: 75,
-    height: 75,
-    borderRadius:25,
+    width: 55,
+    height: 55,
+    borderRadius:30,
     padding: "2.5%",
     alignItems: "center",
     justifyContent: "center",
     zIndex: 1,
   },
 });
+
 
 export default FindJobDetailScreen;
