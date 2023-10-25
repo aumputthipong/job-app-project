@@ -15,6 +15,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // Now you can use Firebase services in your component
 
 const CreateFind = ({ route, navigation }) => {
@@ -172,21 +173,21 @@ const CreateFind = ({ route, navigation }) => {
           value={jobTitle}
           onChangeText={setJobTitle}
           placeholder="หัวข้องาน"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <Text>ตำแหน่งที่รับ</Text>
         <TextInput
           value={position}
           onChangeText={setPosition}
           placeholder="ตำแหน่ง/อาชีพ"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <Text>บริษัท</Text>
         <TextInput
           value={agency}
           onChangeText={setAgency}
           placeholder="บริษัท"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
 
         <Text>รายละเอียด</Text>
@@ -194,7 +195,7 @@ const CreateFind = ({ route, navigation }) => {
           value={detail}
           onChangeText={setDetail}
           placeholder="เวลา"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <Text>รูปโพส</Text>
         {image && (
@@ -204,13 +205,13 @@ const CreateFind = ({ route, navigation }) => {
           />
         )}
         <TouchableOpacity
-          style={{ ...styles.button, ...{ width: "80%", marginleft: "5" } }}
+          style={{ ...styles.button, ...{ width: "80%", marginleft: "5", marginVertical: 10 } }}
           onPress={pickImage}
         >
           <Text style={{ ...{ color: "white" } }}>เพิ่มรูปภาพโพสต์</Text>
         </TouchableOpacity>
 
-        <Text>ประเภทงาน</Text>
+        <Text style={{marginBottom: 10 }}>ประเภทงาน</Text>
         <SelectList
           setSelected={(val) => setCategory(val)}
           data={categorydata}
@@ -218,7 +219,7 @@ const CreateFind = ({ route, navigation }) => {
           save="value"
         />
 
-        <Text>ประเภทการจ้าง</Text>
+        <Text style={{marginVertical: 10 }}>ประเภทการจ้าง</Text>
         <SelectList
           setSelected={(val) => setEmploymentType(val)}
           data={emptypedata}
@@ -226,26 +227,26 @@ const CreateFind = ({ route, navigation }) => {
           save="value"
         />
 
-        <Text>ค่าจ้าง</Text>
+        <Text style={{marginTop: 10 }}>ค่าจ้าง</Text>
         <TextInput
           value={wage}
           onChangeText={setWage}
           placeholder="บาท"
           keyboardType="numeric"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <Text>ช่องทางติดต่อ</Text>
         <TextInput
           value={email}
           onChangeText={setEmail}
           placeholder="อีเมล"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <TextInput
           value={phone}
           onChangeText={setPhone}
           placeholder="เบอร์โทร"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginBottom: 10, borderWidth: 2, borderRadius: 5 }}
         />
         {/* attribute */}
         <Text>คุณสมบัติ</Text>
@@ -254,22 +255,22 @@ const CreateFind = ({ route, navigation }) => {
            style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText} key={index}>{`${index + 1}. ${attribute}`}</Text>
         {/* ปุ่มลบ */}
-        <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}} onPress={() => attriDel(index)} >
-        <Text  style={{...{color: "white"}}}>ลบ</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={{...{width:"20%" , alignSelf:'center'}}} onPress={() => attriDel(index)} >
+          <FontAwesome name={'remove'}  size={20} />
+        </TouchableOpacity>
         </View>
       ))}
        
       
- <View style={styles.postRow}>
+      <View style={styles.postRow}>
       <TextInput
         placeholder="คุณสมบัติ"
         value={inputText}
         onChangeText={(text) => setInputText(text)}
-        style={{ borderWidth: 1, padding: 10, marginBottom: 10 ,width:"75%"}}
+        style={{ borderWidth: 2, padding: 10, marginVertical: 10 ,width:"75%", borderRadius: 5}}
       />
      
-     <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}}  onPress={attriAdd} >
+     <TouchableOpacity style={{...styles.button,...{width:"20%" , marginLeft: 15}}}  onPress={attriAdd} >
         <Text  style={{...{color: "white"}}}>เพิ่ม</Text>
       </TouchableOpacity>
       </View>
@@ -280,8 +281,8 @@ const CreateFind = ({ route, navigation }) => {
           <View key={index}
           style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText}>{`${index + 1}. ${welfareBenefit}`}</Text>
-        <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}} onPress={() => BenefitDel(index)} >
-        <Text  style={{...{color: "white"}}}>ลบ</Text>
+        <TouchableOpacity style={{...{width:"20%" , alignSelf:'center'}}} onPress={() => BenefitDel(index)} >
+        <FontAwesome name={'remove'}  size={20} />
       </TouchableOpacity>
         </View>
       ))}
@@ -291,16 +292,11 @@ const CreateFind = ({ route, navigation }) => {
             placeholder="สวัสดิการ"
             value={inputText2}
             onChangeText={(text) => setInputText2(text)}
-            style={{
-              borderWidth: 1,
-              padding: 10,
-              marginBottom: 10,
-              width: "75%",
-            }}
+            style={{ borderWidth: 2, padding: 10, marginVertical: 10 ,width:"75%", borderRadius: 5}}
           />
 
           <TouchableOpacity
-            style={{ ...styles.button, ...{ width: "20%", marginleft: "50" } }}
+            style={{ ...styles.button, ...{ width: "20%", marginLeft: 15 } }}
             onPress={benefitAdd}
           >
             <Text style={{ ...{ color: "white" } }}>เพิ่ม</Text>
@@ -340,15 +336,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontSize: 15,
   },
-  button: {
-    marginVertical: 10,
-    backgroundColor: "#BEBDFF",
-    color: "red",
-    width: "50%",
-    height: "5%",
-    borderRadius: 10,
-    paddingTop: "1.5%",
-  },
   postRow: {
     flexDirection: "row",
     // backgroundColor:"red",
@@ -368,6 +355,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
+  subText: {
+    fontSize: 15,
+  }
 });
 
 export default CreateFind;

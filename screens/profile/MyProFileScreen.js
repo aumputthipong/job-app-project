@@ -166,12 +166,11 @@ const MyProfileScreen = ({ route, navigation }) => {
 
   return (
     
-    <ScrollView style={styles.screen}>
-      <View>
+    <View style={styles.screen}>
       {userData ? (
          <View>
          {/*1st profileBox */}
-         <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" ,} }}>
+         <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" , height: "35%"} }}>
            <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
              <View style={styles.postRow}>
              <Image source={{
@@ -231,32 +230,33 @@ const MyProfileScreen = ({ route, navigation }) => {
 
          {/*3 EducationBox */}
          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white",  position: 'relative' } }}>
-           <Text style={styles.HeaderText}>การศึกษา</Text>
+          <ScrollView>
+           <Text style={{ ...styles.HeaderText, ...{marginBottom: 10 } }}>การศึกษา</Text>
            
            <View style={{ ...styles.postRow, ...{} }}>
-             <Text style={styles.subTitle}>ปริญญาตรี : 
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
-               {userData.bachelor}
+             <Text style={styles.subTitle2}>ปริญญาตรี : 
+             <Text style={{ ...styles.subTitle2, ...{ fontWeight: "normal", marginRight: 10 } }}>
+             <Text> </Text>{userData.bachelor}
              </Text>
              </Text>
            </View>
-           {/* เบอร์ */}
+
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาโท : 
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
-               {userData.master}
-             </Text>
-           <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาเอก 
-             </Text>
-           </View>
-           <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาเอก : 
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
-               {userData.doctoral}
+             <Text style={styles.subTitle2}>ปริญญาโท : 
+             <Text style={{ ...styles.subTitle2, ...{ fontWeight: "normal", marginRight: 10 } }}>
+             <Text> </Text>{userData.master}
              </Text>
              </Text>
            </View>
+
+           <View style={styles.postRow}>
+             <Text style={styles.subTitle2}>ปริญญาเอก : 
+             <Text style={{ ...styles.subTitle2, ...{ fontWeight: "normal", marginRight: 10 } }}>
+             <Text> </Text>{userData.doctoral}
+             </Text>
+             </Text>
+           </View>
+           </ScrollView>
          </View>
  
        </View>
@@ -284,7 +284,6 @@ const MyProfileScreen = ({ route, navigation }) => {
               setEditData({ ...editData, firstName: text })
             }
           />
-
           <Text>นามสกุล</Text>
           <TextInput
             style={styles.txtinput}
@@ -372,14 +371,15 @@ const MyProfileScreen = ({ route, navigation }) => {
     </Modal>
     )}
     </View>
-    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#BEBDFF",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: "#ABA7FA",
   },
   profileBox: {
     width: 350,
@@ -390,14 +390,7 @@ const styles = StyleSheet.create({
   },
   contactBox: {
     width: 350,
-    height: 300,
-    marginVertical: "1%",
-    borderRadius: 10,
-    alignSelf: "center",
-  },
-  eduBox: {
-    width: 500,
-    height: 450,
+    height: "29%",
     marginVertical: "1%",
     borderRadius: 10,
     alignSelf: "center",
@@ -417,7 +410,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   subTitle2: {
-    marginTop: 10,
     marginBottom: 10,
     fontSize: 18,
     marginLeft: 10,
