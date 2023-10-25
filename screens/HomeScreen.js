@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     paddingTop:60,
-    backgroundColor:"#ABA7FA",
+    backgroundColor:"#BEBDFF",
   },
   gridItem: {
     // flex: 1,

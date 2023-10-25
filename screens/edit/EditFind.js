@@ -170,7 +170,7 @@ console.log(imageUrl)
         <TextInput
           value={detail}
           onChangeText={setDetail}
-          placeholder="เวลา"
+          placeholder="รายละเอียดงาน"
           multiline={true}
           numberOfLines={8}
           maxLength={500}
@@ -326,6 +326,7 @@ const styles = StyleSheet.create({
   postRow: {
     flexDirection: "row",
     // backgroundColor:"red",
+    
   },
   postImage: {
     width: 250,

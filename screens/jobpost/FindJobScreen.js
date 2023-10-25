@@ -22,13 +22,7 @@ import firebase from "../../database/firebaseDB";
 const FindJobScreen = ({ route, navigation }) => {
 
   const currentUserId = firebase.auth().currentUser.uid;
-  const filteredJobs = useSelector((state) => state.jobs.filteredJobs);
-  const [filteredJobsKey, setFilteredJobsKey] = useState(0);
-
- 
-
   const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
-  
 
   const renderJobItem = ({ itemData }) => (
 
@@ -71,9 +65,6 @@ const FindJobScreen = ({ route, navigation }) => {
     
   );
 
-  // useEffect(() => {
-    
-  // }, []);
   
 
   return (
@@ -93,7 +84,7 @@ const FindJobScreen = ({ route, navigation }) => {
         // onChangeText={numberInputHandler}
       />
 
-      <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("CreateFind", {});}}>
+      <TouchableOpacity style={styles.createbutton} onPress={() => {navigation.navigate("CreateFind", {});}}>
         <Text  style={{...{color: "white"}}}>สร้างโพสต์</Text>
       </TouchableOpacity>
 
@@ -175,6 +166,19 @@ const styles = StyleSheet.create({
     padding:"2.5%",
     alignItems: "center",
     alignSelf:"center",
+  },
+  createbutton: {
+    position:"absolute",
+    bottom: 20, 
+    right: 20,
+    backgroundColor: "#5A6BF5",
+    width: 75,
+    height: 75,
+    borderRadius:25,
+    padding: "2.5%",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
   },
 });
 
