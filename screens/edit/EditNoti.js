@@ -51,6 +51,7 @@ import { useDispatch } from "react-redux";
       { key: "8", value: "งานการศึกษา" },
     ];
   
+    
     return (
       <View style={styles.container}>
         <MultipleSelectList 
