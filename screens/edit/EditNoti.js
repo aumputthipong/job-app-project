@@ -15,62 +15,59 @@ import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
 import { MultipleSelectList } from 'react-native-dropdown-select-list'
+import { useSelector } from "react-redux";
 import { filterJobs } from "../../store/actions/jobAction";
 import { useDispatch } from "react-redux";
 
 
-  const EditNoti = ({ navigation }) => {
-    const dispatch = useDispatch();
-    const userId = firebase.auth().currentUser.uid;
-    
-    console.log(imageUrl)
+const EditNoti = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const userId = firebase.auth().currentUser.uid;
 
-    const [selected, setSelected] = useState([]);
-  
-  
-    const applyFilters = () => {
-      // ส่งค่า filter ไปยัง Redux state
-      dispatch(filterJobs(selected));
-      console.log(selected)
-      const saveNoti = {
-        category: selected,
-        notiBy: userId,
-        createdAt: new Date(), 
-        // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
-      };
-      firebase.firestore().collection("User Noti").add(saveNoti);
-      
-      navigation.goBack(); // กลับไปหน้า NotificationScreen
-    };
+
+  // const myNoti = currentNoti.filter((noti) => noti.notiBy == userId);
+
+  const [selected, setSelected] = useState([]);
+  // const noti = useSelector((state) => state.jobs.favoriteJobs);
+
+  // const myNoti = noti.filter((noti)=> noti.notiBy == userId);
+
+  const applyFilters = () => {
+    // ส่งค่า filter ไปยัง Redux state
+    dispatch(filterJobs(selected));
+    console.log(selected)
     
-    const categorydata = [
-      { key: "1", value: "งานบัญชี" },
-      { key: "2", value: "งานทรัพยากรบุคคล" },
-      { key: "3", value: "งานธนาคาร" },
-      { key: "4", value: "งานสุขภาพ" },
-      { key: "5", value: "งานก่อสร้าง" },
-      { key: "6", value: "งานออกแบบ" },
-      { key: "7", value: "งานไอที" },
-      { key: "8", value: "งานการศึกษา" },
-    ];
-  
-    
-    return (
-      <View style={styles.container}>
-        <MultipleSelectList 
-        setSelected={(val) => setSelected(val)} 
-        data={categorydata} 
-        save="value"
-        
-        label="Categories"
-    />
-    
-        
-        
-        <Button title="บันทึก" onPress={applyFilters} />
-      </View>
-    );
+    navigation.navigate("NotificationScreen") // กลับไปหน้า NotificationScreen
   };
+  
+  const categorydata = [
+    { key: "1", value: "งานบัญชี" },
+    { key: "2", value: "งานทรัพยากรบุคคล" },
+    { key: "3", value: "งานธนาคาร" },
+    { key: "4", value: "งานสุขภาพ" },
+    { key: "5", value: "งานก่อสร้าง" },
+    { key: "6", value: "งานออกแบบ" },
+    { key: "7", value: "งานไอที" },
+    { key: "8", value: "งานการศึกษา" },
+  ];
+
+
+  return (
+    <View style={styles.container}>
+      <MultipleSelectList
+        setSelected={(val) => setSelected(val)}
+        data={categorydata}
+        save="value"
+
+        label="Categories"
+      />
+
+
+
+      <Button title="บันทึก" onPress={applyFilters} />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   screen: {

@@ -23,3 +23,4 @@ notiCollection.onSnapshot((querySnapshot) => {
 }, (error) => {
   console.error("Error getting real-time noti updates: ", error);
 });
+
