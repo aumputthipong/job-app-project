@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,useEffect} from "react";
+import { useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -14,106 +15,76 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
+import { updateHireData } from "../../store/actions/hireAction";
+
 // ก่อนพัง
 const EditHire = ({ route, navigation }) => {
   const hireid = route.params.id;
+  const availableHire = useSelector((state) => state.hires.filteredHires);
+  const displayedHire = availableHire.find(hire => hire.id == hireid);
 
-  const [hireTitle, setHireTitle] = useState("");
+  const displayedUsers = useSelector((state) => state.users.users);
+
+
+const [hireTitle, setHireTitle] = useState("");
 const [category, setCategory] = useState("");
 const [detail, setDetail] = useState("");
 const [email, setEmail] = useState("");
-const [imageUrl, setImageUrl] = useState("");
 const [phone, setPhone] = useState("");
-const [image, setImage] = useState(null);
+const [imageUrl, setImageUrl] = useState("");
 const [postData, setPostData] = useState(null);
 
   const [uploading, setUploading] = useState(false);
 
-
-
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert(
-        "Permission needed",
-        "Please allow access to your media library to pick an image."
-      );
-    } else {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setImage(result.assets[0].uri);
-      }
+  useEffect(() => {
+    if (displayedHire) {
+      setHireTitle(displayedHire.hireTitle);
+      setCategory(displayedHire.category);
+      setDetail(displayedHire.detail);
+      setEmail(displayedHire.email);
+      setPhone(displayedHire.phone);
     }
-  };
-
+  }, [displayedHire]);
   const submitPost = async () => {
-    // Ensure that you have valid data before updating
-    if (hireTitle && detail && email && phone && category) {
-      // Prepare the data to update in Firestore
-      const updatedData = {
+    // สร้างอ็อบเจกต์ที่เก็บข้อมูลที่คุณต้องการแก้ไข
+    const updatedData = {
         hireTitle,
         detail,
         email,
         phone,
         category,
-      };
+      // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการแก้ไข
+    };
   
-      // If a new image was selected, upload it and get the URL
-      if (image) {
-        let filename = image.substring(image.lastIndexOf("/") + 1);
+    try {
+      // อัปเดตข้อมูลใน Firestore โดยใช้ `hireid` ของโพสต์ที่คุณต้องการแก้ไข
+      const postRef = firebase.firestore().collection("HirePosts").doc(hireid);
+      await postRef.update(updatedData);
   
-        try {
-          const response = await fetch(image);
-          const blob = await response.blob();
-          const uploadTask = firebase
-            .storage()
-            .ref()
-            .child(`images/${filename}`)
-            .put(blob);
-  
-          uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-              const progress =
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              console.log(`Upload is ${progress}% done`);
-            },
-            (error) => {
-              console.error("Upload Error: ", error);
-            },
-            () => {
-              uploadTask.snapshot.ref.getDownloadURL().then(async (downloadURL) => {
-                // Update the Firestore document with the new data and image URL
-                const postRef = firebase.firestore().collection("HirePosts").doc(hireid);
-                await postRef.update({
-                  ...updatedData,
-                  resumeUrl: downloadURL,
-                });
-                console.log("Post updated");
-                navigation.navigate("HireJobScreen");
-              });
-            }
-          );
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        // If no new image was selected, update Firestore without the image URL
-        const postRef = firebase.firestore().collection("HirePosts").doc(hireid);
-        await postRef.update(updatedData);
-        console.log("Post updated");
-        navigation.navigate("HireJobScreen");
-      }
-    } else {
-      console.log("Please fill in all the required fields.");
+      console.log("Post updated successfully");
+      navigation.navigate("HireJobDetailScreen",{id:hireid});
+    } catch (e) {
+      console.error("Error updating data: ", e);
     }
   };
+  const deletePost = async () => {
+    try {
+      // Delete the post document from Firestore
+      await firebase.firestore().collection("HirePosts").doc(hireid).delete();
+  
+      // If there is an image associated with the post, delete it from storage
+      if (imageUrl) {
+        const imageRef = firebase.storage().refFromURL(imageUrl);
+        await imageRef.delete();
+      }
+  
+      console.log("Post deleted");
+      navigation.navigate("HireJobScreen");
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+  
   const categorydata = [
     { key: "1", value: "งานบัญชี" },
     { key: "2", value: "งานทรัพยากรบุคคล" },
@@ -124,6 +95,10 @@ const [postData, setPostData] = useState(null);
     { key: "7", value: "งานไอที" },
     { key: "8", value: "งานการศึกษา" },
   ];
+    // สร้างฟังก์ชันที่จะใช้ในการอัปเดตค่า category
+    const handleCategoryChange = (selectedValue) => {
+      setCategory(selectedValue);
+    };
   return (
     <ScrollView style={{}}>
       <View style={{ padding: 20 }}>
@@ -143,27 +118,15 @@ const [postData, setPostData] = useState(null);
           placeholder="เวลา"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
-        <Text>รูปResume</Text>
-        {image && (
-          <Image
-            source={{ uri: image }}
-            style={{ ...styles.postImage, ...{ alignSelf: "center" } }}
-          />
-        )}
-        <TouchableOpacity
-          style={{ ...styles.button, ...{ width: "80%", marginleft: "5" } }}
-          onPress={pickImage}
-        >
-          <Text style={{ ...{ color: "white" } }}>เพิ่มรูปภาพโพสต์</Text>
-        </TouchableOpacity>
 
         <Text>ประเภทงาน</Text>
-        <SelectList
-          setSelected={(val) => setCategory(val)}
-          data={categorydata}
-          placeholder="ประเภทของงาน"
-          save="value"
-        />
+  <SelectList
+      setSelected={(val) => setCategory(val)}
+      data={categorydata}
+      placeholder="ประเภทของงาน"
+      selectedValue={category} 
+      onValueChange={handleCategoryChange} 
+    />
 
 
 
@@ -201,23 +164,7 @@ const [postData, setPostData] = useState(null);
     </ScrollView>
   );
 };
-const deletePost = async () => {
-  try {
-    // Delete the post document from Firestore
-    await firebase.firestore().collection("HirePosts").doc(hireid).delete();
 
-    // If there is an image associated with the post, delete it from storage
-    if (imageUrl) {
-      const imageRef = firebase.storage().refFromURL(imageUrl);
-      await imageRef.delete();
-    }
-
-    console.log("Post deleted");
-    navigation.navigate("HireJobScreen");
-  } catch (error) {
-    console.error("Error deleting post:", error);
-  }
-};
 
 const styles = StyleSheet.create({
   screen: {

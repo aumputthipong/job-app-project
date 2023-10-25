@@ -40,8 +40,8 @@ const CreateFind = ({ route, navigation }) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       Alert.alert(
-        "Permission needed",
-        "Please allow access to your media library to pick an image."
+        "ต้องการสิทธิ์การเข้าถึง",
+        "โปรดอนุญาติการเข้าถึงไฟล์รูปรูปภาพในเครื่องของคุณ."
       );
     } else {
       const result = await ImagePicker.launchImageLibraryAsync({

@@ -20,8 +20,9 @@ import firebase from '../../database/firebaseDB';
 const FindJobScreen = ({ route, navigation }) => {
 
   const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
-  
+
   const renderJobItem = ({ itemData }) => (
+
   
     <TouchableOpacity
 
@@ -39,9 +40,9 @@ const FindJobScreen = ({ route, navigation }) => {
           ></Image>
           
         </View>
-        {/* ชื่อหน่วยงาน */}
+        {/* ชื่องาน */}
         <Text style={styles.title} numberOfLines={2}>
-          {itemData.agency}
+          {itemData.jobTitle}
         </Text>
         {/* ตำแหน่ง */}
         <Text style={styles.subText}>{itemData.position}</Text>
@@ -60,11 +61,12 @@ const FindJobScreen = ({ route, navigation }) => {
     
     
   );
+
   useEffect(() => {
     
   }, []);
   
-  
+
   return (
 
     <View style={styles.container}>

@@ -17,11 +17,22 @@ const HireJobScreen = ({ route, navigation }) => {
   const displayedHires = useSelector((state) => state.hires.filteredHires);
   const displayedUsers = useSelector((state) => state.users.users);
 
+  const [hires, setHires] = useState(displayedHires);
+  const [users, setUsers] = useState(displayedUsers);
+
+  useEffect(() => {
+    setHires(displayedHires);
+  }, [displayedHires]);
+
+  useEffect(() => {
+    setUsers(displayedUsers);
+  }, [displayedUsers]);
 
 
-  const renderHireItem = ({ item }) => {
-    const user = displayedUsers.find((user) => user.id === item.postById);
-    return (
+  const renderHireItem = ({ item}) => {
+    const user = users.find((user) => user.id === item.postById);
+    return(
+
       <TouchableOpacity
         onPress={() => {
           navigation.navigate("HireJobDetailScreen", { id: item.id });
@@ -89,7 +100,7 @@ const HireJobScreen = ({ route, navigation }) => {
       </TouchableOpacity>
 
       <FlatList
-        data={displayedHires}
+        data={hires}
         renderItem={renderHireItem}
         keyExtractor={(item) => item.id.toString()}
       />
