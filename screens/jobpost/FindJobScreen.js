@@ -45,7 +45,8 @@ const FindJobScreen = ({ route, navigation }) => {
   const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
   
 
-  const renderJobItem = ({ itemData}) => (
+  const renderJobItem = ({ itemData }) => (
+
   
     <TouchableOpacity
 
@@ -81,7 +82,14 @@ const FindJobScreen = ({ route, navigation }) => {
         </Text>
       </View>
     </TouchableOpacity>
+    
+    
   );
+
+  useEffect(() => {
+    
+  }, []);
+  
 
   return (
 
@@ -162,14 +170,17 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "flex-end",
     resizeMode: "stretch",
-    borderRadius: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   postRow: {
     flexDirection: "row",
     backgroundColor: "gray",
+    borderRadius: 20,
   },
   postHeader: {
     height: "50%",
+    
   },
   button: { 
     backgroundColor: "#5A6BF5",

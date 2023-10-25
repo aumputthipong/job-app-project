@@ -12,7 +12,7 @@ import {
   ScrollView,
   TextInput,
 } from "react-native";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 const HireJobScreen = ({ route, navigation }) => {
   const displayedHires = useSelector((state) => state.hires.filteredHires);
   const displayedUsers = useSelector((state) => state.users.users);
@@ -28,46 +28,52 @@ const HireJobScreen = ({ route, navigation }) => {
     setUsers(displayedUsers);
   }, [displayedUsers]);
 
+
   const renderHireItem = ({ item}) => {
     const user = users.find((user) => user.id === item.postById);
     return(
+
       <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("HireJobDetailScreen", { id: item.id });
-      }}
-    >
-      <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
-        <View style={styles.postRow}>
-          <Image
-            source={{uri: user.imageUrl}}
-            style={{ ...styles.profileImg, ...{} }}
-          ></Image>
-          {/* ชื่อหน่วยงาน */}
-          <View style={{ paddingTop: 10 }}>
-            {user && (
-              <Text style={styles.title}>{user.firstName} {user.lastName}</Text>
-            )}
+        onPress={() => {
+          navigation.navigate("HireJobDetailScreen", { id: item.id });
+        }}
+      >
+        <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
+          <View style={styles.postRow}>
+            <Image
+              source={{ uri: user.imageUrl }}
+              style={{ ...styles.profileImg, ...{} }}
+            ></Image>
+            {/* ชื่อหน่วยงาน */}
+            <View style={{ paddingTop: 10 }}>
+              {user && (
+                <Text style={styles.title}>{user.firstName} {user.lastName}</Text>
+              )}
 
-            {/* ตำแหน่ง */}
-            <Text style={styles.subText}>{user.job}</Text>
+              {/* ตำแหน่ง */}
+              <Text style={styles.subText}>{user.job}</Text>
+            </View>
           </View>
-        </View>
 
-        <Text style={styles.title}>{item.hireTitle}</Text>
-        {/* รายละเอียด */}
-        <Text style={styles.detailText}>{item.detail}</Text>
-        <Text
-          style={{
-            ...styles.detailText,
-            ...{ alignSelf: "flex-start", marginTop: 15 },
-          }}
-        >
-          29 ก.พ.64
-        </Text>
-      </View>
-    </TouchableOpacity>
+          <Text style={styles.title}>{item.hireTitle}</Text>
+          {/* รายละเอียด */}
+          <Text style={styles.detailText}>{item.detail}</Text>
+          <Text
+            style={{
+              ...styles.detailText,
+              ...{ alignSelf: "flex-start", marginTop: 15 },
+            }}
+          >
+            29 ก.พ.64
+          </Text>
+        </View>
+      </TouchableOpacity>
     );
-        };
+  };
+
+  useEffect(() => {
+
+  }, []);
   return (
     <View style={styles.container}>
       {/* searchbar */}
@@ -79,9 +85,9 @@ const HireJobScreen = ({ route, navigation }) => {
         keyboardType="default"
         maxLength={20}
         placeholder="ค้นหา"
-        //...เพิ่ม property value และ onChangeText...
-        // value={enteredValue}
-        // onChangeText={numberInputHandler}
+      //...เพิ่ม property value และ onChangeText...
+      // value={enteredValue}
+      // onChangeText={numberInputHandler}
       />
 
       <TouchableOpacity
@@ -151,7 +157,7 @@ const styles = StyleSheet.create({
   },
   postRow: {
     flexDirection: "row",
-    paddingTop:10,
+    paddingTop: 10,
     borderRadius: 10,
     marginBottom: 10,
   },
@@ -160,7 +166,7 @@ const styles = StyleSheet.create({
     width: "100%",
 
   },
-  
+
   profileImg: {
     marginTop: 10,
     marginLeft: 10,
