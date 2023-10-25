@@ -191,7 +191,7 @@ const MyProfileScreen = ({ route, navigation }) => {
              
            </View>
            {/* aboutme */}
-           <Text style={{ ...{ color: '#3C3F40', left: 10, top: 90, fontWeight: 'bold', fontSize: 18 ,position: 'absolute'} }}>About Me</Text>
+           <Text style={{ ...{ color: '#3C3F40', left: 10, top: 100, fontWeight: 'bold', fontSize: 18 ,position: 'absolute'} }}>About Me</Text>
            <Text style={{ ...{ color: '#3C3F40', marginLeft: 20, fontSize:18, marginTop: 35} }}>
              {userData.aboutme}
            </Text>
@@ -388,15 +388,17 @@ const styles = StyleSheet.create({
   },
   profileBox: {
     width: 350,
-    height: 270,
+    height: 250,
     marginVertical: "2%",
     borderRadius: 10,
+    alignSelf:'center'
   },
   contactBox: {
     width: 350,
     height: 300,
     marginVertical: "1.5%",
     borderRadius: 10,
+    alignSelf:'center'
   },
   HeaderText: {
     marginTop: 10,
@@ -499,7 +501,7 @@ const styles = StyleSheet.create({
   },
   createbutton: {
     position:"absolute",
-    bottom: 25, 
+    bottom: 20, 
     right: 30,
     backgroundColor: "#5A6BF5",
     width: 45,

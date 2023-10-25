@@ -175,7 +175,7 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
 
 
     <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <Image source={{ uri: displayedHire.resumeUrl }} style={{ width: 200, height: 200 }} />
+        <Image source={{ uri: displayedHire.resumeUrl }} style={{ width: 200, height: 200, alignSelf:'center' }} />
       </TouchableOpacity>
       <Modal isVisible={isModalVisible}>
         <ImageViewer
@@ -226,7 +226,7 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
       style={{...styles.commentImg,...{}}}
       ></Image>
             </TouchableOpacity>
-      <View>
+          <View>
             <Text style={{ ...styles.subTitle, ...{ marginTop: 10 } }}>
              {comment.userfistName} {comment.userlastName}
             </Text>
@@ -253,6 +253,7 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: "#BEBDFF",
   },
   item: {
     backgroundColor: "white",
