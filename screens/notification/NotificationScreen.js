@@ -35,7 +35,7 @@ const NotificationScreen = ({ route, navigation }) => {
 
 
   // กรองโพสต์ที่มี category ตรงกับ categoriesToDisplay
-  const filteredJobs = jobs.filter(job => currentUserNoti.some(noti => noti.category.includes(job.category)));
+  const filteredJobs = jobs.filter(job => currentUserNoti.some(noti => noti.category.includes(job.category) && noti.notiBy !== job.postById));
 
 
   const renderJobItem = ({ itemData }) => (
