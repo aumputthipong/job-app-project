@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import {
   View,
   Text,
@@ -12,14 +12,36 @@ import {
 } from "react-native";
 import { useSelector } from "react-redux";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
+import firebase from "../../database/firebaseDB";
+import { BackHandler } from 'react-native';
 const FindJobDetailScreen = ({ route, navigation }) => {
 
 
+  // ...
+  
+  // สร้างฟังก์ชันสำหรับการจัดการกับการกดปุ่ม Back
+  const handleBackButton = () => {
+    // ทำสิ่งที่คุณต้องการทำเมื่อกดปุ่ม Back ที่นี่
+    // ตัวอย่าง: navigation.navigate('หน้าที่คุณต้องการไป');
+    return true; // ส่งค่า true เพื่อยกเลิกการปิดแอพพลิเคชัน (ถ้าคุณไม่ต้องการให้แอพปิด)
+  };
+  
+  // ใช้ useEffect เพื่อรับการเรียกฟังก์ชัน handleBackButton ขณะที่คอมโพเนนต์โหลดและถอดออก
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+  
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, []);
+  
   const jobid = route.params.id;
   const availableJob = useSelector((state) => state.jobs.filteredJobs);
   const displayedJob = availableJob.find(job => job.id == jobid);
-  // console.log("display index :"+displayedJob[0])
+
+  const currentUserId = firebase.auth().currentUser.uid;
+
+  console.log(jobid)
 
   return (
     <View style={styles.screen}>
@@ -135,11 +157,13 @@ const FindJobDetailScreen = ({ route, navigation }) => {
     
     
       </ScrollView>
+
+  {currentUserId === displayedJob.postById&& (
       <TouchableOpacity style={styles.editbutton} onPress={() => {navigation.navigate("EditFind", {
       id: displayedJob.id});}}>
           <Text  style={{...{color: "white"}}}>แก้ไข</Text>
         </TouchableOpacity>
-
+        )}
     </View>
   );
 };
