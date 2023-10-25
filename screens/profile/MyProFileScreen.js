@@ -187,12 +187,12 @@ const MyProfileScreen = ({ route, navigation }) => {
              
            </View>
            {/* aboutme */}
-           <Text style={{ ...styles.subTitle, ...{ marginTop: 20 } }}>About Me</Text>
+           <Text style={{ ...styles.subTitle, ...{ marginTop: 25 } }}>About Me</Text>
            <Text style={{ ...styles.subText, ...{ marginLeft: 20} }}>
              {userData.aboutme}
            </Text>
            <FontAwesome5 name={'camera'} size={22} onPress={pickImageAndUpload} style={{...{ left: 70, top: 70, position: 'absolute'} }} />
-           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 317.5, top: 195, position: 'absolute'} }}/>
+           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 317.5, top: 190, position: 'absolute'} }}/>
          </View>
          {/*2 ContactBox */}
          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
@@ -227,31 +227,36 @@ const MyProfileScreen = ({ route, navigation }) => {
              </Text>
            </View>
          </View>
+
          {/*3 EducationBox */}
          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white",  position: 'relative' } }}>
+          <ScrollView>
            <Text style={styles.HeaderText}>การศึกษา</Text>
+           
            <View style={{ ...styles.postRow, ...{} }}>
-             <Text style={styles.subTitle}>ปริญญาตรี : 
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
-               {userData.bachelor}
+             <Text style={styles.subTitle2}>ปริญญาตรี : 
+             <Text style={{ ...styles.subTitle2, ...{ fontWeight: "normal", marginRight: 10 } }}>
+              <Text> </Text>{userData.bachelor}
              </Text>
              </Text>
            </View>
-           {/* เบอร์ */}
+
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาโท : 
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
-               {userData.master}
+             <Text style={styles.subTitle2}>ปริญญาโท : 
+             <Text style={{ ...styles.subTitle2, ...{ fontWeight: "normal", marginRight: 10 } }}>
+                <Text> </Text>{userData.master}
              </Text>
              </Text>
            </View>
+
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาเอก : 
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
-               {userData.doctoral}
+             <Text style={styles.subTitle2}>ปริญญาเอก : 
+             <Text style={{ ...styles.subTitle2, ...{ fontWeight: "normal", marginRight: 10 } }}>
+              <Text> </Text>{userData.doctoral}
              </Text>
              </Text>
            </View>
+           </ScrollView>
          </View>
  
        </View>
@@ -403,7 +408,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginLeft: 10,
     fontWeight: "bold",
-    // backgroundColor:"red"
+  },
+  subTitle2: {
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 18,
+    marginLeft: 10,
+    fontWeight: "bold",
   },
   subText: {
     fontSize: 18,
