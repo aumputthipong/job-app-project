@@ -50,7 +50,7 @@ const MyProfileScreen = ({ route, navigation }) => {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4, 3],
+        aspect: [4, 4],
         quality: 1,
       });
 
@@ -170,7 +170,7 @@ const MyProfileScreen = ({ route, navigation }) => {
       {userData ? (
          <View>
          {/*1st profileBox */}
-         <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" } }}>
+         <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" , height: "35%"} }}>
            <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
              <View style={styles.postRow}>
              <Image source={{
@@ -192,7 +192,7 @@ const MyProfileScreen = ({ route, navigation }) => {
              {userData.aboutme}
            </Text>
            <FontAwesome5 name={'camera'} size={22} onPress={pickImageAndUpload} style={{...{ left: 70, top: 70, position: 'absolute'} }} />
-           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 317.5, top: 232.5, position: 'absolute'} }}/>
+           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 317.5, top: 195, position: 'absolute'} }}/>
          </View>
          {/*2 ContactBox */}
          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
@@ -228,7 +228,7 @@ const MyProfileScreen = ({ route, navigation }) => {
            </View>
          </View>
          {/*3 EducationBox */}
-         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white", height: "25%", position: 'relative' } }}>
+         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white",  position: 'relative' } }}>
            
            <Text style={styles.HeaderText}>การศึกษา</Text>
            
