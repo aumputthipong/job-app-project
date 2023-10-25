@@ -1,19 +1,19 @@
 import firebase from "../database/firebaseDB";
 
 
-export const Noti = [];
+export const NOTI = [];
 const notiCollection = firebase.firestore().collection('User Noti');
 
 // Create a real-time listener to fetch and update data when it changes
 notiCollection.onSnapshot((querySnapshot) => {
-  Noti.length = 0; // Clear the existing data
+  NOTI.length = 0; // Clear the existing data
 
   querySnapshot.forEach((doc) => {
     const notiData = doc.data();
     const notiId = doc.id;
     // Include the document ID as part of the data
     const notiWithId = { id: notiId, ...notiData };
-    Noti.push(notiWithId);
+    NOTI.push(notiWithId);
   });
 });
 
