@@ -222,7 +222,7 @@ console.log(imageUrl)
            style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText} key={index}>{`${index + 1}. ${attribute}`}</Text>
         {/* ปุ่มลบ */}
-        <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}} onPress={() => attriDel(index)} >
+        <TouchableOpacity style={{...styles.delbutton,...{}}} onPress={() => attriDel(index)} >
         <Text  style={{...{color: "white"}}}>ลบ</Text>
       </TouchableOpacity>
         </View>
@@ -247,7 +247,7 @@ console.log(imageUrl)
           <View key={index}
           style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText}>{`${index + 1}. ${welfareBenefit}`}</Text>
-        <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}} onPress={() => BenefitDel(index)} >
+        <TouchableOpacity style={{...styles.delbutton,...{}}} onPress={() => attriDel(index)} >
         <Text  style={{...{color: "white"}}}>ลบ</Text>
       </TouchableOpacity>
         </View>
@@ -343,6 +343,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
+  delbutton:{
+    backgroundColor:"red",
+    paddingTop:6,
+    width:40,height:40,alignItems:"center", 
+    borderRadius:15,
+  }
 });
 
 export default EditFind;

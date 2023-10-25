@@ -252,9 +252,9 @@ const CreateFind = ({ route, navigation }) => {
         {attributes.map((attribute, index) => (
            <View key={index}
            style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={styles.subText} key={index}>{`${index + 1}. ${attribute}`}</Text>
+        <Text style={{...styles.subText,...{width:"80%"}}}numberOfLines={2} key={index}>{`${index + 1}. ${attribute}`}</Text>
         {/* ปุ่มลบ */}
-        <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}} onPress={() => attriDel(index)} >
+        <TouchableOpacity style={{...styles.delbutton,...{marginleft:"5"}}} onPress={() => BenefitDel(index)} >
         <Text  style={{...{color: "white"}}}>ลบ</Text>
       </TouchableOpacity>
         </View>
@@ -269,18 +269,19 @@ const CreateFind = ({ route, navigation }) => {
         style={{ borderWidth: 1, padding: 10, marginBottom: 10 ,width:"75%"}}
       />
      
-     <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}}  onPress={attriAdd} >
-        <Text  style={{...{color: "white"}}}>เพิ่ม</Text>
+     <TouchableOpacity style={{...styles.button,...{width:"18%" ,marginleft:"5"}}}  onPress={attriAdd} >
+        <Text  style={{...{color: "white",width:"50%"}}}>เพิ่ม</Text>
       </TouchableOpacity>
       </View>
 
+          
         {/* สวัสดิการ */}
-        <Text>สวัสดิการ </Text>
+        <Text>สวัสดิการ</Text>
         {welfareBenefits.map((welfareBenefit, index) => (
           <View key={index}
           style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText}>{`${index + 1}. ${welfareBenefit}`}</Text>
-        <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}} onPress={() => BenefitDel(index)} >
+        <TouchableOpacity style={{...styles.delbutton,...{marginleft:"5"}}} onPress={() => BenefitDel(index)} >
         <Text  style={{...{color: "white"}}}>ลบ</Text>
       </TouchableOpacity>
         </View>
@@ -300,7 +301,7 @@ const CreateFind = ({ route, navigation }) => {
           />
 
           <TouchableOpacity
-            style={{ ...styles.button, ...{ width: "20%", marginleft: "50" } }}
+            style={{ ...styles.button, ...{width:"18%", marginleft:50 } }}
             onPress={benefitAdd}
           >
             <Text style={{ ...{ color: "white" } }}>เพิ่ม</Text>
@@ -368,6 +369,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
+  delbutton:{
+    backgroundColor:"red",
+    paddingTop:6,
+    width:40,height:40,alignItems:"center", 
+    borderRadius:15,
+  }
 });
 
 export default CreateFind;
