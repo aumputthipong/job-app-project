@@ -17,23 +17,23 @@ const initialState = {
     
 };
 
-const jobsReducer = (state = initialState, action) => {
-    switch (action.type) {
 
-        case TOGGLE_FAVORITE:
-            const currentUserId = firebase.auth().currentUser.uid;
-            const updatedFavoriteJobs = [...state.favoriteJobs];
-            const favIndex = updatedFavoriteJobs.findIndex((job) => job.postId === action.jobId && job.userId === currentUserId);
+    const jobsReducer = (state = initialState, action) => {
+        switch (action.type) {
+            case TOGGLE_FAVORITE:
+                const currentUserId = firebase.auth().currentUser.uid;
+                const updatedFavoriteJobs = [...state.favoriteJobs];
+                const favIndex = updatedFavoriteJobs.findIndex((job) => job.postId === action.jobId && job.userId === currentUserId);
+            
+                if (favIndex === -1) {  
+                    updatedFavoriteJobs.push( {postId:action.jobId,userId:currentUserId});
+                    // console.log('push', updatedFavoriteJobs);
+                    // console.log(updatedFavoriteJobs);
+                    firebase.firestore().collection("FavoriteJobs").add({
+                        postId: action.jobId,
+                        userId: currentUserId
+                    })
 
-            if (favIndex === -1) {
-
-                updatedFavoriteJobs.push({ postId: action.jobId, userId: currentUserId });
-                // console.log('push', updatedFavoriteJobs);
-                // console.log(updatedFavoriteJobs);
-                firebase.firestore().collection("FavoriteJobs").add({
-                    postId: action.jobId,
-                    userId: currentUserId
-                })
                     .then(() => {
                         console.log('Job added to favorites on Firebase');
                     })

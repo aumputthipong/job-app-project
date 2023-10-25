@@ -12,6 +12,7 @@ import {
   FlatList,
   ScrollView,
 } from "react-native";
+
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
@@ -45,6 +46,7 @@ const [postData, setPostData] = useState(null);
       setPhone(displayedHire.phone);
     }
   }, [displayedHire]);
+  // console.log(displayedHire)
   const submitPost = async () => {
     // สร้างอ็อบเจกต์ที่เก็บข้อมูลที่คุณต้องการแก้ไข
     const updatedData = {
@@ -115,13 +117,18 @@ const [postData, setPostData] = useState(null);
         <TextInput
           value={detail}
           onChangeText={setDetail}
-          placeholder="เวลา"
+          placeholder="รายละเอียดที่ต้องการแก้ไข"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
 
         <Text>ประเภทงาน</Text>
   <SelectList
-      setSelected={(val) => setCategory(val)}
+      setSelected={(val) => {
+        const index = val; // เลือก index ที่คุณต้องการ (เช่น 5)
+        if (index >= 0 && index < categorydata.length) {
+          setCategory(categorydata[index].value);
+        }
+      }}
       data={categorydata}
       placeholder="ประเภทของงาน"
       selectedValue={category} 
@@ -141,6 +148,8 @@ const [postData, setPostData] = useState(null);
           value={phone}
           onChangeText={setPhone}
           placeholder="เบอร์โทร"
+          keyboardType="numeric"
+          maxLength={10}
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
 

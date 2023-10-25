@@ -22,13 +22,7 @@ import firebase from "../../database/firebaseDB";
 const FindJobScreen = ({ route, navigation }) => {
 
   const currentUserId = firebase.auth().currentUser.uid;
-  const filteredJobs = useSelector((state) => state.jobs.filteredJobs);
-  const [filteredJobsKey, setFilteredJobsKey] = useState(0);
-
- 
-
   const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
-  
 
   const renderJobItem = ({ itemData }) => (
 
@@ -56,13 +50,13 @@ const FindJobScreen = ({ route, navigation }) => {
         {/* ตำแหน่ง */}
         <Text style={styles.subText}>{itemData.position}</Text>
         {/* ค่าจ้าง */}
-        <Text style={styles.subText}>{itemData.wages} บาท/{itemData.employmentType}</Text>
+        <Text style={styles.subText}>{itemData.wage} บาท/{itemData.employmentType}</Text>
         {/* เงื่อนไข */}
         {itemData.attributes.map((attribute, index) => (
-        <Text style={styles.detailText} key={index}>-{attribute}</Text>
+        <Text style={styles.detailText} key={index}>- {attribute}</Text>
         ))}
     
-        <Text style={{...styles.detailText,...{ alignSelf: "flex-start", marginTop: 15 },}}>
+        <Text style={{...styles.detailText,...{ alignSelf: "flex-start", marginTop: 45 },}}>
           29 ก.พ.64
         </Text>
       </View>
@@ -71,9 +65,6 @@ const FindJobScreen = ({ route, navigation }) => {
     
   );
 
-  // useEffect(() => {
-    
-  // }, []);
   
 
   return (
@@ -93,7 +84,7 @@ const FindJobScreen = ({ route, navigation }) => {
         // onChangeText={numberInputHandler}
       />
 
-      <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("CreateFind", {});}}>
+      <TouchableOpacity style={styles.createbutton} onPress={() => {navigation.navigate("CreateFind", {});}}>
         <Text  style={{...{color: "white"}}}>สร้างโพสต์</Text>
       </TouchableOpacity>
 
@@ -175,6 +166,19 @@ const styles = StyleSheet.create({
     padding:"2.5%",
     alignItems: "center",
     alignSelf:"center",
+  },
+  createbutton: {
+    position:"absolute",
+    bottom: 20, 
+    right: 20,
+    backgroundColor: "#5A6BF5",
+    width: 75,
+    height: 75,
+    borderRadius:25,
+    padding: "2.5%",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
   },
 });
 
