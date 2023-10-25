@@ -99,10 +99,8 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
 
         {/* ค่าจ้าง */}
       
-        <Text style={styles.subTitle}>รายละเอียดงาน :</Text>
-        <Text style={styles.subText}>
-        {displayedJob.detail}
-        </Text>
+        <Text style={styles.subTitle}>รายละเอียดงาน : <Text style={styles.subText}>{displayedJob.detail}</Text></Text>
+        
      {/* ต้องทำเป็นflatlist แสดงคุณสมบัติ */}
         {/* คุณสมบัติ */}
 
@@ -155,6 +153,7 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
           </TouchableOpacity>
         </View>
 {/* ต้องทำเป็นflatlist แสดงคอมเม้น */}
+
         {/* คอมเม้นทางบ้าน */}
         {thisFliteredPostComment.map((comment, index) => (
        
@@ -168,7 +167,7 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
             <Text style={{ ...styles.subTitle, ...{ marginTop: 10 } }}>
              {comment.userfistName} {comment.userlastName}
             </Text>
-            <Text style={{ ...styles.subText, ...{} }}>   {comment.comment} </Text>
+            <Text style={{ ...styles.subText, ...{} }}>{comment.comment}</Text>
           </View>
         </View>
              ))}

@@ -56,7 +56,7 @@ const FindJobScreen = ({ route, navigation }) => {
         <Text style={styles.detailText} key={index}>- {attribute}</Text>
         ))}
     
-        <Text style={{...styles.detailText,...{ alignSelf: "flex-start", marginTop: 45 },}}>
+        <Text style={{...styles.detailText,...{ alignSelf: "flex-start", bottom: 10, position: 'absolute' },}}>
           29 ก.พ.64
         </Text>
       </View>
@@ -126,18 +126,19 @@ const styles = StyleSheet.create({
     // padding: 20
   },
   title: {
-    marginLeft: 15,
+    marginLeft: 10,
+    marginTop: 5,
     fontSize: 22,
     fontWeight: "bold",
     textAlign: "left",
     color: "#4B32E5",
   },
   subText: {
-    fontSize: 13,
-    marginLeft: 20,
+    fontSize: 14,
+    marginLeft: 25,
   },
   detailText: {
-    fontSize: 11,
+    fontSize: 12,
     color: "#929090",
     marginHorizontal: 10, 
   },

@@ -61,10 +61,7 @@ const HireJobScreen = ({ route, navigation }) => {
           {/* รายละเอียด */}
           <Text style={styles.detailText}>{item.detail}</Text>
           <Text
-            style={{
-              ...styles.detailText,
-              ...{ alignSelf: "flex-start", marginTop: 15 },
-            }}
+            style={{...styles.detailText,...{ alignSelf: "flex-start", bottom: 0, position: 'absolute' },}}
           >
             29 ก.พ.64
           </Text>
@@ -155,7 +152,8 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 13,
     color: "#929090",
-    margin: 10,
+    marginBottom: 10,
+    marginLeft: 10,
   },
   postRow: {
     flexDirection: "row",

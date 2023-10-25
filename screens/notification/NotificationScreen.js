@@ -40,37 +40,38 @@ const NotificationScreen = ({ route, navigation }) => {
 
   const renderJobItem = ({ itemData }) => (
     <TouchableOpacity
-
-       onPress={() => {
-       navigation.navigate("FindJobDetailScreen", {
-      id: itemData.id})
-            }}
-    >
-      <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
-      
-        <Image
-            source={{
-              uri: itemData.imageUrl}}
-            style={styles.bgImage}
-          ></Image>
-          
-        {/* ชื่อหน่วยงาน */}
-        <Text style={styles.title} numberOfLines={2}>
-          {itemData.agency}
-        </Text>
-        {/* ตำแหน่ง */}
-        <Text style={styles.subText}>{itemData.position}</Text>
-        {/* ค่าจ้าง */}
-        <Text style={styles.subText}>{itemData.wages} บาท/{itemData.employmentType}</Text>
-        {/* เงื่อนไข */}
-
-
-        <Text style={{...styles.detailText,...{ alignSelf: "flex-start", marginTop: 15 },}}>
-          29 ก.พ.64
-        </Text>
-        
-      </View>
-    </TouchableOpacity>
+    onPress={() => {
+    navigation.navigate("FindJobDetailScreen", {
+   id: itemData.id})
+         }}
+ >
+   <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
+     <View style={{ ...styles.postRow, ...styles.postHeader }}>
+       <Image
+         source={{
+           uri: itemData.imageUrl}}
+         style={styles.bgImage}
+       ></Image>
+       
+     </View>
+     {/* ชื่องาน */}
+     <Text style={styles.title} numberOfLines={2}>
+       {itemData.jobTitle}
+     </Text>
+     {/* ตำแหน่ง */}
+     <Text style={styles.subText}>{itemData.position}</Text>
+     {/* ค่าจ้าง */}
+     <Text style={styles.subText}>{itemData.wage} บาท/{itemData.employmentType}</Text>
+     {/* เงื่อนไข */}
+     {itemData.attributes.map((attribute, index) => (
+     <Text style={styles.detailText} key={index}>- {attribute}</Text>
+     ))}
+ 
+     <Text style={{...styles.detailText,...{ alignSelf: "flex-start", bottom: 10, position: 'absolute' },}}>
+       29 ก.พ.64
+     </Text>
+   </View>
+ </TouchableOpacity>
   );
   
   
@@ -103,9 +104,8 @@ const NotificationScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#BEBDFF",
+    backgroundColor:"#ABA7FA",
   },
-
   textInput: {
     width: "90%",
     height: "5%",
@@ -121,56 +121,67 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: "#f9c2ff",
     width: "95%",
-    height: 120,
+    height: 390,
     marginVertical: "2%",
     borderRadius: 10,
     alignSelf: "center",
     // padding: 20
   },
   title: {
-    marginTop: 10,
-    marginLeft: 15,
+    marginLeft: 10,
+    marginTop: 5,
     fontSize: 22,
     fontWeight: "bold",
     textAlign: "left",
     color: "#4B32E5",
   },
   subText: {
-    fontSize: 13,
-    marginLeft: 20,
+    fontSize: 14,
+    marginLeft: 25,
   },
   detailText: {
-    fontSize: 11,
+    fontSize: 12,
     color: "#929090",
-    marginHorizontal: 10,
+    marginHorizontal: 10, 
+  },
+  postRow: {
+    flexDirection: "row",
+    backgroundColor: "gray",
+    borderRadius: 20,
+  },
+  postHeader: {
+    height: "50%",
   },
   bgImage: {
-    width: "50%",
-    height: "50%",
+    width: "100%",
+    height: "100%",
     justifyContent: "flex-end",
     resizeMode: "stretch",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
-  postRow: {
-    flexDirection: "row",
-    // backgroundColor:"red",
-  },
-  postHeader: {
-    height: "50%",
-
-  },
-  text: {
-    color: "white",
-  },
-  button: {
+  button: { 
     backgroundColor: "#5A6BF5",
-    width: "50%",
+    width:"50%",
     height: 40,
-    borderRadius: 10,
+    borderRadius:10,
+    padding:"2.5%",
+    alignItems: "center",
+    alignSelf:"center",
+    marginTop: 10
+  },
+  createbutton: {
+    position:"absolute",
+    bottom: 20, 
+    right: 20,
+    backgroundColor: "#5A6BF5",
+    width: 60,
+    height: 60,
+    borderRadius:30,
     padding: "2.5%",
     alignItems: "center",
-    alignSelf: "center",
+    justifyContent: "center",
+    zIndex: 1,
   },
 });
 

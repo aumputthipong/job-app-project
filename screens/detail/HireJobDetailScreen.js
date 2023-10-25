@@ -200,7 +200,7 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
             <Text style={{ ...styles.subTitle, ...{ marginTop: 10 } }}>
              {comment.userfistName} {comment.userlastName}
             </Text>
-            <Text style={{ ...styles.subText, ...{} }}>   {comment.comment} </Text>
+            <Text style={{ ...styles.subText, ...{} }}>{comment.comment} </Text>
           </View>
         </View>
              ))}
