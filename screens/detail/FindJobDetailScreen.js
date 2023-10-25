@@ -95,8 +95,8 @@ console.log(currentUserImg.imageUrl)
         {/* ตำแหน่ง */}
  
   
-        <Text style={styles.subTitle}>ตำแหน่ง :</Text>
-        <Text style={styles.subText}>{displayedJob.position}</Text>
+        <Text style={styles.subTitle}>ตำแหน่ง : <Text style={styles.subText}>{displayedJob.position}</Text></Text>
+        
 
         {/* ค่าจ้าง */}
       
@@ -111,28 +111,23 @@ console.log(currentUserImg.imageUrl)
 
       {/* เงื่อนไข */}
       {displayedJob.attributes.map((attribute, index) => (
-        <Text style={styles.subText} key={index}>-{attribute}</Text>
+        <Text style={styles.subText} key={index}>- {attribute}</Text>
       ))}
-       
-
-        {/* ระยะงาน */}
-  
-        <Text style={styles.subTitle}>ระยะเวลางาน :</Text>
-        <Text style={styles.subText}>{displayedJob.position}</Text>
+        
         {/* ค่าจ้าง */}
 
-        <Text style={styles.subTitle}>ค่าจ้าง :</Text>
-        <Text style={styles.subText}>{displayedJob.wage} บาท/{displayedJob.employmentType}</Text>
+        <Text style={styles.subTitle}>ค่าจ้าง : <Text style={styles.subText}>{displayedJob.wage} บาท/{displayedJob.employmentType}</Text></Text>
+        
 
         {/* สวัสดิการ */}
-        <Text style={styles.subTitle}>สวัสดิการ</Text>
+        <Text style={styles.subTitle}>สวัสดิการ :</Text>
         {displayedJob.welfareBenefits.map((welfareBenefit, index) => (
-        <Text style={styles.subText} key={index}>-{welfareBenefit}</Text>
+        <Text style={styles.subText} key={index}>- {welfareBenefit}</Text>
       ))}
         {/* ช่องทางติดต่อ */}
         <Text style={styles.subTitle}>ช่องทางติดต่อ</Text>
-        <Text style={styles.subText}><MaterialCommunityIcons name='email' size={20} color="black" /> Email: {displayedJob.email}</Text>
-        <Text style={styles.subText}><MaterialCommunityIcons name='phone' size={20} color="black" /> เบอร์โทร: {displayedJob.phone}</Text>
+        <Text style={styles.subText}><MaterialCommunityIcons name='email' size={20} color="black" /> Email : {displayedJob.email}</Text>
+        <Text style={styles.subText}><MaterialCommunityIcons name='phone' size={20} color="black" /> เบอร์โทร : {displayedJob.phone}</Text>
        
 {/* กล่องคอมเม้น */}
         <Text style={{ ...styles.subText, ...{ marginTop: 30 } }}>
@@ -186,7 +181,9 @@ console.log(currentUserImg.imageUrl)
   {currentUserId === displayedJob.postById&& (
       <TouchableOpacity style={styles.editbutton} onPress={() => {navigation.navigate("EditFind", {
       id: displayedJob.id});}}>
+
           <MaterialCommunityIcons name='comment-edit-outline' size={25} color="white" />
+
         </TouchableOpacity>
         )}
     </View>
@@ -231,14 +228,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 18,
     marginLeft: 10,
-    fontWeight: "bold",
+    fontWeight: 'bold'
     // backgroundColor:"red"
   },
   subText: {
     fontSize: 18,
     marginHorizontal: 20,
     // backgroundColor:"blue"
-    
+    fontWeight: 'normal'
   },
   detailText: {
     fontSize: 11,

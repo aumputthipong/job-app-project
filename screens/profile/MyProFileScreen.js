@@ -166,12 +166,12 @@ const MyProfileScreen = ({ route, navigation }) => {
 
   return (
     
-    <ScrollView style={styles.screen}>
-      <View>
+    <View style={styles.screen}>
       {userData ? (
          <View>
          {/*1st profileBox */}
-         <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" ,} }}>
+         <View style={{ ...styles.profileBox, ...{ backgroundColor: "#E5F5FA" , height: "35%"} }}>
+         <ScrollView>
            <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
              <View style={styles.postRow}>
              <Image source={{
@@ -184,19 +184,21 @@ const MyProfileScreen = ({ route, navigation }) => {
                {/* อาชีพ */}
                <Text style={styles.subText}>{userData.job}</Text>
              </View>
-             <FontAwesome5 name={'edit'} size={22} onPress={startEditing} style={{...{ left: 320, top: 10, position: 'absolute'} }}/>
+             <FontAwesome5 name={'edit'} size={23} onPress={startEditing} style={{...{ left: 320, top: 10, position: 'absolute'} }}/>
              
            </View>
            {/* aboutme */}
-           <Text style={{ ...styles.subTitle, ...{ marginTop: 20 } }}>About Me</Text>
+           <Text style={{ ...styles.subTitle, ...{ marginTop: 25 } }}>About Me</Text>
            <Text style={{ ...styles.subText, ...{ marginLeft: 20} }}>
              {userData.aboutme}
            </Text>
            <FontAwesome5 name={'camera'} size={22} onPress={pickImageAndUpload} style={{...{ left: 70, top: 70, position: 'absolute'} }} />
-           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 317.5, top: 195, position: 'absolute'} }}/>
+           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 317.5, top: 190, position: 'absolute'} }}/>
+           </ScrollView>
          </View>
+
          {/*2 ContactBox */}
-         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
+         <View style={{ ...styles.contactBox, ...{ backgroundColor: "#E5F5FA"  } }}>
            {/* ช่องทางติดต่อ*/}
            <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
            {/* email */}
@@ -228,31 +230,36 @@ const MyProfileScreen = ({ route, navigation }) => {
              </Text>
            </View>
          </View>
+
          {/*3 EducationBox */}
-         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white",} }}>
-           <Text style={styles.HeaderText}>การศึกษา</Text>
+         <View style={{ ...styles.contactBox, ...{ backgroundColor: "#E5F5FA" ,  position: 'relative' } }}>
+          <ScrollView>
+           <Text style={{ ...styles.HeaderText, ...{marginBottom: 10 } }}>การศึกษา</Text>
+           
            <View style={{ ...styles.postRow, ...{} }}>
-             <Text style={styles.subTitle}>ปริญญาตรี
+             <Text style={styles.subTitle2}>ปริญญาตรี : 
+             <Text style={{ ...styles.subTitle2, ...{ fontWeight: "normal", marginRight: 10 } }}>
+             <Text> </Text>{userData.bachelor}
+             </Text>
              </Text>
            </View>
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
-               {userData.bachelor}
-             </Text>
-           {/* เบอร์ */}
+
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาโท 
+             <Text style={styles.subTitle2}>ปริญญาโท : 
+             <Text style={{ ...styles.subTitle2, ...{ fontWeight: "normal", marginRight: 10 } }}>
+             <Text> </Text>{userData.master}
+             </Text>
              </Text>
            </View>
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
-               {userData.master}
-             </Text>
+
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาเอก 
+             <Text style={styles.subTitle2}>ปริญญาเอก : 
+             <Text style={{ ...styles.subTitle2, ...{ fontWeight: "normal", marginRight: 10 } }}>
+             <Text> </Text>{userData.doctoral}
+             </Text>
              </Text>
            </View>
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
-               {userData.doctoral}
-             </Text>
+           </ScrollView>
          </View>
  
        </View>
@@ -280,7 +287,6 @@ const MyProfileScreen = ({ route, navigation }) => {
               setEditData({ ...editData, firstName: text })
             }
           />
-
           <Text>นามสกุล</Text>
           <TextInput
             style={styles.txtinput}
@@ -368,14 +374,15 @@ const MyProfileScreen = ({ route, navigation }) => {
     </Modal>
     )}
     </View>
-    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#BEBDFF",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: "#ABA7FA",
   },
   profileBox: {
     width: 350,
@@ -386,15 +393,8 @@ const styles = StyleSheet.create({
   },
   contactBox: {
     width: 350,
-    height: 300,
-    marginVertical: "1%",
-    borderRadius: 10,
-    alignSelf: "center",
-  },
-  eduBox: {
-    width: 500,
-    height: 450,
-    marginVertical: "1%",
+    height: "29%",
+    marginVertical: "1.5%",
     borderRadius: 10,
     alignSelf: "center",
   },
@@ -404,19 +404,27 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     textAlign: "left",
-    color: "black",
+    color: '#3C3F40'
   },
   subTitle: {
     marginTop: 10,
     fontSize: 18,
     marginLeft: 10,
     fontWeight: "bold",
-    // backgroundColor:"red"
+    color: '#3C3F40'
+  },
+  subTitle2: {
+    marginBottom: 10,
+    fontSize: 18,
+    marginLeft: 10,
+    fontWeight: "bold",
+    color: '#3C3F40'
   },
   subText: {
     fontSize: 18,
     marginHorizontal:15,
     // backgroundColor:"blue"
+    color: '#3C3F40'
   },
   detailText: {
     fontSize: 11,
@@ -442,6 +450,8 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 360,
+    borderColor: '#5666E9',
+    borderWidth: 3
   },
   modalBackground: {
     flex: 1,

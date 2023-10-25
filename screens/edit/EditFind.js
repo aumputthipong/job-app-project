@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const EditFind = ({ route, navigation }) => {
   const postId = route.params.id;
@@ -149,21 +150,21 @@ console.log(imageUrl)
           value={jobTitle}
           onChangeText={setJobTitle}
           placeholder="หัวข้องาน"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <Text>ตำแหน่งที่รับ</Text>
         <TextInput
           value={position}
           onChangeText={setPosition}
           placeholder="ตำแหน่ง/อาชีพ"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <Text>บริษัท</Text>
         <TextInput
           value={agency}
           onChangeText={setAgency}
           placeholder="บริษัท"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
 
         <Text>รายละเอียด</Text>
@@ -174,10 +175,10 @@ console.log(imageUrl)
           multiline={true}
           numberOfLines={8}
           maxLength={500}
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10,height:180}}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5, height: 180}}
         />
 
-        <Text>ประเภทงาน</Text>
+        <Text style={{marginBottom: 10 }}>ประเภทงาน</Text>
         <SelectList
           setSelected={(val) => setCategory(val)}
           data={categorydata}
@@ -185,7 +186,7 @@ console.log(imageUrl)
           save="value"
         />
 
-        <Text>ประเภทการจ้าง</Text>
+        <Text style={{marginVertical: 10 }}>ประเภทการจ้าง</Text>
         <SelectList
           setSelected={(val) => setEmploymentType(val)}
           data={emptypedata}
@@ -193,26 +194,26 @@ console.log(imageUrl)
           save="value"
         />
 
-        <Text>ค่าจ้าง</Text>
+        <Text style={{marginTop: 10 }}>ค่าจ้าง</Text>
         <TextInput
           value={wage}
           onChangeText={setWage}
           placeholder="บาท"
           keyboardType="numeric"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <Text>ช่องทางติดต่อ</Text>
         <TextInput
           value={email}
           onChangeText={setEmail}
           placeholder="อีเมล"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <TextInput
           value={phone}
           onChangeText={setPhone}
           placeholder="เบอร์โทร"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         {/* attribute */}
 
@@ -222,21 +223,23 @@ console.log(imageUrl)
            style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText} key={index}>{`${index + 1}. ${attribute}`}</Text>
         {/* ปุ่มลบ */}
-        <TouchableOpacity style={{...styles.delbutton,...{}}} onPress={() => attriDel(index)} >
-        <Text  style={{...{color: "white"}}}>ลบ</Text>
+
+        <TouchableOpacity style={{...{width:"20%" , alignSelf:'center'}}} onPress={() => attriDel(index)} >
+        <FontAwesome name={'remove'}  size={20} />
+
       </TouchableOpacity>
         </View>
       ))}
       
- <View style={styles.postRow}>
+      <View style={styles.postRow}>
       <TextInput
         placeholder="คุณสมบัติ"
         value={inputText}
         onChangeText={(text) => setInputText(text)}
-        style={{ borderWidth: 1, padding: 10, marginBottom: 10 ,width:"75%"}}
+        style={{ borderWidth: 2, padding: 10, marginVertical: 10 ,width:"75%", borderRadius: 5}}
       />
      
-     <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}}  onPress={attriAdd} >
+      <TouchableOpacity style={{...styles.button,...{width:"20%" , marginLeft: 15}}}  onPress={attriAdd} >
         <Text  style={{...{color: "white"}}}>เพิ่ม</Text>
       </TouchableOpacity>
       </View>
@@ -247,45 +250,42 @@ console.log(imageUrl)
           <View key={index}
           style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText}>{`${index + 1}. ${welfareBenefit}`}</Text>
-        <TouchableOpacity style={{...styles.delbutton,...{}}} onPress={() => attriDel(index)} >
-        <Text  style={{...{color: "white"}}}>ลบ</Text>
-      </TouchableOpacity>
+
+        <TouchableOpacity style={{...{width:"20%" , alignSelf:'center'}}} onPress={() => BenefitDel(index)} >
+          <FontAwesome name={'remove'}  size={20} />
+        </TouchableOpacity>
+
         </View>
-      ))}
+        ))}
 
         <View style={styles.postRow}>
           <TextInput
             placeholder="สวัสดิการ"
             value={inputText2}
             onChangeText={(text) => setInputText2(text)}
-            style={{
-              borderWidth: 1,
-              padding: 10,
-              marginBottom: 10,
-              width: "75%",
-            }}
+            style={{ borderWidth: 2, padding: 10, marginVertical: 10 ,width:"75%", borderRadius: 5}}
           />
-
           <TouchableOpacity
-            style={{ ...styles.button, ...{ width: "20%", marginleft: "50" } }}
+            style={{...styles.button,...{width:"20%" , marginLeft: 15}}}
             onPress={benefitAdd}
           >
             <Text style={{ ...{ color: "white" } }}>เพิ่ม</Text>
           </TouchableOpacity>   
         </View>
+        
         <TouchableOpacity
-          style={{ ...styles.button, ...{ width: "80%", marginleft: "5" } }}
+          style={{ ...styles.button, ...{ width: "80%", marginVertical: 10} }}
           onPress={submitPost}
         >
           <Text style={{ ...{ color: "white" } }}>แก้ไข</Text>
         </TouchableOpacity>
         
         <TouchableOpacity
-  style={{ ...styles.button, ...{ backgroundColor: "red" } }}
-  onPress={deletePost}
->
-  <Text style={{ color: "white" }}>Delete Post</Text>
-</TouchableOpacity>
+          style={{ ...styles.button, ...{ width: "80%", backgroundColor: 'red'} }}
+          onPress={deletePost}
+        >
+          <Text style={{ color: "white" }}>ลบโพสต์</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -314,15 +314,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontSize: 15,
   },
-  button: {
-    marginVertical: 10,
-    backgroundColor: "#BEBDFF",
-    color: "red",
-    width: "50%",
-    height: "5%",
-    borderRadius: 10,
-    paddingTop: "1.5%",
-  },
   postRow: {
     flexDirection: "row",
     // backgroundColor:"red",
@@ -343,12 +334,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
-  delbutton:{
-    backgroundColor:"red",
-    paddingTop:6,
-    width:40,height:40,alignItems:"center", 
-    borderRadius:15,
-  }
+  subText: {
+    fontSize: 15,
+
+  },
 });
 
 export default EditFind;
