@@ -229,9 +229,7 @@ const MyProfileScreen = ({ route, navigation }) => {
          </View>
          {/*3 EducationBox */}
          <View style={{ ...styles.contactBox, ...{ backgroundColor: "white",  position: 'relative' } }}>
-           
            <Text style={styles.HeaderText}>การศึกษา</Text>
-           
            <View style={{ ...styles.postRow, ...{} }}>
              <Text style={styles.subTitle}>ปริญญาตรี : 
              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
@@ -471,7 +469,7 @@ const styles = StyleSheet.create({
     bottom: 25
   },
   saveButton: {
-    backgroundColor: "#BEBDFF",
+    backgroundColor: "#5A6BF5",
     width:"50%",
     height: 40,
     borderRadius:10,

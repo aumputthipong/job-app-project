@@ -25,12 +25,14 @@ import CreateFind from "../screens/create/CreateFind";
 import CreateHire from "../screens/create/CreateHire";
 import EditFind from "../screens/edit/EditFind";
 import EditHire from "../screens/edit/EditHire";
+import EditNoti from "../screens/edit/EditNoti";
+
 
 // สร้าง navigator ตามโจทย์กำหนด
 
 
 const HomeNavigator = createNativeStackNavigator();
-
+const NotiNavigator = createNativeStackNavigator();
 
 
 const BottomTab = createBottomTabNavigator();
@@ -46,7 +48,7 @@ function HomeStack() {
     <HomeNavigator.Navigator
       initialRouteName="HomeScreen"
       screenOptions={{
-        headerStyle: { backgroundColor: "#4769E2"},
+        headerStyle: { backgroundColor: "#4769E2" },
         headerTintColor: "white",
       }}
     >
@@ -78,8 +80,8 @@ function HomeStack() {
         options={({ route }) => ({
           headerRight: () => (
             <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-            <Item title="MealDetail" iconName="ios-star" onPress={() => {toggleFavoriteHandler(route.params.id)}} />
-            </HeaderButtons> ),
+              <Item title="MealDetail" iconName="ios-star" onPress={() => { toggleFavoriteHandler(route.params.id) }} />
+            </HeaderButtons>),
         })}
       />
       <HomeNavigator.Screen
@@ -90,7 +92,8 @@ function HomeStack() {
           // id: route.params.id,
         })}
       />
-        <HomeNavigator.Screen
+
+      <HomeNavigator.Screen
         name="CreateFind"
         component={CreateFind}
         options={({ route }) => ({
@@ -98,7 +101,7 @@ function HomeStack() {
           // id: route.params.id,
         })}
       />
-            <HomeNavigator.Screen
+      <HomeNavigator.Screen
         name="CreateHire"
         component={CreateHire}
         options={({ route }) => ({
@@ -106,7 +109,7 @@ function HomeStack() {
           // id: route.params.id,
         })}
       />
-        <HomeNavigator.Screen
+      <HomeNavigator.Screen
         name="EditHire"
         component={EditHire}
         options={({ route }) => ({
@@ -114,7 +117,7 @@ function HomeStack() {
           // id: route.params.id,
         })}
       />
-       <HomeNavigator.Screen
+      <HomeNavigator.Screen
         name="EditFind"
         component={EditFind}
         options={({ route }) => ({
@@ -122,7 +125,36 @@ function HomeStack() {
           // id: route.params.id,
         })}
       />
+
+
     </HomeNavigator.Navigator>
+  );
+}
+
+function NotiStack() {
+  return (
+    <NotiNavigator.Navigator
+      initialRouteName="NotificationScreen"
+      screenOptions={{
+        headerStyle: { backgroundColor: "#4769E2" },
+        headerTintColor: "white",
+      }}
+    >
+      <NotiNavigator.Screen
+        name="NotificationScreen"
+        component={NotificationScreen}
+        options={{}
+        }
+      />
+      <NotiNavigator.Screen
+        name="EditNoti"
+        component={EditNoti}
+        options={({ route }) => ({
+          // title: route.params.title,
+          // id: route.params.id,
+        })}
+      />
+    </NotiNavigator.Navigator>
   );
 }
 
@@ -133,7 +165,7 @@ function BottomTabNav() {
       screenOptions={{
         //  headerShown: false,
         tabBarActiveTintColor: "black",
-        headerStyle: {      backgroundColor: "#4769E2",},
+        headerStyle: { backgroundColor: "#4769E2", },
         headerTintColor: "white",
         tabBarStyle: { backgroundColor: "white" },
         tabBarLabelStyle: { fontSize: 15 },
@@ -144,7 +176,7 @@ function BottomTabNav() {
         component={HomeStack}
         options={{
           headerShown: false,
-          
+
           tabBarIcon: ({ tintColor }) => {
             return (
               <Ionicons name="ios-home-outline" size={24} color={tintColor} />
@@ -157,7 +189,7 @@ function BottomTabNav() {
         name="MyKeep"
         component={KeepScreen}
         options={{
-        
+
           tabBarIcon: ({ tintColor }) => {
             return <Ionicons name="bookmark-outline" size={24} color={tintColor} />;
           },
@@ -165,12 +197,14 @@ function BottomTabNav() {
       />
       <BottomTab.Screen
         name="Notifcation"
-        component={NotificationScreen}
+        component={NotiStack}
         options={{
-          
+          headerShown: false,
           tabBarIcon: ({ tintColor }) => {
             return <Ionicons name="notifications-outline" size={24} color={tintColor} />;
+
           },
+          tabBarOptions: { tabBarActiveTintColor: "blue" },
         }}
       />
       <BottomTab.Screen
@@ -193,7 +227,7 @@ export default function MyNavigator() {
   return (
     <NavigationContainer>
       <MainNavigator.Navigator
-         initialRouteName="Welcome"
+        initialRouteName="Welcome"
         screenOptions={{
           // headerShown: false,
           drawerActiveTintColor: "orange",
@@ -205,28 +239,28 @@ export default function MyNavigator() {
           component={BottomTabNav}
           options={{
             drawerLabel: "Meals",
-            headerShown:false,
+            headerShown: false,
           }}
         />
-        <MainNavigator.Screen name="Welcome" component={WelcomeScreen} 
+        <MainNavigator.Screen name="Welcome" component={WelcomeScreen}
           options={{
             headerStyle: { backgroundColor: "#4769E2" },
             headerTitleStyle: { color: "white" }
           }}
         />
-        <MainNavigator.Screen name="Login" component={LoginScreen} 
+        <MainNavigator.Screen name="Login" component={LoginScreen}
           options={{
             headerStyle: { backgroundColor: "#4769E2" },
             headerTitleStyle: { color: "white" },
             headerTintColor: "white",
           }}
         />
-        <MainNavigator.Screen name="Register" component={RegisterScreen} 
-        options={{
-          headerStyle: { backgroundColor: "#4769E2" },
-          headerTitleStyle: { color: "white" },
-          headerTintColor: "white",
-        }}
+        <MainNavigator.Screen name="Register" component={RegisterScreen}
+          options={{
+            headerStyle: { backgroundColor: "#4769E2" },
+            headerTitleStyle: { color: "white" },
+            headerTintColor: "white",
+          }}
         />
       </MainNavigator.Navigator>
     </NavigationContainer>
