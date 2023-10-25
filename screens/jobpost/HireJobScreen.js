@@ -91,7 +91,7 @@ const HireJobScreen = ({ route, navigation }) => {
       />
 
       <TouchableOpacity
-        style={styles.button}
+        style={styles.createbutton}
         onPress={() => {
           navigation.navigate("CreateHire", {});
         }}
@@ -111,7 +111,7 @@ const HireJobScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ABA7FA",
+    backgroundColor: "#BEBDFF",
   },
   textInput: {
     width: "90%",
@@ -182,6 +182,19 @@ const styles = StyleSheet.create({
     padding: "2.5%",
     alignItems: "center",
     alignSelf: "center",
+  },
+  createbutton: {
+    position:"absolute",
+    bottom: 20, 
+    right: 20,
+    backgroundColor: "#5A6BF5",
+    width: 75,
+    height: 75,
+    borderRadius:25,
+    padding: "2.5%",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
   },
 });
 export default HireJobScreen;

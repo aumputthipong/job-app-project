@@ -164,11 +164,11 @@ function BottomTabNav() {
     <BottomTab.Navigator
       screenOptions={{
         //  headerShown: false,
-        tabBarActiveTintColor: "black",
+        tabBarActiveTintColor: "#EC8032",
         headerStyle: { backgroundColor: "#4769E2", },
         headerTintColor: "white",
         tabBarStyle: { backgroundColor: "white" },
-        tabBarLabelStyle: { fontSize: 15 },
+        tabBarLabelStyle: { fontSize: 15, color: 'black' },
       }}
     >
       <BottomTab.Screen
@@ -179,19 +179,17 @@ function BottomTabNav() {
 
           tabBarIcon: ({ tintColor }) => {
             return (
-              <Ionicons name="ios-home-outline" size={24} color={tintColor} />
+              <Ionicons name="ios-home-outline" size={24} />
             );
           },
-          tabBarOptions: { tabBarActiveTintColor: "blue" },
         }}
       />
       <BottomTab.Screen
         name="MyKeep"
         component={KeepScreen}
         options={{
-
           tabBarIcon: ({ tintColor }) => {
-            return <Ionicons name="bookmark-outline" size={24} color={tintColor} />;
+            return <Ionicons name="bookmark-outline" size={24}  />;
           },
         }}
       />
@@ -201,10 +199,9 @@ function BottomTabNav() {
         options={{
           headerShown: false,
           tabBarIcon: ({ tintColor }) => {
-            return <Ionicons name="notifications-outline" size={24} color={tintColor} />;
+            return <Ionicons name="notifications-outline" size={24}  />;
 
           },
-          tabBarOptions: { tabBarActiveTintColor: "blue" },
         }}
       />
       <BottomTab.Screen
@@ -213,7 +210,7 @@ function BottomTabNav() {
         options={{
 
           tabBarIcon: ({ tintColor }) => {
-            return <Ionicons name="ios-person-outline" size={24} color={tintColor} />;
+            return <Ionicons name="ios-person-outline" size={24} />;
           },
         }}
       />
