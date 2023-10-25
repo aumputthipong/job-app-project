@@ -194,7 +194,7 @@ const CreateFind = ({ route, navigation }) => {
         <TextInput
           value={detail}
           onChangeText={setDetail}
-          placeholder="เวลา"
+          placeholder="รายละเอียดงาน"
           style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <Text>รูปโพส</Text>
@@ -282,8 +282,8 @@ const CreateFind = ({ route, navigation }) => {
           style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText}>{`${index + 1}. ${welfareBenefit}`}</Text>
         <TouchableOpacity style={{...{width:"20%" , alignSelf:'center'}}} onPress={() => BenefitDel(index)} >
-        <FontAwesome name={'remove'}  size={20} />
-      </TouchableOpacity>
+          <FontAwesome name={'remove'}  size={20} />
+        </TouchableOpacity>
         </View>
       ))}
  
@@ -303,10 +303,10 @@ const CreateFind = ({ route, navigation }) => {
           </TouchableOpacity>   
         </View>
         <TouchableOpacity
-          style={{ ...styles.button, ...{ width: "80%", marginleft: "5" } }}
+          style={{ ...styles.button, ...{ width: "80%", marginTop: 10 } }}
           onPress={submitPost}
         >
-          <Text style={{ ...{ color: "white" } }}>สร้างโพสต์</Text>
+          <Text style={{ ...{ color: "white"} }}>สร้างโพสต์</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

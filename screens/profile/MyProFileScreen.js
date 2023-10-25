@@ -170,7 +170,8 @@ const MyProfileScreen = ({ route, navigation }) => {
       {userData ? (
          <View>
          {/*1st profileBox */}
-         <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" , height: "35%"} }}>
+         <View style={{ ...styles.profileBox, ...{ backgroundColor: "#E5F5FA" , height: "35%"} }}>
+         <ScrollView>
            <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
              <View style={styles.postRow}>
              <Image source={{
@@ -183,7 +184,7 @@ const MyProfileScreen = ({ route, navigation }) => {
                {/* อาชีพ */}
                <Text style={styles.subText}>{userData.job}</Text>
              </View>
-             <FontAwesome5 name={'edit'} size={22} onPress={startEditing} style={{...{ left: 320, top: 10, position: 'absolute'} }}/>
+             <FontAwesome5 name={'edit'} size={23} onPress={startEditing} style={{...{ left: 320, top: 10, position: 'absolute'} }}/>
              
            </View>
            {/* aboutme */}
@@ -193,9 +194,11 @@ const MyProfileScreen = ({ route, navigation }) => {
            </Text>
            <FontAwesome5 name={'camera'} size={22} onPress={pickImageAndUpload} style={{...{ left: 70, top: 70, position: 'absolute'} }} />
            <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 317.5, top: 190, position: 'absolute'} }}/>
+           </ScrollView>
          </View>
+
          {/*2 ContactBox */}
-         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" } }}>
+         <View style={{ ...styles.contactBox, ...{ backgroundColor: "#E5F5FA"  } }}>
            {/* ช่องทางติดต่อ*/}
            <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
            {/* email */}
@@ -229,7 +232,7 @@ const MyProfileScreen = ({ route, navigation }) => {
          </View>
 
          {/*3 EducationBox */}
-         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white",  position: 'relative' } }}>
+         <View style={{ ...styles.contactBox, ...{ backgroundColor: "#E5F5FA" ,  position: 'relative' } }}>
           <ScrollView>
            <Text style={{ ...styles.HeaderText, ...{marginBottom: 10 } }}>การศึกษา</Text>
            
@@ -391,7 +394,7 @@ const styles = StyleSheet.create({
   contactBox: {
     width: 350,
     height: "29%",
-    marginVertical: "1%",
+    marginVertical: "1.5%",
     borderRadius: 10,
     alignSelf: "center",
   },
@@ -401,24 +404,27 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     textAlign: "left",
-    color: "black",
+    color: '#3C3F40'
   },
   subTitle: {
     marginTop: 10,
     fontSize: 18,
     marginLeft: 10,
     fontWeight: "bold",
+    color: '#3C3F40'
   },
   subTitle2: {
     marginBottom: 10,
     fontSize: 18,
     marginLeft: 10,
     fontWeight: "bold",
+    color: '#3C3F40'
   },
   subText: {
     fontSize: 18,
     marginHorizontal:15,
     // backgroundColor:"blue"
+    color: '#3C3F40'
   },
   detailText: {
     fontSize: 11,
@@ -444,6 +450,8 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 360,
+    borderColor: '#5666E9',
+    borderWidth: 3
   },
   modalBackground: {
     flex: 1,

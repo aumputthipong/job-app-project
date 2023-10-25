@@ -50,10 +50,10 @@ const FindJobScreen = ({ route, navigation }) => {
         {/* ตำแหน่ง */}
         <Text style={styles.subText}>{itemData.position}</Text>
         {/* ค่าจ้าง */}
-        <Text style={styles.subText}>{itemData.wages} บาท/{itemData.employmentType}</Text>
+        <Text style={styles.subText}>{itemData.wage} บาท/{itemData.employmentType}</Text>
         {/* เงื่อนไข */}
         {itemData.attributes.map((attribute, index) => (
-        <Text style={styles.detailText} key={index}>-{attribute}</Text>
+        <Text style={styles.detailText} key={index}>- {attribute}</Text>
         ))}
     
         <Text style={{...styles.detailText,...{ alignSelf: "flex-start", marginTop: 45 },}}>
