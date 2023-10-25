@@ -244,7 +244,9 @@ const CreateFind = ({ route, navigation }) => {
         <TextInput
           value={phone}
           onChangeText={setPhone}
+          keyboardType="numeric"
           placeholder="เบอร์โทร"
+          maxLength={10}
           style={{ borderWidth: 1, padding: 10, marginBottom: 10, borderWidth: 2, borderRadius: 5 }}
         />
         {/* attribute */}

@@ -1,9 +1,11 @@
 import React,{useState} from "react";
-import { View, Text, Modal, Button, StyleSheet,ScrollView ,Image,TouchableOpacity,TextInput} from "react-native";
+import { View, Text, Button, StyleSheet,ScrollView ,Image,TouchableOpacity,TextInput} from "react-native";
 import { useSelector } from "react-redux";
 import firebase from "../../database/firebaseDB";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
+import Modal from 'react-native-modal';
+import ImageViewer from 'react-native-image-zoom-viewer';
+import * as ImagePicker from "expo-image-picker";
 const HireJobDetailScreen = ({route, navigation}) => {
 
 
@@ -47,6 +49,7 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
       setCommentBox("");
     }
   }
+
   
   const [uploading, setUploading] = useState(false);
   const [image, setImage] = useState(null);
@@ -54,102 +57,111 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       Alert.alert(
-        "ต้องการสิทธิ์การเข้าถึง",
-        "โปรดอนุญาติการเข้าถึงไฟล์รูปรูปภาพในเครื่องของคุณ."
+        "Permission needed",
+        "Please allow access to your media library to pick an image."
       );
     } else {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4, 3],
+        aspect: [210, 297], 
         quality: 1,
       });
 
       if (!result.canceled) {
         setImage(result.assets[0].uri);
+      editImg(result.assets[0].uri);
       }
     }
   };
 
-  const EditImage = async () => {
-    const uploadUri = image;
-    if (uploadUri) {
-      let filename = uploadUri.substring(uploadUri.lastIndexOf("/") + 1);
+  
+  const editImg = async () => {
+    if (image) {
+      let filename = image.substring(image.lastIndexOf('/') + 1);
 
       try {
-        const response = await fetch(uploadUri);
+        const response = await fetch(image);
         const blob = await response.blob();
-        const uploadTask = firebase
-          .storage()
-          .ref()
-          .child(`images/${filename}`)
-          .put(blob);
-        // abcdes
+        const uploadTask = firebase.storage().ref().child(`images/${filename}`).put(blob);
+
         uploadTask.on(
-          "state_changed",
+          'state_changed',
           (snapshot) => {
-            // Handle upload progress if needed
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log(`Upload is ${progress}% done`);
           },
           (error) => {
-            // Handle upload error
-            console.error("Upload Error: ", error);
+            console.error('Upload Error: ', error);
           },
           () => {
-            // Upload completed successfully, get the download URL
-            uploadTask.snapshot.ref
-              .getDownloadURL()
-              .then(async (downloadURL) => {
-                // Save the download URL to Firestore or use it as needed
-                const postById = firebase.auth().currentUser.uid;
-                console.log("File available at", downloadURL);
-                const post = {
-                  jobTitle,
-                  position,
-                  agency,
-                  attributes,
-                  welfareBenefits,
-                  imageUrl: downloadURL,
-                  wage,
-                  category,
-                  employmentType,
-                  email,
-                  phone,
-                  postById,
-                  createdAt: new Date(), 
-                  // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
-                };
-                const postRef = firebase.firestore().collection("JobPosts");
-                const docRef = await postRef.add(post);
-                console.log("Post created with ID: ", docRef.id);
-                navigation.navigate("FindJobScreen");
+            uploadTask.snapshot.ref.getDownloadURL().then(async (downloadURL) => {
+              const img = {
+                resumeUrl: downloadURL,
+              };
+              const postRef = firebase.firestore().collection('HirePosts').doc(hireid);
+              await postRef.update(img)
+              .then(() => {
+                console.log('อัพเดทข้อมูลสำเร็จ');
+                // getUserData();
+              })
+              .catch((error) => {
+                console.error('เกิดข้อผิดพลาดในการอัพเดทข้อมูล:', error);
               });
+            });
           }
         );
       } catch (e) {
         console.log(e);
       }
     } else {
-      console.log("No image to upload");
+      console.log('No image to upload');
     }
   };
+
+
+  const [isModalVisible, setModalVisible] = useState(false);
+  const images = [
+    {
+      url: displayedHire.resumeUrl,
+    },
+    // เพิ่มรูปภาพเพิ่มเติมในอาร์เรย์ตามต้องการ
+  ];
   return (
     <ScrollView style={styles.screen}>
       <View style={styles.item}>
 <View style={{...styles.postRow,...styles.postHeader}}>
+<TouchableOpacity   onPress={() => {
+       navigation.navigate("OtherProfile", {
+      id: postOwner.id})
+    }}>
       <Image
           source={{uri:postOwner.imageUrl}}
           style={{ ...styles.profileImg, ...{} }}
         ></Image>
+        </TouchableOpacity>
         <View>
+        <TouchableOpacity   onPress={() => {
+       navigation.navigate("OtherProfile", {
+      id: postOwner.id})
+    }}>
     <Text style={{...styles.title,...{color:"white"}}}>{postOwner.firstName} {postOwner.lastName}</Text>
+    </TouchableOpacity>
     <Text style={styles.subTitle}>{postOwner.job}</Text>
         </View>
 
+
     </View>
-    
+        
+    {
+    currentUserId === displayedHire.postById && (
+    <TouchableOpacity
+    style={{ ...styles.button, ...{ width: "80%", marginleft: "5", marginVertical: 10 } }}
+    onPress={pickImage}
+    >
+          <Text style={{ ...{ color: "white" } }}>แก้ไขรูปภาพ</Text>
+        </TouchableOpacity>
+      )}
     <Text style={{...styles.jobTitle,...{fontSize:25,color:"#421BDF"}}}>{displayedHire.hireTitle}</Text>
     <Text style={{...styles.subText,...{fontSize:17}}}>รายละเอียดงาน</Text>
     <Text style={{...styles.subText,...{fontSize:17}}}>{displayedHire.detail}</Text>
@@ -160,9 +172,22 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
         <Text style={styles.subText}><MaterialCommunityIcons name='phone' size={20} color="black" /> เบอร์โทร: {displayedHire.phone}</Text>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     </View>
+
+
+    <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <Image source={{ uri: displayedHire.resumeUrl }} style={{ width: 200, height: 200 }} />
+      </TouchableOpacity>
+      <Modal isVisible={isModalVisible}>
+        <ImageViewer
+          imageUrls={images}
+          index={0} // รูปภาพแรกในอาร์เรย์
+          onSwipeDown={() => setModalVisible(false)} // ปิดโหมดเมื่อลากลง
+          enableSwipeDown // เปิดใช้การลากลงเพื่อปิด
+        />
+      </Modal>
 {/* กล่องคอมเม้น */}
 <Text style={{ ...styles.subText, ...{ marginTop: 30 } }}>
-          ความคิดเห็น 1 รายการ
+          ความคิดเห็น {thisFliteredPostComment.length} รายการ
         </Text>
         {/* ช่องพิมพ์คอมเม้น + รูปโปรไฟล์ */}
         <View style={{...styles.commentRow,...{ marginVertical:10,}}}>
@@ -192,11 +217,16 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
        
  
         <View style={{...styles.commentRow,...{ marginVertical:10,}}}key={index}>
-          <Image
-            source={{uri:    comment.userImage || "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}}
-            style={{...styles.commentImg,...{}}}
-          ></Image>
-          <View>
+           <TouchableOpacity   onPress={() => {
+       navigation.navigate("OtherProfile", {
+      id: comment.userId})
+    }}>
+      <Image
+      source={{uri:   comment.userImage || "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}}
+      style={{...styles.commentImg,...{}}}
+      ></Image>
+            </TouchableOpacity>
+      <View>
             <Text style={{ ...styles.subTitle, ...{ marginTop: 10 } }}>
              {comment.userfistName} {comment.userlastName}
             </Text>
@@ -379,6 +409,15 @@ commentImg: {
     width: 45,
     height: 45,
     borderRadius: 360,
+  },
+  button: {
+    backgroundColor: "#5A6BF5",
+    width: "50%",
+    height: 40,
+    borderRadius: 10,
+    padding: "2.5%",
+    alignItems: "center",
+    alignSelf: "center",
   },
 });
 

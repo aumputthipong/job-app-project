@@ -166,15 +166,15 @@ const MyProfileScreen = ({ route, navigation }) => {
 
   return (
     
-    <View style={styles.screen}>
+    <ScrollView style={styles.screen}>
       {userData ? (
          <View>
         <TouchableOpacity style={styles.createbutton} onPress={handleLogout}>
         <Text  style={{...{color: "white"}}}>Log Out</Text>
         </TouchableOpacity>
          {/*1st profileBox */}
-         <View style={{ ...styles.profileBox, ...{ backgroundColor: "#E5F5FA" , height: "35%"} }}>
-         <ScrollView>
+         <View style={{ ...styles.profileBox, ...{ backgroundColor: "#E5F5FA" , height: 350} }}>
+        
            <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
              <View style={styles.postRow}>
              <Image source={{
@@ -196,7 +196,7 @@ const MyProfileScreen = ({ route, navigation }) => {
              {userData.aboutme}
            </Text>
            <FontAwesome5 name={'camera'} size={22} onPress={pickImageAndUpload} style={{...{ left: 70, top: 70, position: 'absolute'} }} />
-           </ScrollView>
+           
          </View>
 
          {/*2 ContactBox */}
@@ -234,8 +234,8 @@ const MyProfileScreen = ({ route, navigation }) => {
          </View>
 
          {/*3 EducationBox */}
-         <View style={{ ...styles.contactBox, ...{ backgroundColor: "#E5F5FA" ,  position: 'relative' } }}>
-          <ScrollView>
+         <View style={{ ...styles.contactBox, ...{ backgroundColor: "#E5F5FA" ,  position: 'relative',height:350 } }}>
+        
            <Text style={{ ...styles.HeaderText, ...{marginBottom: 10 } }}>การศึกษา</Text>
            
            <View style={{ ...styles.postRow, ...{} }}>
@@ -261,7 +261,7 @@ const MyProfileScreen = ({ route, navigation }) => {
              </Text>
              </Text>
            </View>
-           </ScrollView>
+           
          </View>
 
        </View>
@@ -270,7 +270,7 @@ const MyProfileScreen = ({ route, navigation }) => {
       )}
       {isEditing && (
       <Modal animationType="slide" transparent={true} visible={isEditing}>
-      <ScrollView>
+      <View>
       <View style={styles.modalBackground}>
         <View style={styles.modalView}>
         <Text style={{ ...{ alignSelf: 'center', fontSize: 20 } }}>Edit Profile</Text>
@@ -372,18 +372,18 @@ const MyProfileScreen = ({ route, navigation }) => {
           <Text style={{...styles.saveButton,...{}}} title="Save" onPress={finishEditing}>Save</Text>
         </View>
       </View>
-      </ScrollView>
+      </View>
     </Modal>
     )}
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
+    // justifyContent: "flex-start",
+    // alignItems: "center",
     backgroundColor: "#ABA7FA",
   },
   profileBox: {
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
   },
   contactBox: {
     width: 350,
-    height: "29%",
+    height: 300,
     marginVertical: "1.5%",
     borderRadius: 10,
   },
@@ -499,8 +499,8 @@ const styles = StyleSheet.create({
   },
   createbutton: {
     position:"absolute",
-    bottom: 0, 
-    right: -15,
+    bottom: 25, 
+    right: 30,
     backgroundColor: "#5A6BF5",
     width: 45,
     height: 45,
