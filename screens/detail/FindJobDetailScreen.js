@@ -1,4 +1,4 @@
-import React,{useEffect } from "react";
+import React,{useEffect,useState } from "react";
 import {
   View,
   Text,
@@ -15,17 +15,10 @@ import { useSelector } from "react-redux";
 import { useNavigation, useIsFocused ,useFocusEffect } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from "../../database/firebaseDB";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const FindJobDetailScreen = ({ route, navigation }) => {
-
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     // คอดจากเมื่อหน้านี้เป็นหน้าที่มีการโฟกัส
-      
-  //     Alert.alert('ยินดีต้อนรับ!', 'คุณเข้าสู่หน้านี้แล้ว');
-  //   }, [])
-  // );
+  const [isFavorite, setIsFavorite] = useState(false); 
 
   const jobid = route.params.id;
   const availableJob = useSelector((state) => state.jobs.filteredJobs);
@@ -33,7 +26,10 @@ const FindJobDetailScreen = ({ route, navigation }) => {
 
   const currentUserId = firebase.auth().currentUser.uid;
 
-  console.log(jobid)
+  // console.log(jobid)
+  const toggleFavorite = () => {
+    setIsFavorite((prevIsFavorite) => !prevIsFavorite);
+  };
 
   return (
     <View style={styles.screen}>
@@ -45,6 +41,14 @@ const FindJobDetailScreen = ({ route, navigation }) => {
             style={styles.bgImage}
           ></ImageBackground>
         </View>
+        {/* ปุ่มfav */}
+      {/* <TouchableOpacity onPress={toggleFavorite}>
+          <Icon
+            name={isFavorite ? 'heart' : 'heart-outline'}
+            size={30}
+            color={isFavorite ? 'red' : 'black'}
+          />
+        </TouchableOpacity> */}
     
          {/* ชื่อหน่วยงาน */}
          <Text style={styles.jobTitle} >
