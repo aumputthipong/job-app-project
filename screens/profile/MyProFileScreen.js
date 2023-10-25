@@ -270,7 +270,7 @@ const MyProfileScreen = ({ route, navigation }) => {
       )}
       {isEditing && (
       <Modal animationType="slide" transparent={true} visible={isEditing}>
-      <View>
+      <ScrollView>
       <View style={styles.modalBackground}>
         <View style={styles.modalView}>
         <Text style={{ ...{ alignSelf: 'center', fontSize: 20 } }}>Edit Profile</Text>
@@ -372,7 +372,7 @@ const MyProfileScreen = ({ route, navigation }) => {
           <Text style={{...styles.saveButton,...{}}} title="Save" onPress={finishEditing}>Save</Text>
         </View>
       </View>
-      </View>
+      </ScrollView>
     </Modal>
     )}
     </ScrollView>
