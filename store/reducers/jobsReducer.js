@@ -21,8 +21,7 @@ const initialState = {
                 const updatedFavoriteJobs = [...state.favoriteJobs];
                 const favIndex = updatedFavoriteJobs.findIndex((job) => job.postId === action.jobId && job.userId === currentUserId);
             
-                if (favIndex === -1) {
-          
+                if (favIndex === -1) {  
                     updatedFavoriteJobs.push( {postId:action.jobId,userId:currentUserId});
                     // console.log('push', updatedFavoriteJobs);
                     // console.log(updatedFavoriteJobs);

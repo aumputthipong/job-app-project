@@ -19,10 +19,8 @@ const KeepScreen = ({ route, navigation }) => {
 
  
   const availableJob = useSelector((state) => state.jobs.filteredJobs);
-   
   const FavJobs = useSelector((state) => state.jobs.favoriteJobs);
-  
-const myFavs = FavJobs.filter((fav)=> fav.userId == currentUserId);
+  const myFavs = FavJobs.filter((fav)=> fav.userId == currentUserId);
 
 
 const displayedJobs = availableJob.filter((job) => myFavs.some((fav) => fav.postId === job.id));
@@ -32,7 +30,6 @@ const displayedJobs = availableJob.filter((job) => myFavs.some((fav) => fav.post
 
   
     <TouchableOpacity
-
 displayedJob      onPress={() => {
        navigation.navigate("FindJobDetailScreen", {
       id: itemData.id})
@@ -92,7 +89,7 @@ displayedJob      onPress={() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:"#ABA7FA",
+    backgroundColor:"#BEBDFF",
   },
   textInput: {
     width: "90%",

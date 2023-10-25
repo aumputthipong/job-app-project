@@ -166,11 +166,12 @@ const MyProfileScreen = ({ route, navigation }) => {
 
   return (
     
-    <View style={styles.screen}>
+    <ScrollView style={styles.screen}>
+      <View>
       {userData ? (
          <View>
          {/*1st profileBox */}
-         <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" , height: "35%"} }}>
+         <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" ,} }}>
            <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
              <View style={styles.postRow}>
              <Image source={{
@@ -228,30 +229,30 @@ const MyProfileScreen = ({ route, navigation }) => {
            </View>
          </View>
          {/*3 EducationBox */}
-         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white",  position: 'relative' } }}>
+         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white",} }}>
            <Text style={styles.HeaderText}>การศึกษา</Text>
            <View style={{ ...styles.postRow, ...{} }}>
-             <Text style={styles.subTitle}>ปริญญาตรี : 
+             <Text style={styles.subTitle}>ปริญญาตรี
+             </Text>
+           </View>
              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
                {userData.bachelor}
              </Text>
-             </Text>
-           </View>
            {/* เบอร์ */}
            <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาโท : 
+             <Text style={styles.subTitle}>ปริญญาโท 
+             </Text>
+           </View>
              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
                {userData.master}
              </Text>
+           <View style={styles.postRow}>
+             <Text style={styles.subTitle}>ปริญญาเอก 
              </Text>
            </View>
-           <View style={styles.postRow}>
-             <Text style={styles.subTitle}>ปริญญาเอก : 
              <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal", marginRight: 10 } }}>
                {userData.doctoral}
              </Text>
-             </Text>
-           </View>
          </View>
  
        </View>
@@ -279,6 +280,7 @@ const MyProfileScreen = ({ route, navigation }) => {
               setEditData({ ...editData, firstName: text })
             }
           />
+
           <Text>นามสกุล</Text>
           <TextInput
             style={styles.txtinput}
@@ -366,15 +368,14 @@ const MyProfileScreen = ({ route, navigation }) => {
     </Modal>
     )}
     </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    backgroundColor: "#ABA7FA",
+    backgroundColor: "#BEBDFF",
   },
   profileBox: {
     width: 350,
@@ -385,7 +386,14 @@ const styles = StyleSheet.create({
   },
   contactBox: {
     width: 350,
-    height: "29%",
+    height: 300,
+    marginVertical: "1%",
+    borderRadius: 10,
+    alignSelf: "center",
+  },
+  eduBox: {
+    width: 500,
+    height: 450,
     marginVertical: "1%",
     borderRadius: 10,
     alignSelf: "center",

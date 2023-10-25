@@ -74,7 +74,7 @@ const NotificationScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ABA7FA",
+    backgroundColor: "#BEBDFF",
   },
 
   textInput: {

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 
 
-import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity,ScrollView } from "react-native";
 import firebase from '../../database/firebaseDB';
 import { Ionicons } from "@expo/vector-icons";
+import { Center } from "native-base";
   
 const RegisterScreen = ({ route, navigation }) => {
 
@@ -50,11 +51,9 @@ const RegisterScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.screen}>
-
-
-    
-
+    <ScrollView style={styles.screen}>
+    <View style={{...{alignItems:"center"}}}>
+      
     {/* email */}
     <View style={{ ...{ alignSelf: "left", width: "80%" } }}>
       <Text style={{ ...styles.text, ...{} }}>อีเมล</Text>
@@ -172,7 +171,8 @@ const RegisterScreen = ({ route, navigation }) => {
     <TouchableOpacity onPress={togglePasswordVisibility2}  style={{ ...styles.iconButton, top: -145 }}>
       <Ionicons name={showPassword2 ? 'eye' : 'eye-off'} size={20} color="black" />
     </TouchableOpacity>
-  </View>
+    </View>
+  </ScrollView>
   );
 };
 
@@ -180,8 +180,6 @@ const styles = StyleSheet.create({
   screen: {
     paddingTop: "10%",
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems:"center"
   },
   input: {
     width: "85%",
