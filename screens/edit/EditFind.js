@@ -11,12 +11,16 @@ import {
   FlatList,
   ScrollView
 } from "react-native";
+import { useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
 
 const EditFind = ({ route, navigation }) => {
   const postId = route.params.id;
+  const availableJob = useSelector((state) => state.jobs.filteredJobs);
+  const displayedJob = availableJob.find(job => job.id == postId);
+console.log(imageUrl)
   const [jobTitle, setJobTitle] = useState("");
   const [position, setPosition] = useState("");
   const [agency, setAgency] = useState("");
@@ -28,9 +32,27 @@ const EditFind = ({ route, navigation }) => {
   const [phone, setPhone] = useState("");
   const [wage, setWage] = useState("");
   const [welfareBenefits, setWelfareBenefits] = useState([]);
+  const [imageUrl, setImageUrl] = useState([]);
 
 
-
+  useEffect(() => {
+    if (displayedJob) {
+      setJobTitle(displayedJob.jobTitle);
+      setPosition(displayedJob.position);
+      setAgency(displayedJob.agency);
+      setAttributes(displayedJob.attributes);
+      setCategory(displayedJob.category);
+      setDetail(displayedJob.detail);
+      setEmail(displayedJob.email);
+      setEmploymentType(displayedJob.employmentType);
+      setPhone(displayedJob.phone);
+      setWage(displayedJob.wage);
+      setWelfareBenefits(displayedJob.welfareBenefits);
+      setImageUrl(displayedJob.imageUrl)
+      
+    }
+  }, [displayedJob]);
+ 
   const submitPost = async () => {
   // สร้างอ็อบเจกต์ที่เก็บข้อมูลที่คุณต้องการแก้ไข
   const updatedData = {
@@ -101,6 +123,24 @@ const EditFind = ({ route, navigation }) => {
     newData.splice(index, 1);
     setWelfareBenefits(newData);
   };
+  const deletePost = async () => {
+    try {
+      // Delete the post document from Firestore
+      await firebase.firestore().collection("JobPosts").doc(postId).delete();
+  
+      // If there is an image associated with the post, delete it from storage
+      if (imageUrl) {
+        const imageRef = firebase.storage().refFromURL(imageUrl);
+        await imageRef.delete();
+      }
+  
+      console.log("Post deleted");
+      navigation.navigate("FindJobScreen");
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+  
   return (
     <ScrollView style={{}}>
       <View style={{ padding: 20 }}>
@@ -172,9 +212,10 @@ const EditFind = ({ route, navigation }) => {
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
         {/* attribute */}
+
         <Text>คุณสมบัติ</Text>
         {attributes.map((attribute, index) => (
-           <View
+           <View key={index}
            style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText} key={index}>{`${index + 1}. ${attribute}`}</Text>
         {/* ปุ่มลบ */}
@@ -183,7 +224,6 @@ const EditFind = ({ route, navigation }) => {
       </TouchableOpacity>
         </View>
       ))}
-       
       
  <View style={styles.postRow}>
       <TextInput
@@ -201,7 +241,7 @@ const EditFind = ({ route, navigation }) => {
         {/* สวัสดิการ */}
         <Text>สวัสดิการ </Text>
         {welfareBenefits.map((welfareBenefit, index) => (
-          <View
+          <View key={index}
           style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText}>{`${index + 1}. ${welfareBenefit}`}</Text>
         <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}} onPress={() => BenefitDel(index)} >
@@ -209,18 +249,7 @@ const EditFind = ({ route, navigation }) => {
       </TouchableOpacity>
         </View>
       ))}
-        {/* <FlatList
-          data={welfareBenefits}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <Text>{`${index + 1}. ${item}`}</Text>
-              <Button title="ลบ" onPress={() => BenefitDel(index)} />
-            </View>
-          )}
-        /> */}
+
         <View style={styles.postRow}>
           <TextInput
             placeholder="สวัสดิการ"
@@ -245,8 +274,15 @@ const EditFind = ({ route, navigation }) => {
           style={{ ...styles.button, ...{ width: "80%", marginleft: "5" } }}
           onPress={submitPost}
         >
-          <Text style={{ ...{ color: "white" } }}>สร้างโพสต์</Text>
+          <Text style={{ ...{ color: "white" } }}>แก้ไข</Text>
         </TouchableOpacity>
+        
+        <TouchableOpacity
+  style={{ ...styles.button, ...{ backgroundColor: "red" } }}
+  onPress={deletePost}
+>
+  <Text style={{ color: "white" }}>Delete Post</Text>
+</TouchableOpacity>
       </View>
     </ScrollView>
   );

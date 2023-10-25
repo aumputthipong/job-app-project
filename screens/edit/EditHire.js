@@ -1,4 +1,5 @@
-import React, { useState, useEffect,useDispatch } from "react";
+import React, { useState,useEffect} from "react";
+import { useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -15,23 +16,35 @@ import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
 import { updateHireData } from "../../store/actions/hireAction";
+
 // ก่อนพัง
 const EditHire = ({ route, navigation }) => {
   const hireid = route.params.id;
+  const availableHire = useSelector((state) => state.hires.filteredHires);
+  const displayedHire = availableHire.find(hire => hire.id == hireid);
+
+  const displayedUsers = useSelector((state) => state.users.users);
 
 
-  const [hireTitle, setHireTitle] = useState("");
+const [hireTitle, setHireTitle] = useState("");
 const [category, setCategory] = useState("");
 const [detail, setDetail] = useState("");
 const [email, setEmail] = useState("");
-const [imageUrl, setImageUrl] = useState("");
 const [phone, setPhone] = useState("");
-const [image, setImage] = useState(null);
+const [imageUrl, setImageUrl] = useState("");
 const [postData, setPostData] = useState(null);
 
   const [uploading, setUploading] = useState(false);
 
-
+  useEffect(() => {
+    if (displayedHire) {
+      setHireTitle(displayedHire.hireTitle);
+      setCategory(displayedHire.category);
+      setDetail(displayedHire.detail);
+      setEmail(displayedHire.email);
+      setPhone(displayedHire.phone);
+    }
+  }, [displayedHire]);
   const submitPost = async () => {
     // สร้างอ็อบเจกต์ที่เก็บข้อมูลที่คุณต้องการแก้ไข
     const updatedData = {
@@ -44,7 +57,7 @@ const [postData, setPostData] = useState(null);
     };
   
     try {
-      // อัปเดตข้อมูลใน Firestore โดยใช้ `docId` ของโพสต์ที่คุณต้องการแก้ไข
+      // อัปเดตข้อมูลใน Firestore โดยใช้ `hireid` ของโพสต์ที่คุณต้องการแก้ไข
       const postRef = firebase.firestore().collection("HirePosts").doc(hireid);
       await postRef.update(updatedData);
   
@@ -52,6 +65,23 @@ const [postData, setPostData] = useState(null);
       navigation.navigate("HireJobDetailScreen",{id:hireid});
     } catch (e) {
       console.error("Error updating data: ", e);
+    }
+  };
+  const deletePost = async () => {
+    try {
+      // Delete the post document from Firestore
+      await firebase.firestore().collection("HirePosts").doc(hireid).delete();
+  
+      // If there is an image associated with the post, delete it from storage
+      if (imageUrl) {
+        const imageRef = firebase.storage().refFromURL(imageUrl);
+        await imageRef.delete();
+      }
+  
+      console.log("Post deleted");
+      navigation.navigate("HireJobScreen");
+    } catch (error) {
+      console.error("Error deleting post:", error);
     }
   };
   
@@ -65,6 +95,10 @@ const [postData, setPostData] = useState(null);
     { key: "7", value: "งานไอที" },
     { key: "8", value: "งานการศึกษา" },
   ];
+    // สร้างฟังก์ชันที่จะใช้ในการอัปเดตค่า category
+    const handleCategoryChange = (selectedValue) => {
+      setCategory(selectedValue);
+    };
   return (
     <ScrollView style={{}}>
       <View style={{ padding: 20 }}>
@@ -86,12 +120,13 @@ const [postData, setPostData] = useState(null);
         />
 
         <Text>ประเภทงาน</Text>
-        <SelectList
-          setSelected={(val) => setCategory(val)}
-          data={categorydata}
-          placeholder="ประเภทของงาน"
-          save="value"
-        />
+  <SelectList
+      setSelected={(val) => setCategory(val)}
+      data={categorydata}
+      placeholder="ประเภทของงาน"
+      selectedValue={category} 
+      onValueChange={handleCategoryChange} 
+    />
 
 
 
@@ -129,23 +164,7 @@ const [postData, setPostData] = useState(null);
     </ScrollView>
   );
 };
-const deletePost = async () => {
-  try {
-    // Delete the post document from Firestore
-    await firebase.firestore().collection("HirePosts").doc(hireid).delete();
 
-    // If there is an image associated with the post, delete it from storage
-    if (imageUrl) {
-      const imageRef = firebase.storage().refFromURL(imageUrl);
-      await imageRef.delete();
-    }
-
-    console.log("Post deleted");
-    navigation.navigate("HireJobScreen");
-  } catch (error) {
-    console.error("Error deleting post:", error);
-  }
-};
 
 const styles = StyleSheet.create({
   screen: {

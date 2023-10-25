@@ -20,6 +20,7 @@ import firebase from '../../database/firebaseDB';
 const FindJobScreen = ({ route, navigation }) => {
 
   const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
+
   const renderJobItem = ({ itemData}) => (
   
     <TouchableOpacity
@@ -57,6 +58,7 @@ const FindJobScreen = ({ route, navigation }) => {
       </View>
     </TouchableOpacity>
   );
+
   return (
 
     <View style={styles.container}>
