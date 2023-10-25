@@ -26,6 +26,7 @@ import CreateHire from "../screens/create/CreateHire";
 import EditFind from "../screens/edit/EditFind";
 import EditHire from "../screens/edit/EditHire";
 import EditNoti from "../screens/edit/EditNoti";
+import OtherProfileScreen from "../screens/profile/OtherProfileScreen";
 
 
 // สร้าง navigator ตามโจทย์กำหนด
@@ -120,6 +121,14 @@ function HomeStack() {
       <HomeNavigator.Screen
         name="EditFind"
         component={EditFind}
+        options={({ route }) => ({
+          // title: route.params.title,
+          // id: route.params.id,
+        })}
+      />
+        <HomeNavigator.Screen
+        name="OtherProfile"
+        component={OtherProfileScreen}
         options={({ route }) => ({
           // title: route.params.title,
           // id: route.params.id,
