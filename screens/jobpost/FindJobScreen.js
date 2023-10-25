@@ -21,10 +21,19 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 const FindJobScreen = ({ route, navigation }) => {
-
+  const [searchText, setSearchText] = useState("");
   const currentUserId = firebase.auth().currentUser.uid;
-  const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
-
+  // const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
+  const displayedJobs = useSelector((state) => {
+    const { filteredJobs } = state.jobs;
+    if (!searchText) {
+      return filteredJobs; // ไม่มีข้อความค้นหา, แสดงทั้งหมด
+    }
+    const lowerSearchText = searchText.toLowerCase();
+    return filteredJobs.filter((job) =>
+      job.jobTitle.toLowerCase().includes(lowerSearchText)
+    );
+  });
   const renderJobItem = ({ itemData }) => (
 
   
@@ -79,9 +88,8 @@ const FindJobScreen = ({ route, navigation }) => {
         keyboardType="default"
         maxLength={20}
         placeholder="ค้นหา"
-        //...เพิ่ม property value และ onChangeText...
-        // value={enteredValue}
-        // onChangeText={numberInputHandler}
+        value={searchText}
+        onChangeText={(text) => setSearchText(text)}
       />
 
       <TouchableOpacity style={styles.createbutton} onPress={() => {navigation.navigate("CreateFind", {});}}>
