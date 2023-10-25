@@ -1,4 +1,4 @@
-import { JOBS } from "../../data/Jobs-data";
+import { JOBS,FAVORITEJOBS } from "../../data/Jobs-data";
 import { TOGGLE_FAVORITE } from "../actions/jobAction";
 import { LINK_JOB } from "../actions/jobAction";
 
@@ -7,7 +7,7 @@ const initialState = {
     jobs: JOBS,
     filteredJobs:JOBS ,
     selectedJob:JOBS[0] ,
-    favoriteJobs: []
+    favoriteJobs: FAVORITEJOBS
     };
 
     const jobsReducer = (state = initialState, action) => {
@@ -20,11 +20,11 @@ const initialState = {
                 if (favIndex === -1) {
                     updatedFavoriteJobs.push(action.jobId);
                     console.log('push', updatedFavoriteJobs);
-                    console.log('favIndex', favIndex);
+                    console.log(updatedFavoriteJobs);
                 }
                 else {
                     updatedFavoriteJobs.splice(favIndex, 1);
-                    console.log('splice');
+                    console.log(updatedFavoriteJobs);
                 }
                 return {
                     ...state,
