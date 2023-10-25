@@ -32,92 +32,29 @@ const [postData, setPostData] = useState(null);
   const [uploading, setUploading] = useState(false);
 
 
-
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert(
-        "Permission needed",
-        "Please allow access to your media library to pick an image."
-      );
-    } else {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setImage(result.assets[0].uri);
-      }
-    }
-  };
-
   const submitPost = async () => {
-    // Ensure that you have valid data before updating
-    if (hireTitle && detail && email && phone && category) {
-      // Prepare the data to update in Firestore
-      const updatedData = {
+    // สร้างอ็อบเจกต์ที่เก็บข้อมูลที่คุณต้องการแก้ไข
+    const updatedData = {
         hireTitle,
         detail,
         email,
         phone,
         category,
-      };
+      // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการแก้ไข
+    };
   
-      // If a new image was selected, upload it and get the URL
-      if (image) {
-        let filename = image.substring(image.lastIndexOf("/") + 1);
+    try {
+      // อัปเดตข้อมูลใน Firestore โดยใช้ `docId` ของโพสต์ที่คุณต้องการแก้ไข
+      const postRef = firebase.firestore().collection("HirePosts").doc(hireid);
+      await postRef.update(updatedData);
   
-        try {
-          const response = await fetch(image);
-          const blob = await response.blob();
-          const uploadTask = firebase
-            .storage()
-            .ref()
-            .child(`images/${filename}`)
-            .put(blob);
-  
-          uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-              const progress =
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              console.log(`Upload is ${progress}% done`);
-            },
-            (error) => {
-              console.error("Upload Error: ", error);
-            },
-            () => {
-              uploadTask.snapshot.ref.getDownloadURL().then(async (downloadURL) => {
-                // Update the Firestore document with the new data and image URL
-                const postRef = firebase.firestore().collection("HirePosts").doc(hireid);
-                await postRef.update({
-                  ...updatedData,
-                  resumeUrl: downloadURL,
-                });
-                console.log("Post updated");
-                navigation.navigate("HireJobDetailScreen", {
-                  id: hireid});
-              });
-            }
-          );
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        // If no new image was selected, update Firestore without the image URL
-        const postRef = firebase.firestore().collection("HirePosts").doc(hireid);
-        await postRef.update(updatedData);
-        console.log("Post updated");
-        navigation.navigate("HireJobDetailScreen", {
-          id: hireid});
-      }
-    } else {
-      console.log("กรุณาเติมข้อมูลให้ครบมทุกช่อง");
+      console.log("Post updated successfully");
+      navigation.navigate("HireJobDetailScreen",{id:hireid});
+    } catch (e) {
+      console.error("Error updating data: ", e);
     }
   };
+  
   const categorydata = [
     { key: "1", value: "งานบัญชี" },
     { key: "2", value: "งานทรัพยากรบุคคล" },
@@ -147,19 +84,6 @@ const [postData, setPostData] = useState(null);
           placeholder="เวลา"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
-        <Text>รูปResume</Text>
-        {image && (
-          <Image
-            source={{ uri: image }}
-            style={{ ...styles.postImage, ...{ alignSelf: "center" } }}
-          />
-        )}
-        <TouchableOpacity
-          style={{ ...styles.button, ...{ width: "80%", marginleft: "5" } }}
-          onPress={pickImage}
-        >
-          <Text style={{ ...{ color: "white" } }}>เพิ่มรูปภาพโพสต์</Text>
-        </TouchableOpacity>
 
         <Text>ประเภทงาน</Text>
         <SelectList
