@@ -66,6 +66,7 @@ console.log(imageUrl)
     category,
     employmentType,
     email,
+    detail,
     phone,
     // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการแก้ไข
   };

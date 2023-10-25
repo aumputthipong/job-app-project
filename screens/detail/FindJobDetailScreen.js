@@ -40,7 +40,6 @@ const FindJobDetailScreen = ({ route, navigation }) => {
 });
 
 const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
-console.log(currentUserImg.imageUrl)
   const toggleFavorite = () => {
     setIsFavorite((prevIsFavorite) => !prevIsFavorite);
   };

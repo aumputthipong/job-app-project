@@ -29,7 +29,6 @@ const FindJobScreen = ({ route, navigation }) => {
 
   
     <TouchableOpacity
-
        onPress={() => {
        navigation.navigate("FindJobDetailScreen", {
       id: itemData.id})

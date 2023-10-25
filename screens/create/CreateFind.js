@@ -34,9 +34,7 @@ const CreateFind = ({ route, navigation }) => {
 
 
   const [uploading, setUploading] = useState(false);
-
   const [image, setImage] = useState(null);
-
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -100,6 +98,7 @@ const CreateFind = ({ route, navigation }) => {
                   welfareBenefits,
                   imageUrl: downloadURL,
                   wage,
+                  detail,
                   category,
                   employmentType,
                   email,
