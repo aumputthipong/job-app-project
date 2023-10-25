@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Button, StyleSheet,ScrollView ,Image,TouchableOpacity} from "react-native";
 import { useSelector } from "react-redux";
+import firebase from "../../database/firebaseDB";
 const HireJobDetailScreen = ({route, navigation}) => {
 
 const hireid = route.params.id;
@@ -8,9 +9,10 @@ const hireid = route.params.id;
   const displayedHire = availableHire.find(hire => hire.id == hireid);
 
   const displayedUsers = useSelector((state) => state.users.users);
-
+  const currentUserId = firebase.auth().currentUser.uid;
   const postOwner =  displayedUsers.find(user => user.id ==displayedHire.postById )
-  // console.log(postOwner)
+  // console.log(postOwner.id)
+  // console.log(currentUserId)
   return (
     <ScrollView style={styles.screen}>
       <Image
@@ -28,11 +30,13 @@ const hireid = route.params.id;
     <Text>ช่องทางติดต่อ</Text>
     <Text>{displayedHire.phone}</Text>
     <Text>{displayedHire.email}</Text>
+    {
+  currentUserId === displayedHire.postById && (
     <TouchableOpacity style={styles.editbutton} onPress={() => {navigation.navigate("EditHire", {
       id: displayedHire.id});}}>
           <Text  style={{...{color: "white"}}}>แก้ไข</Text>
         </TouchableOpacity>
-
+  )}
   </ScrollView>
   );
 };

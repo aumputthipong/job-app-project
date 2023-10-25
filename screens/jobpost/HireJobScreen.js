@@ -17,9 +17,18 @@ const HireJobScreen = ({ route, navigation }) => {
   const displayedHires = useSelector((state) => state.hires.filteredHires);
   const displayedUsers = useSelector((state) => state.users.users);
 
-  function WhoOwner(post){displayedUsers.find(user => user.id ==post.postById )
 
+  const dispatch = useDispatch();
+
+useEffect(() => {
+  // ตรวจสอบ displayedJobs เมื่อมีการเปลี่ยนแปลงใน Redux state
+  // และอัพเดตตามต้องการ
+  if (displayedHires.length === 0) {
+    // กรณีใด ๆ ที่คุณต้องการอัพเดต displayedJobs
+    // เช่น ใช้ dispatch เรียก action หรือประมวลผลข้อมูลใหม่
+    // เรียก dispatch(action) หรือทำอะไรตามที่ต้องการ
   }
+}, [displayedHires]);
   const renderHireItem = ({ item}) => {
     const user = displayedUsers.find((user) => user.id === item.postById);
     return(
