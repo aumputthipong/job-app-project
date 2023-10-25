@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react"; // ต้องเพิ่ม useState
 import {
   View,
   Text,
@@ -15,13 +15,28 @@ import { useSelector, useDispatch } from "react-redux";
 import { LINK_JOB } from "../../store/actions/jobAction"
 import { filterJobs } from "../../store/actions/jobAction";
 import { ViewBase } from "react-native";
-
+import firebase from "../../database/firebaseDB";
 
 
 const NotificationScreen = ({ route, navigation }) => {
   
+  const notiData = useSelector((state) => state.jobs.notiData);
+  const jobs = useSelector((state) => state.jobs.filterJob);
+  
 
-  const displayedJobs = useSelector((state) => state.jobs.filterJob);
+  // หา userId ของผู้ใช้ปัจจุบัน
+  const currentUserId = firebase.auth().currentUser.uid;
+
+  // กรอง User Noti ของผู้ใช้ปัจจุบัน
+  const currentUserNoti = notiData.filter((noti) => noti.notiBy === currentUserId);
+
+
+  // หา category ที่ผู้ใช้ต้องการดู
+
+
+  // กรองโพสต์ที่มี category ตรงกับ categoriesToDisplay
+  const filteredJobs = jobs.filter(job => currentUserNoti.some(noti => noti.category.includes(job.category) && noti.notiBy !== job.postById));
+
 
   const renderJobItem = ({ itemData }) => (
     <TouchableOpacity
@@ -32,8 +47,13 @@ const NotificationScreen = ({ route, navigation }) => {
             }}
     >
       <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
-        <View>
-        </View>
+      
+        <Image
+            source={{
+              uri: itemData.imageUrl}}
+            style={styles.bgImage}
+          ></Image>
+          
         {/* ชื่อหน่วยงาน */}
         <Text style={styles.title} numberOfLines={2}>
           {itemData.agency}
@@ -43,31 +63,40 @@ const NotificationScreen = ({ route, navigation }) => {
         {/* ค่าจ้าง */}
         <Text style={styles.subText}>{itemData.wages} บาท/{itemData.employmentType}</Text>
         {/* เงื่อนไข */}
-        
-    
+
+
         <Text style={{...styles.detailText,...{ alignSelf: "flex-start", marginTop: 15 },}}>
           29 ก.พ.64
         </Text>
+        
       </View>
     </TouchableOpacity>
   );
- 
+  
+  
   return (
- 
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("EditNoti", {});}}>
-        <Text  style={{...{color: "white"}}}>กรอง</Text>
+
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("EditNoti", {}); }}>
+        <Text style={{ ...{ color: "white" } }}>กรอง</Text>
       </TouchableOpacity>
-        <FlatList
-          data={displayedJobs}
+      {/* <FlatList
+          
           renderItem={({ item }) => {
             return renderJobItem({ itemData: item });
           }}
           keyExtractor={(item) => item.id.toString()}
-        />
-      
-      
-</View>
+        /> */}
+      <FlatList
+        data={filteredJobs}
+        renderItem={({ item }) => {
+          return renderJobItem({ itemData: item });
+        }}
+        keyExtractor={(item) => item.id.toString()}
+      />
+
+
+    </View>
   );
 };
 
@@ -116,29 +145,32 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   bgImage: {
-    width: "100%",
-    height: "100%",
+    width: "50%",
+    height: "50%",
     justifyContent: "flex-end",
     resizeMode: "stretch",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
-  
+  postRow: {
+    flexDirection: "row",
+    // backgroundColor:"red",
+  },
   postHeader: {
     height: "50%",
-   
+
   },
   text: {
     color: "white",
   },
-  button: { 
+  button: {
     backgroundColor: "#5A6BF5",
-    width:"50%",
+    width: "50%",
     height: 40,
-    borderRadius:10,
-    padding:"2.5%",
+    borderRadius: 10,
+    padding: "2.5%",
     alignItems: "center",
-    alignSelf:"center",
+    alignSelf: "center",
   },
 });
 

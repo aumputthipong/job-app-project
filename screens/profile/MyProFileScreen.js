@@ -169,6 +169,9 @@ const MyProfileScreen = ({ route, navigation }) => {
     <View style={styles.screen}>
       {userData ? (
          <View>
+        <TouchableOpacity style={styles.createbutton} onPress={handleLogout}>
+        <Text  style={{...{color: "white"}}}>Log Out</Text>
+        </TouchableOpacity>
          {/*1st profileBox */}
          <View style={{ ...styles.profileBox, ...{ backgroundColor: "#E5F5FA" , height: "35%"} }}>
          <ScrollView>
@@ -193,7 +196,6 @@ const MyProfileScreen = ({ route, navigation }) => {
              {userData.aboutme}
            </Text>
            <FontAwesome5 name={'camera'} size={22} onPress={pickImageAndUpload} style={{...{ left: 70, top: 70, position: 'absolute'} }} />
-           <Ionicons name={'log-out-outline'} size={30} onPress={handleLogout} style={{...{ left: 317.5, top: 190, position: 'absolute'} }}/>
            </ScrollView>
          </View>
 
@@ -261,7 +263,7 @@ const MyProfileScreen = ({ route, navigation }) => {
            </View>
            </ScrollView>
          </View>
- 
+
        </View>
       ): (
         <Text>กำลังโหลดข้อมูล...</Text>
@@ -496,7 +498,20 @@ const styles = StyleSheet.create({
     color: "white",
     alignSelf: "center",
     fontSize : 18
-  }
+  },
+  createbutton: {
+    position:"absolute",
+    bottom: 0, 
+    right: -15,
+    backgroundColor: "#5A6BF5",
+    width: 45,
+    height: 45,
+    borderRadius:10,
+    padding: "2.5%",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
+  },
 });
 
 export default MyProfileScreen;
