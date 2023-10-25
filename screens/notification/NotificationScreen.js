@@ -18,7 +18,7 @@ import { ViewBase } from "react-native";
 
 
 const NotificationScreen = ({ route, navigation }) => {
-
+  
 
   const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
 
