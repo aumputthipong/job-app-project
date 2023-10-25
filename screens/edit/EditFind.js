@@ -171,7 +171,10 @@ console.log(imageUrl)
           value={detail}
           onChangeText={setDetail}
           placeholder="เวลา"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          multiline={true}
+          numberOfLines={8}
+          maxLength={500}
+          style={{ borderWidth: 1, padding: 10, marginBottom: 10,height:180}}
         />
 
         <Text>ประเภทงาน</Text>

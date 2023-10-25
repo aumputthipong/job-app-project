@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React,{useEffect } from "react";
 import {
   View,
   Text,
@@ -9,32 +9,24 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useSelector } from "react-redux";
+import { useNavigation, useIsFocused ,useFocusEffect } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from "../../database/firebaseDB";
-import { BackHandler } from 'react-native';
+
 const FindJobDetailScreen = ({ route, navigation }) => {
 
 
-  // ...
-  
-  // สร้างฟังก์ชันสำหรับการจัดการกับการกดปุ่ม Back
-  const handleBackButton = () => {
-    // ทำสิ่งที่คุณต้องการทำเมื่อกดปุ่ม Back ที่นี่
-    // ตัวอย่าง: navigation.navigate('หน้าที่คุณต้องการไป');
-    return true; // ส่งค่า true เพื่อยกเลิกการปิดแอพพลิเคชัน (ถ้าคุณไม่ต้องการให้แอพปิด)
-  };
-  
-  // ใช้ useEffect เพื่อรับการเรียกฟังก์ชัน handleBackButton ขณะที่คอมโพเนนต์โหลดและถอดออก
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
-  
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
-    };
-  }, []);
-  
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     // คอดจากเมื่อหน้านี้เป็นหน้าที่มีการโฟกัส
+      
+  //     Alert.alert('ยินดีต้อนรับ!', 'คุณเข้าสู่หน้านี้แล้ว');
+  //   }, [])
+  // );
+
   const jobid = route.params.id;
   const availableJob = useSelector((state) => state.jobs.filteredJobs);
   const displayedJob = availableJob.find(job => job.id == jobid);
@@ -92,7 +84,7 @@ const FindJobDetailScreen = ({ route, navigation }) => {
         {/* ค่าจ้าง */}
 
         <Text style={styles.subTitle}>ค่าจ้าง :</Text>
-        <Text style={styles.subText}>{displayedJob.wages} บาท/{displayedJob.employmentType}</Text>
+        <Text style={styles.subText}>{displayedJob.wage} บาท/{displayedJob.employmentType}</Text>
 
         {/* สวัสดิการ */}
         <Text style={styles.subTitle}>สวัสดิการ</Text>

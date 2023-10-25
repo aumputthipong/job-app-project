@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useCallback} from "react";
 import {
   View,
   Text,
@@ -9,17 +9,41 @@ import {
   Image,
   FlatList,
   TextInput,
+  Alert,
 } from "react-native";
+import { useNavigation, useIsFocused ,useFocusEffect } from '@react-navigation/native';
 import { useSelector,useDispatch } from "react-redux";
 import {LINK_JOB} from "../../store/actions/jobAction"
-import firebase from '../../database/firebaseDB';
+import firebase from "../../database/firebaseDB";
 
 
 
 
 const FindJobScreen = ({ route, navigation }) => {
 
+  
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     // คอดจากเมื่อหน้านี้เป็นหน้าที่มีการโฟกัส
+
+  //     Alert.alert('ยินดีต้อนรับ!', 'คุณเข้าสู่หน้านี้แล้ว');
+  //   }, [])
+  // );
+  const currentUserId = firebase.auth().currentUser.uid;
+
+
+  const filteredJobs = useSelector((state) => state.jobs.filteredJobs);
+  const [filteredJobsKey, setFilteredJobsKey] = useState(0);
+
+  useEffect(() => {
+    // ทำสิ่งที่คุณต้องการเมื่อ filteredJobs เปลี่ยน
+    console.log('filteredJobs มีการเปลี่ยนแปลง:', filteredJobs);
+
+    // สามารถเรียกสิ่งที่คุณต้องการทำที่นี่
+  }, [filteredJobsKey]);
+
   const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
+  
 
   const renderJobItem = ({ itemData}) => (
   
