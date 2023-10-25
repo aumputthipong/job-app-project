@@ -16,23 +16,34 @@ import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from '@expo/vector-icons'; 
 
 const HireJobScreen = ({ route, navigation }) => {
-  const displayedHires = useSelector((state) => state.hires.filteredHires);
+  // const displayedHires = useSelector((state) => state.hires.filteredHires);
   const displayedUsers = useSelector((state) => state.users.users);
+  const [searchText, setSearchText] = useState("");
+  const displayedHires = useSelector((state) => {
+    
+    const { filteredHires } = state.hires;
+    if (!searchText) {
+      return filteredHires; // ไม่มีข้อความค้นหา, แสดงทั้งหมด
+    }
+    const lowerSearchText = searchText.toLowerCase();
+    return filteredHires.filter((job) =>
+      job.hireTitle.toLowerCase().includes(lowerSearchText)
+    );
+  });
+  // const [hires, setHires] = useState(displayedHires);
+  // const [users, setUsers] = useState(displayedUsers);
 
-  const [hires, setHires] = useState(displayedHires);
-  const [users, setUsers] = useState(displayedUsers);
+  // useEffect(() => {
+  //   setHires(displayedHires);
+  // }, [displayedHires]);
 
-  useEffect(() => {
-    setHires(displayedHires);
-  }, [displayedHires]);
-
-  useEffect(() => {
-    setUsers(displayedUsers);
-  }, [displayedUsers]);
+  // useEffect(() => {
+  //   setUsers(displayedUsers);
+  // }, [displayedUsers]);
 
 
   const renderHireItem = ({ item}) => {
-    const user = users.find((user) => user.id === item.postById);
+    const user = displayedUsers.find((user) => user.id === item.postById);
     return(
 
       <TouchableOpacity
@@ -84,9 +95,8 @@ const HireJobScreen = ({ route, navigation }) => {
         keyboardType="default"
         maxLength={20}
         placeholder="ค้นหา"
-      //...เพิ่ม property value และ onChangeText...
-      // value={enteredValue}
-      // onChangeText={numberInputHandler}
+        value={searchText}
+        onChangeText={(text) => setSearchText(text)}
       />
 
       <TouchableOpacity
@@ -99,7 +109,7 @@ const HireJobScreen = ({ route, navigation }) => {
       </TouchableOpacity>
 
       <FlatList
-        data={hires}
+        data={displayedHires}
         renderItem={renderHireItem}
         keyExtractor={(item) => item.id.toString()}
       />
