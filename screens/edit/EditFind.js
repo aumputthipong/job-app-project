@@ -9,8 +9,8 @@ import {
   Image,
   Alert,
   FlatList,
+  ScrollView
 } from "react-native";
-import { ScrollView } from 'react-native-virtualized-view'
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
