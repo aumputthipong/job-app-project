@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useDispatch } from "react";
 import {
   View,
   Text,
@@ -14,9 +14,11 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
+import { updateHireData } from "../../store/actions/hireAction";
 // ก่อนพัง
 const EditHire = ({ route, navigation }) => {
   const hireid = route.params.id;
+
 
   const [hireTitle, setHireTitle] = useState("");
 const [category, setCategory] = useState("");
@@ -96,7 +98,8 @@ const [postData, setPostData] = useState(null);
                   resumeUrl: downloadURL,
                 });
                 console.log("Post updated");
-                navigation.navigate("HireJobScreen");
+                navigation.navigate("HireJobDetailScreen", {
+                  id: hireid});
               });
             }
           );
@@ -108,10 +111,11 @@ const [postData, setPostData] = useState(null);
         const postRef = firebase.firestore().collection("HirePosts").doc(hireid);
         await postRef.update(updatedData);
         console.log("Post updated");
-        navigation.navigate("HireJobScreen");
+        navigation.navigate("HireJobDetailScreen", {
+          id: hireid});
       }
     } else {
-      console.log("Please fill in all the required fields.");
+      console.log("กรุณาเติมข้อมูลให้ครบมทุกช่อง");
     }
   };
   const categorydata = [

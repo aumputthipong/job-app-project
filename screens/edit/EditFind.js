@@ -16,6 +16,7 @@ import firebase from "../../database/firebaseDB";
 import { SelectList } from "react-native-dropdown-select-list";
 
 const EditFind = ({ route, navigation }) => {
+  const postId = route.params.id;
   const [jobTitle, setJobTitle] = useState("");
   const [position, setPosition] = useState("");
   const [agency, setAgency] = useState("");
@@ -24,101 +25,39 @@ const EditFind = ({ route, navigation }) => {
   const [detail, setDetail] = useState("");
   const [email, setEmail] = useState("");
   const [employmentType, setEmploymentType] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
   const [phone, setPhone] = useState("");
   const [wage, setWage] = useState("");
   const [welfareBenefits, setWelfareBenefits] = useState([]);
 
 
-  const [uploading, setUploading] = useState(false);
-
-  const [image, setImage] = useState(null);
-
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert(
-        "Permission needed",
-        "Please allow access to your media library to pick an image."
-      );
-    } else {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setImage(result.assets[0].uri);
-      }
-    }
-  };
 
   const submitPost = async () => {
-    const uploadUri = image;
-    if (uploadUri) {
-      let filename = uploadUri.substring(uploadUri.lastIndexOf("/") + 1);
-
-      try {
-        const response = await fetch(uploadUri);
-        const blob = await response.blob();
-        const uploadTask = firebase
-          .storage()
-          .ref()
-          .child(`images/${filename}`)
-          .put(blob);
-        // abcdes
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            // Handle upload progress if needed
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log(`Upload is ${progress}% done`);
-          },
-          (error) => {
-            // Handle upload error
-            console.error("Upload Error: ", error);
-          },
-          () => {
-            // Upload completed successfully, get the download URL
-            uploadTask.snapshot.ref
-              .getDownloadURL()
-              .then(async (downloadURL) => {
-                // Save the download URL to Firestore or use it as needed
-                const postById = firebase.auth().currentUser.uid;
-                console.log("File available at", downloadURL);
-                const post = {
-                  jobTitle,
-                  position,
-                  agency,
-                  attributes,
-                  welfareBenefits,
-                  imageUrl: downloadURL,
-                  wage,
-                  category,
-                  employmentType,
-                  email,
-                  phone,
-                  postById,
-                  createdAt: new Date(), 
-                  // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
-                };
-                const postRef = firebase.firestore().collection("JobPosts");
-                const docRef = await postRef.add(post);
-                console.log("Post created with ID: ", docRef.id);
-                navigation.navigate("FindJobScreen");
-              });
-          }
-        );
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      console.log("No image to upload");
-    }
+  // สร้างอ็อบเจกต์ที่เก็บข้อมูลที่คุณต้องการแก้ไข
+  const updatedData = {
+    jobTitle,
+    position,
+    agency,
+    attributes,
+    welfareBenefits,
+    wage,
+    category,
+    employmentType,
+    email,
+    phone,
+    // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการแก้ไข
   };
+
+  try {
+    // อัปเดตข้อมูลใน Firestore โดยใช้ `docId` ของโพสต์ที่คุณต้องการแก้ไข
+    const postRef = firebase.firestore().collection("JobPosts").doc(postId);
+    await postRef.update(updatedData);
+
+    console.log("Post updated successfully");
+    navigation.navigate("FindJobDetailScreen",{id:postId});
+  } catch (e) {
+    console.error("Error updating data: ", e);
+  }
+};
 
   const categorydata = [
     { key: "1", value: "งานบัญชี" },
@@ -194,19 +133,6 @@ const EditFind = ({ route, navigation }) => {
           placeholder="เวลา"
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
-        <Text>รูปโพส</Text>
-        {image && (
-          <Image
-            source={{ uri: image }}
-            style={{ ...styles.postImage, ...{ alignSelf: "center" } }}
-          />
-        )}
-        <TouchableOpacity
-          style={{ ...styles.button, ...{ width: "80%", marginleft: "5" } }}
-          onPress={pickImage}
-        >
-          <Text style={{ ...{ color: "white" } }}>เพิ่มรูปภาพโพสต์</Text>
-        </TouchableOpacity>
 
         <Text>ประเภทงาน</Text>
         <SelectList
