@@ -8,7 +8,6 @@ import firebase from "../../database/firebaseDB";
 
 const initialState = {
     jobs: JOBS,
-    noti: Noti,
     filteredJobs:JOBS ,
     filterJob: JOBS,
     selectedJob:JOBS[0] ,
