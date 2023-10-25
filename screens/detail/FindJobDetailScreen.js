@@ -203,7 +203,7 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
        
 {/* กล่องคอมเม้น */}
         <Text style={{ ...styles.subText, ...{ marginTop: 30 } }}>
-          ความคิดเห็น 1 รายการ
+          ความคิดเห็น {thisFliteredPostComment.length}  รายการ
         </Text>
         {/* ช่องพิมพ์คอมเม้น + รูปโปรไฟล์ */}
         <View style={{...styles.postRow,...{ marginVertical:10,}}}>
@@ -233,10 +233,15 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
        
  
         <View style={{...styles.postRow,...{ marginVertical:10,}}}key={index}>
+          <TouchableOpacity   onPress={() => {
+       navigation.navigate("OtherProfile", {
+      id: comment.userId})
+            }}>
           <Image
-            source={{uri:    currentUserImg.imageUrl || "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}}
+            source={{uri:    comment.userImage || "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}}
             style={{...styles.profileImg,...{}}}
-          ></Image>
+            ></Image>
+          </TouchableOpacity>
           <View>
             <Text style={{ ...styles.subTitle, ...{ marginTop: 10 } }}>
              {comment.userfistName} {comment.userlastName}
