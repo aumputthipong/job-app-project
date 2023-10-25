@@ -18,17 +18,7 @@ const HireJobScreen = ({ route, navigation }) => {
   const displayedUsers = useSelector((state) => state.users.users);
 
 
-  const dispatch = useDispatch();
 
-useEffect(() => {
-  // ตรวจสอบ displayedJobs เมื่อมีการเปลี่ยนแปลงใน Redux state
-  // และอัพเดตตามต้องการ
-  if (displayedHires.length === 0) {
-    // กรณีใด ๆ ที่คุณต้องการอัพเดต displayedJobs
-    // เช่น ใช้ dispatch เรียก action หรือประมวลผลข้อมูลใหม่
-    // เรียก dispatch(action) หรือทำอะไรตามที่ต้องการ
-  }
-}, [displayedHires]);
   const renderHireItem = ({ item}) => {
     const user = displayedUsers.find((user) => user.id === item.postById);
     return(

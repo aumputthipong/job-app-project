@@ -250,7 +250,7 @@ const CreateFind = ({ route, navigation }) => {
         {/* attribute */}
         <Text>คุณสมบัติ</Text>
         {attributes.map((attribute, index) => (
-           <View
+           <View key={index}
            style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText} key={index}>{`${index + 1}. ${attribute}`}</Text>
         {/* ปุ่มลบ */}
@@ -277,7 +277,7 @@ const CreateFind = ({ route, navigation }) => {
         {/* สวัสดิการ */}
         <Text>สวัสดิการ </Text>
         {welfareBenefits.map((welfareBenefit, index) => (
-          <View
+          <View key={index}
           style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText}>{`${index + 1}. ${welfareBenefit}`}</Text>
         <TouchableOpacity style={{...styles.button,...{width:"20%" ,marginleft:"5"}}} onPress={() => BenefitDel(index)} >
@@ -285,18 +285,7 @@ const CreateFind = ({ route, navigation }) => {
       </TouchableOpacity>
         </View>
       ))}
-        {/* <FlatList
-          data={welfareBenefits}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <Text>{`${index + 1}. ${item}`}</Text>
-              <Button title="ลบ" onPress={() => BenefitDel(index)} />
-            </View>
-          )}
-        /> */}
+ 
         <View style={styles.postRow}>
           <TextInput
             placeholder="สวัสดิการ"

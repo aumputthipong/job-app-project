@@ -20,7 +20,6 @@ import firebase from '../../database/firebaseDB';
 const FindJobScreen = ({ route, navigation }) => {
 
   const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
-  // console.log(displayedJobs[0])
   const renderJobItem = ({ itemData}) => (
   
     <TouchableOpacity
