@@ -6,6 +6,7 @@ import { FILTER_JOBS } from '../actions/jobAction';
 const initialState = {
     jobs: JOBS,
     filteredJobs:JOBS ,
+    filterJob: JOBS,
     selectedJob:JOBS[0] ,
     favoriteJobs: []
     };
@@ -35,17 +36,21 @@ const initialState = {
                 
                 // const selectedJob = [...state.favoriteJobs];
                 case FILTER_JOBS:
-                    const { jobType, hireType, wages } = action;
-                    // นี่คือตัวอย่างเพียงแค่เริ่มต้น คุณควรใช้เงื่อนไขที่เหมาะสมในการกรองงาน
-                    const filteredJobs = state.jobs.filter((job) => {
-                      return (
-                        (jobType === '' || job.jobType === jobType) &&
-                        (hireType === '' || job.hireType === hireType) &&
-                        (wages === '' || job.wages === wages)
-                      );
-                    });
-                    return { ...state, filteredJobs };
+
+                const { selected } = action;
+                    if (selected.length === 0) {
+                        // ถ้าไม่มีค่าที่ถูกเลือก ให้แสดงทั้งหมด
+                        return { ...state, filterJob: state.jobs };
+                      }
+                    
+                      // ดำเนินการกรองโพสต์ตามค่าที่ถูกเลือก
+                      const filteredJobs = state.jobs.filter((job) => {
+                        return selected.includes(job.category);
+                      });
+                      
+                      return { ...state, filterJob: filteredJobs };
                 
+
     
             default:
                 return state;

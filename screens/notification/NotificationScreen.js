@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { LINK_JOB } from "../../store/actions/jobAction"
+import { filterJobs } from "../../store/actions/jobAction";
 import { ViewBase } from "react-native";
 
 
@@ -20,7 +21,7 @@ import { ViewBase } from "react-native";
 const NotificationScreen = ({ route, navigation }) => {
   
 
-  const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
+  const displayedJobs = useSelector((state) => state.jobs.filterJob);
 
   const renderJobItem = ({ itemData }) => (
     <TouchableOpacity
@@ -50,6 +51,7 @@ const NotificationScreen = ({ route, navigation }) => {
       </View>
     </TouchableOpacity>
   );
+ 
   return (
  
       <View style={styles.container}>

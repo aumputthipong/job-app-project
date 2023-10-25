@@ -21,37 +21,49 @@ import { useDispatch } from "react-redux";
 
   const EditNoti = ({ navigation }) => {
     const dispatch = useDispatch();
-    const [jobType, setJobType] = useState(""); // ประเภทงาน
-    const [hireType, setHireType] = useState(""); // ประเภทการจ้าง
-    const [wages, setWages] = useState(""); // ค่าจ้าง
+    const userId = firebase.auth().currentUser.uid;
+    const [selected, setSelected] = useState([]);
+  
   
     const applyFilters = () => {
       // ส่งค่า filter ไปยัง Redux state
-      dispatch(filterJobs(jobType, hireType, wages));
+      dispatch(filterJobs(selected));
+      console.log(selected)
+      const saveNoti = {
+        category: selected,
+        notiBy: userId,
+        createdAt: new Date(), 
+        // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการใน post object
+      };
+      firebase.firestore().collection("User Noti").add(saveNoti);
+      
       navigation.goBack(); // กลับไปหน้า NotificationScreen
     };
+    
+    const categorydata = [
+      { key: "1", value: "งานบัญชี" },
+      { key: "2", value: "งานทรัพยากรบุคคล" },
+      { key: "3", value: "งานธนาคาร" },
+      { key: "4", value: "งานสุขภาพ" },
+      { key: "5", value: "งานก่อสร้าง" },
+      { key: "6", value: "งานออกแบบ" },
+      { key: "7", value: "งานไอที" },
+      { key: "8", value: "งานการศึกษา" },
+    ];
   
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="ประเภทงาน"
-          value={jobType}
-          onChangeText={(text) => setJobType(text)}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="ประเภทการจ้าง"
-          value={hireType}
-          onChangeText={(text) => setHireType(text)}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="ค่าจ้าง"
-          value={wages}
-          onChangeText={(text) => setWages(text)}
-        />
-        <Button title="กรอง" onPress={applyFilters} />
+        <MultipleSelectList 
+        setSelected={(val) => setSelected(val)} 
+        data={categorydata} 
+        save="value"
+        
+        label="Categories"
+    />
+    
+        
+        
+        <Button title="บันทึก" onPress={applyFilters} />
       </View>
     );
   };
