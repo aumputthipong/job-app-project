@@ -66,6 +66,7 @@ console.log(imageUrl)
     category,
     employmentType,
     email,
+    detail,
     phone,
     // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการแก้ไข
   };
@@ -171,11 +172,11 @@ console.log(imageUrl)
         <TextInput
           value={detail}
           onChangeText={setDetail}
-          placeholder="รายละเอียดงาน"
+          placeholder="รายละเอียดงานที่ต้องการแก้ไข"
           multiline={true}
           numberOfLines={8}
           maxLength={500}
-          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5, height: 180}}
+          style={{  textAlignVertical: 'top',  textAlign: 'left', flex: 1, borderWidth: 1,padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5, height: 180}}
         />
 
         <Text style={{marginBottom: 10 }}>ประเภทงาน</Text>
@@ -203,16 +204,20 @@ console.log(imageUrl)
           style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <Text>ช่องทางติดต่อ</Text>
+        <Text>อีเมล</Text>
         <TextInput
           value={email}
           onChangeText={setEmail}
           placeholder="อีเมล"
           style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
+        <Text>เบอร์โทร</Text>
         <TextInput
           value={phone}
           onChangeText={setPhone}
           placeholder="เบอร์โทร"
+          maxLength={10}
+          keyboardType="numeric"
           style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         {/* attribute */}
@@ -223,8 +228,10 @@ console.log(imageUrl)
            style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText} key={index}>{`${index + 1}. ${attribute}`}</Text>
         {/* ปุ่มลบ */}
+
         <TouchableOpacity style={{...{width:"20%" , alignSelf:'center'}}} onPress={() => attriDel(index)} >
         <FontAwesome name={'remove'}  size={20} />
+
       </TouchableOpacity>
         </View>
       ))}
@@ -248,9 +255,11 @@ console.log(imageUrl)
           <View key={index}
           style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText}>{`${index + 1}. ${welfareBenefit}`}</Text>
+
         <TouchableOpacity style={{...{width:"20%" , alignSelf:'center'}}} onPress={() => BenefitDel(index)} >
           <FontAwesome name={'remove'}  size={20} />
         </TouchableOpacity>
+
         </View>
         ))}
 
@@ -331,8 +340,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   subText: {
-    fontSize: 15
-  }
+    fontSize: 15,
+
+  },
 });
 
 export default EditFind;

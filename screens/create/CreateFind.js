@@ -34,9 +34,7 @@ const CreateFind = ({ route, navigation }) => {
 
 
   const [uploading, setUploading] = useState(false);
-
   const [image, setImage] = useState(null);
-
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -100,6 +98,7 @@ const CreateFind = ({ route, navigation }) => {
                   welfareBenefits,
                   imageUrl: downloadURL,
                   wage,
+                  detail,
                   category,
                   employmentType,
                   email,
@@ -195,7 +194,7 @@ const CreateFind = ({ route, navigation }) => {
           value={detail}
           onChangeText={setDetail}
           placeholder="รายละเอียดงาน"
-          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
+          style={{ textAlignVertical: 'top',  textAlign: 'left', flex: 1, borderWidth: 1,padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5, height: 180 }}
         />
         <Text>รูปโพส</Text>
         {image && (
@@ -253,11 +252,13 @@ const CreateFind = ({ route, navigation }) => {
         {attributes.map((attribute, index) => (
            <View key={index}
            style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={styles.subText} key={index}>{`${index + 1}. ${attribute}`}</Text>
+        <Text style={{...styles.subText,...{width:"80%"}}}numberOfLines={2} key={index}>{`${index + 1}. ${attribute}`}</Text>
         {/* ปุ่มลบ */}
+
         <TouchableOpacity style={{...{width:"20%" , alignSelf:'center'}}} onPress={() => attriDel(index)} >
           <FontAwesome name={'remove'}  size={20} />
         </TouchableOpacity>
+
         </View>
       ))}
        
@@ -270,20 +271,25 @@ const CreateFind = ({ route, navigation }) => {
         style={{ borderWidth: 2, padding: 10, marginVertical: 10 ,width:"75%", borderRadius: 5}}
       />
      
+
      <TouchableOpacity style={{...styles.button,...{width:"20%" , marginLeft: 15}}}  onPress={attriAdd} >
         <Text  style={{...{color: "white"}}}>เพิ่ม</Text>
+
       </TouchableOpacity>
       </View>
 
+          
         {/* สวัสดิการ */}
-        <Text>สวัสดิการ </Text>
+        <Text>สวัสดิการ</Text>
         {welfareBenefits.map((welfareBenefit, index) => (
           <View key={index}
           style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.subText}>{`${index + 1}. ${welfareBenefit}`}</Text>
+
         <TouchableOpacity style={{...{width:"20%" , alignSelf:'center'}}} onPress={() => BenefitDel(index)} >
           <FontAwesome name={'remove'}  size={20} />
         </TouchableOpacity>
+
         </View>
       ))}
  
@@ -296,7 +302,9 @@ const CreateFind = ({ route, navigation }) => {
           />
 
           <TouchableOpacity
+
             style={{ ...styles.button, ...{ width: "20%", marginLeft: 15 } }}
+
             onPress={benefitAdd}
           >
             <Text style={{ ...{ color: "white" } }}>เพิ่ม</Text>
@@ -355,9 +363,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
+
+  delbutton:{
+    backgroundColor:"red",
+    paddingTop:6,
+    width:40,height:40,alignItems:"center", 
+    borderRadius:15,
+  },
   subText: {
     fontSize: 15,
-  }
+
+  },
 });
 
 export default CreateFind;

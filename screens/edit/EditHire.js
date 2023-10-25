@@ -114,11 +114,11 @@ const [postData, setPostData] = useState(null);
 
 
         <Text>รายละเอียด</Text>
-        <TextInput
+     <TextInput
           value={detail}
           onChangeText={setDetail}
           placeholder="รายละเอียดที่ต้องการแก้ไข"
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+          style={{ textAlignVertical: 'top',  textAlign: 'left', flex: 1, borderWidth: 1,padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5, height: 180 }}
         />
 
         <Text>ประเภทงาน</Text>

@@ -15,6 +15,7 @@ import { useNavigation, useIsFocused ,useFocusEffect } from '@react-navigation/n
 import { useSelector,useDispatch } from "react-redux";
 import {LINK_JOB} from "../../store/actions/jobAction"
 import firebase from "../../database/firebaseDB";
+import { Ionicons } from '@expo/vector-icons'; 
 
 
 
@@ -28,7 +29,6 @@ const FindJobScreen = ({ route, navigation }) => {
 
   
     <TouchableOpacity
-
        onPress={() => {
        navigation.navigate("FindJobDetailScreen", {
       id: itemData.id})
@@ -85,7 +85,7 @@ const FindJobScreen = ({ route, navigation }) => {
       />
 
       <TouchableOpacity style={styles.createbutton} onPress={() => {navigation.navigate("CreateFind", {});}}>
-        <Text  style={{...{color: "white"}}}>สร้างโพสต์</Text>
+       <Ionicons name="md-add" size={30} color="white" />
       </TouchableOpacity>
 
       <FlatList
@@ -172,9 +172,9 @@ const styles = StyleSheet.create({
     bottom: 20, 
     right: 20,
     backgroundColor: "#5A6BF5",
-    width: 75,
-    height: 75,
-    borderRadius:25,
+    width: 60,
+    height: 60,
+    borderRadius:30,
     padding: "2.5%",
     alignItems: "center",
     justifyContent: "center",

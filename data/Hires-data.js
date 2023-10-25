@@ -22,3 +22,26 @@ hirePostsCollection.onSnapshot((querySnapshot) => {
 }, (error) => {
   console.error("Error getting real-time hirePosts updates: ", error);
 });
+
+export const COMMENTS = [];
+const commentHireCollection = firebase.firestore().collection('HireComments');
+
+// Create a real-time listener to fetch and update data when it changes
+commentHireCollection.onSnapshot((querySnapshot) => {
+  COMMENTS.length = 0; // Clear the existing data
+
+  querySnapshot.forEach((doc) => {
+    const commentData = doc.data();
+    const commentId = doc.id;
+    // Include the document ID as part of the data
+    const commentWithId = { id: commentId, ...commentData };
+    COMMENTS.push(commentWithId);
+  });
+});
+
+// Optionally, you can also handle any errors that occur during the real-time listener
+commentHireCollection.onSnapshot((querySnapshot) => {
+  // Handle changes as before
+}, (error) => {
+  console.error("Error getting real-time FavjobPosts updates: ", error);
+});

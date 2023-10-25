@@ -1,5 +1,8 @@
-import { JOBS, FAVORITEJOBS } from "../../data/Jobs-data";
+
+import { JOBS,FAVORITEJOBS, COMMENTS } from "../../data/Jobs-data";
+
 import { NOTI } from "../../data/Noti-data";
+
 import { TOGGLE_FAVORITE } from "../actions/jobAction";
 import { LINK_JOB } from "../actions/jobAction";
 import { FILTER_JOBS } from '../actions/jobAction';
@@ -11,8 +14,10 @@ const initialState = {
     jobs: JOBS,
     filteredJobs: JOBS,
     filterJob: JOBS,
-    selectedJob: JOBS[0],
+
+    selectedJob:JOBS[0] ,
     favoriteJobs: FAVORITEJOBS,
+    comments:COMMENTS,
     notiData: NOTI,
     
 };
