@@ -194,7 +194,7 @@ const CreateFind = ({ route, navigation }) => {
           value={detail}
           onChangeText={setDetail}
           placeholder="รายละเอียดงาน"
-          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
+          style={{ textAlignVertical: 'top',  textAlign: 'left', flex: 1, borderWidth: 1,padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5, height: 180 }}
         />
         <Text>รูปโพส</Text>
         {image && (

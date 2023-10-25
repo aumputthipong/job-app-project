@@ -172,11 +172,11 @@ console.log(imageUrl)
         <TextInput
           value={detail}
           onChangeText={setDetail}
-          placeholder="รายละเอียดงาน"
+          placeholder="รายละเอียดงานที่ต้องการแก้ไข"
           multiline={true}
           numberOfLines={8}
           maxLength={500}
-          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5, height: 180}}
+          style={{  textAlignVertical: 'top',  textAlign: 'left', flex: 1, borderWidth: 1,padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5, height: 180}}
         />
 
         <Text style={{marginBottom: 10 }}>ประเภทงาน</Text>
@@ -204,16 +204,20 @@ console.log(imageUrl)
           style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         <Text>ช่องทางติดต่อ</Text>
+        <Text>อีเมล</Text>
         <TextInput
           value={email}
           onChangeText={setEmail}
           placeholder="อีเมล"
           style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
+        <Text>เบอร์โทร</Text>
         <TextInput
           value={phone}
           onChangeText={setPhone}
           placeholder="เบอร์โทร"
+          maxLength={10}
+          keyboardType="numeric"
           style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
         />
         {/* attribute */}
