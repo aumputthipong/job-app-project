@@ -8,6 +8,7 @@ import {
   Modal,
   TextInput,
   TouchableOpacity,
+  ScrollView,
   Image,
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
@@ -15,7 +16,7 @@ import firebase from '../../database/firebaseDB';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from "@expo/vector-icons";
-import { ScrollView } from 'react-native-virtualized-view'
+
 
 const MyProfileScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
