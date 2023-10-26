@@ -5,8 +5,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 const LoginScreen = ({ route, navigation }) => {
   //   const {step, title} = route.params;
-  const [email, setEmail] = useState('pongtest2@gmail.com');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const handleLogin = async () => {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
