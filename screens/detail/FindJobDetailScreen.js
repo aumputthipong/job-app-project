@@ -140,12 +140,15 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
             style={styles.bgImage}
           ></ImageBackground>
         </View>
-        <TouchableOpacity
-          style={{ ...styles.button, ...{ width: "80%", marginleft: "5", marginVertical: 10 } }}
-          onPress={pickImage}
-        >
+        {
+  currentUserId === displayedJob.postById && (
+    <TouchableOpacity
+    style={{ ...styles.button, ...{ width: "80%", marginleft: "5", marginVertical: 10 } }}
+    onPress={pickImage}
+    >
           <Text style={{ ...{ color: "white" } }}>แก้ไขรูปภาพ</Text>
         </TouchableOpacity>
+          )}
 
         {/* ปุ่มfav test*/}
       {/* <TouchableOpacity onPress={toggleFavorite}>
