@@ -51,6 +51,7 @@ function HomeStack() {
       screenOptions={{
         headerStyle: { backgroundColor: "#4769E2" },
         headerTintColor: "white",
+        headerTitle: '',
       }}
     >
       <HomeNavigator.Screen
@@ -91,6 +92,7 @@ function HomeStack() {
         options={({ route }) => ({
           // title: route.params.title,
           // id: route.params.id,
+       
         })}
       />
 
@@ -100,6 +102,7 @@ function HomeStack() {
         options={({ route }) => ({
           // title: route.params.title,
           // id: route.params.id,
+       
         })}
       />
       <HomeNavigator.Screen
@@ -108,6 +111,7 @@ function HomeStack() {
         options={({ route }) => ({
           // title: route.params.title,
           // id: route.params.id,
+       
         })}
       />
       <HomeNavigator.Screen
@@ -116,6 +120,7 @@ function HomeStack() {
         options={({ route }) => ({
           // title: route.params.title,
           // id: route.params.id,
+  
         })}
       />
       <HomeNavigator.Screen
@@ -124,6 +129,7 @@ function HomeStack() {
         options={({ route }) => ({
           // title: route.params.title,
           // id: route.params.id,
+     
         })}
       />
         <HomeNavigator.Screen
@@ -132,6 +138,7 @@ function HomeStack() {
         options={({ route }) => ({
           // title: route.params.title,
           // id: route.params.id,
+   
         })}
       />
 
@@ -147,6 +154,7 @@ function NotiStack() {
       screenOptions={{
         headerStyle: { backgroundColor: "#4769E2" },
         headerTintColor: "white",
+        headerTitle: '',
       }}
     >
       <NotiNavigator.Screen
@@ -178,6 +186,7 @@ function BottomTabNav() {
         headerTintColor: "white",
         tabBarStyle: { backgroundColor: "white" },
         tabBarLabelStyle: { fontSize: 15, color: 'black' },
+        headerTitle: '',
       }}
     >
       <BottomTab.Screen

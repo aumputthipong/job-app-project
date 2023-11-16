@@ -1,9 +1,9 @@
 
-import { JOBS,FAVORITEJOBS, COMMENTS } from "../../data/Jobs-data";
+import { JOBS,FAVORITEJOBS, COMMENTS,RATING } from "../../data/Jobs-data";
 
 import { NOTI } from "../../data/Noti-data";
 
-import { TOGGLE_FAVORITE } from "../actions/jobAction";
+import { TOGGLE_FAVORITE,SCORE_RATING } from "../actions/jobAction";
 import { LINK_JOB } from "../actions/jobAction";
 import { FILTER_JOBS } from '../actions/jobAction';
 import { SET_NEW_POST_AVAILABLE } from '../actions/jobAction';
@@ -19,17 +19,19 @@ const initialState = {
     favoriteJobs: FAVORITEJOBS,
     comments:COMMENTS,
     notiData: NOTI,
+    ratingJobs: RATING,
     
 };
 
 
     const jobsReducer = (state = initialState, action) => {
+
         switch (action.type) {
             case TOGGLE_FAVORITE:
                 const currentUserId = firebase.auth().currentUser.uid;
                 const updatedFavoriteJobs = [...state.favoriteJobs];
                 const favIndex = updatedFavoriteJobs.findIndex((job) => job.postId === action.jobId && job.userId === currentUserId);
-            
+              
                 if (favIndex === -1) {  
                     updatedFavoriteJobs.push( {postId:action.jobId,userId:currentUserId});
                     // console.log('push', updatedFavoriteJobs);
@@ -38,7 +40,7 @@ const initialState = {
                         postId: action.jobId,
                         userId: currentUserId
                     })
-
+            
                     .then(() => {
                         console.log('Job added to favorites on Firebase');
                     })
@@ -71,9 +73,66 @@ const initialState = {
                 ...state,
                 favoriteJobs: updatedFavoriteJobs,
             };
+            // rating
+        case SCORE_RATING:
+            const currentUserIdforRating = firebase.auth().currentUser.uid;
+            const updatedRatingJobs = [...state.ratingJobs];
+            const ratingIndex = updatedRatingJobs.findIndex((job) => job.postId === action.jobId && job.userId === currentUserIdforRating);
+   
+            if (ratingIndex === -1) {  
+               updatedRatingJobs.push( {postId:action.jobId,userId:currentUserIdforRating,rating:action.rating});
+                console.log('add', updatedRatingJobs);
+                // console.log(updatedRatingJobs);
 
+                firebase.firestore().collection("RatingJobs").add({
+                    postId: action.jobId,
+                    userId: currentUserIdforRating,
+                    rating: action.rating,
+                })
+
+                .then(() => {
+                    console.log('Rating added to Firebase');
+                })
+                .catch((error) => {
+                    console.error('Error adding rating to firebase: ', error);
+                });
+        }
+        else {
+            const updatedRating = {
+                postId: action.jobId,
+                userId: currentUserIdforRating,
+                rating: action.rating,
+            };
+    
+            updatedRatingJobs[ratingIndex] = updatedRating;
+    
+            firebase.firestore().collection("RatingJobs")
+                .where("postId", "==", action.jobId)
+                .where("userId", "==", currentUserIdforRating)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        doc.ref.update(updatedRating)
+                            .then(() => {
+                                console.log('Rating updated on Firebase');
+                            })
+                            .catch((error) => {
+                                console.error('Error updating rating on Firebase: ', error);
+                            });
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error updating rating on Firebase: ', error);
+                });
+        }
+    
+        console.log("Updated Ratings", updatedRatingJobs);
+    
+        return {
+            ...state,
+            ratingJobs: updatedRatingJobs,
+        };
         case LINK_JOB:
-
         // const selectedJob = [...state.favoriteJobs];
         case FILTER_JOBS:
             const { selected } = action;
@@ -116,7 +175,6 @@ const initialState = {
                 const updatedNotiData = [...updatedNoti];
                 updatedNotiData[notiIndex].category = selected;
             }
-
 
             // เมื่ออัปเดตข้อมูลแล้วคุณควรอัปเดต local state เช่น notiData
             if (selected.length === 0) {

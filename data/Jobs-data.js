@@ -79,7 +79,7 @@ commentJobCollection.onSnapshot((querySnapshot) => {
 
 
 export const RATING = [];
-const ratingJobCollection = firebase.firestore().collection('JobRating');
+const ratingJobCollection = firebase.firestore().collection('JobRatings');
 
 // Create a real-time listener to fetch and update data when it changes
 ratingJobCollection.onSnapshot((querySnapshot) => {
