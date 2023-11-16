@@ -17,10 +17,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from "../../database/firebaseDB";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as ImagePicker from "expo-image-picker";
+import { Rating, AirbnbRating } from 'react-native-ratings';
 const FindJobDetailScreen = ({ route, navigation }) => {
 
   const [isFavorite, setIsFavorite] = useState(false); 
   const [commentBox, setCommentBox] = useState(""); 
+
   const jobid = route.params.id;
   const availableJob = useSelector((state) => state.jobs.filteredJobs);
   const displayedJob = availableJob.find(job => job.id == jobid);
@@ -40,10 +42,12 @@ const FindJobDetailScreen = ({ route, navigation }) => {
   };
 });
 
+
 const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
   const toggleFavorite = () => {
     setIsFavorite((prevIsFavorite) => !prevIsFavorite);
   };
+
   const sentComment = ()=>{
     if (commentBox.trim() !== "") {
   
@@ -130,6 +134,11 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
     }
   };
 
+
+  const ratingCompleted = (rating) => {
+    console.log("Rating is: " + rating);
+  }
+
   return (
     <View style={styles.screen}>
 
@@ -149,6 +158,14 @@ const currentUserImg = availableUser.find(user=> user.id ==currentUserId);
           <Text style={{ ...{ color: "white" } }}>แก้ไขรูปภาพ</Text>
         </TouchableOpacity>
           )}
+        
+<Rating
+  showRating
+  onFinishRating={ratingCompleted}
+  style={{ paddingVertical: 10 }}
+  
+/>
+
 
         {/* ปุ่มfav test*/}
       {/* <TouchableOpacity onPress={toggleFavorite}>

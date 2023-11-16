@@ -74,3 +74,29 @@ commentJobCollection.onSnapshot((querySnapshot) => {
 }, (error) => {
   console.error("Error getting real-time FavjobPosts updates: ", error);
 });
+
+
+
+
+export const RATING = [];
+const ratingJobCollection = firebase.firestore().collection('JobRating');
+
+// Create a real-time listener to fetch and update data when it changes
+ratingJobCollection.onSnapshot((querySnapshot) => {
+  RATING.length = 0; // Clear the existing data
+
+  querySnapshot.forEach((doc) => {
+    const ratingData = doc.data();
+    const ratingId = doc.id;
+    // Include the document ID as part of the data
+    const ratingWithId = { id: ratingId, ...ratingData };
+    RATING.push(ratingWithId);
+  });
+});
+
+// Optionally, you can also handle any errors that occur during the real-time listener
+ratingJobCollection.onSnapshot((querySnapshot) => {
+  // Handle changes as before
+}, (error) => {
+  console.error("Error getting real-time FavjobPosts updates:", error);
+});
