@@ -147,7 +147,13 @@ console.log(hireid)
     if (thisPostRating.length > 0) {
         const totalRating = thisPostRating.reduce((acc, rating) => acc + rating.rating, 0);
         const averageRating = totalRating / thisPostRating.length;
-        setRatingPost(averageRating);
+        const isInteger = averageRating % 1 === 0;
+
+        if (isInteger) {
+            setRatingPost(averageRating.toString()); // ไม่มีทศนิยมถ้าเป็นจำนวนเต็ม
+        } else {
+            setRatingPost(averageRating.toFixed(2));
+        }
         setMax("/5 คะแนน");
 
         // Find the user's specific rating
@@ -166,23 +172,26 @@ console.log(hireid)
   };
   console.log(yourRating)
   return (
-    <ScrollView style={styles.screen}>
-      <View style={styles.item}>
+    <View style={styles.screen}>
+
+    <ScrollView  style={styles.item}>
+    
 <View style={{...styles.postRow,...styles.postHeader}}>
+  
 <TouchableOpacity   onPress={() => {
        navigation.navigate("OtherProfile", {
       id: postOwner.id})
     }}>
       <Image
-          source={{uri:postOwner.imageUrl}}
+          source={{uri:postOwner.imageUrl|| "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}}
           style={{ ...styles.profileImg, ...{} }}
-        ></Image>
+          ></Image>
         </TouchableOpacity>
         <View>
         <TouchableOpacity   onPress={() => {
        navigation.navigate("OtherProfile", {
-      id: postOwner.id})
-    }}>
+         id: postOwner.id})
+        }}>
     <Text style={{...styles.title,...{color:"white"}}}>{postOwner.firstName} {postOwner.lastName}</Text>
     </TouchableOpacity>
     <Text style={styles.subTitle}> {postOwner.job}</Text>
@@ -196,20 +205,12 @@ console.log(hireid)
           style={{ paddingVertical: 10 }}
           startingValue={ratingPost}
           imageSize={20}
-        />
+          />
       
          </View>
          <Text style={{fontSize:20,marginEnd:10,marginLeft:15}}>จาก {thisAllPostRating.length} ผู้ใช้</Text>
          
-    {
-    currentUserId === displayedHire.postById && (
-    <TouchableOpacity
-    style={{ ...styles.button, ...{ width: "80%", marginleft: "5", marginVertical: 10 } }}
-    onPress={pickImage}
-    >
-          <Text style={{ ...{ color: "white" } }}>แก้ไขรูปภาพ</Text>
-        </TouchableOpacity>
-      )}
+
     <Text style={{...styles.jobTitle,...{fontSize:25,color:"#421BDF"}}}>{displayedHire.hireTitle}</Text>
     <Text style={{...styles.subText,...{fontSize:17, fontWeight: 'bold', marginTop: 10}}}>รายละเอียดโพสต์หางาน : <Text style={{...styles.subText,...{fontSize:17, fontWeight: 'normal'}}}>{displayedHire.detail}</Text></Text>
     
@@ -221,7 +222,6 @@ console.log(hireid)
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     </View>
 
-
     <TouchableOpacity onPress={() => setModalVisible(true)}>
         <Image source={{ uri: displayedHire.resumeUrl }} style={{ width: 200, height: 200, alignSelf:'center' }} />
       </TouchableOpacity>
@@ -231,19 +231,28 @@ console.log(hireid)
           index={0} // รูปภาพแรกในอาร์เรย์
           onSwipeDown={() => setModalVisible(false)} // ปิดโหมดเมื่อลากลง
           enableSwipeDown // เปิดใช้การลากลงเพื่อปิด
-        />
+          />
       </Modal>
       
+    {
+    currentUserId === displayedHire.postById && (
+      <TouchableOpacity
+      style={{ ...styles.button, ...{ width: "80%", marginleft: "5", marginVertical: 10 } }}
+      onPress={pickImage}
+      >
+          <Text style={{ ...{ color: "white" } }}>แก้ไขรูปภาพ</Text>
+        </TouchableOpacity>
+      )}
       {currentUserId !== displayedHire.postById && (
           <View style={{backgroundColor: "white", marginTop: 10, width: "95%", alignSelf: "center",
-           borderWidth: 1, borderColor: "#B0C4DE",borderRadius: 10,
-           shadowColor: "black",
-           shadowOpacity: 0.26,
-           shadowOffset: { width: 0, height: 2 },
-           shadowRadius: 10,
-           elevation: 5
-           , marginTop:20
-          }}>
+          borderWidth: 1, borderColor: "#B0C4DE",borderRadius: 10,
+          shadowColor: "black",
+          shadowOpacity: 0.26,
+          shadowOffset: { width: 0, height: 2 },
+          shadowRadius: 10,
+          elevation: 5
+          , marginTop:20
+        }}>
             <Text style={{alignSelf:"center",fontSize:20, marginTop:10}}>ให้คะแนนโพสต์นี้</Text>
           <Rating
             ratingTextColor="black"
@@ -264,7 +273,7 @@ console.log(hireid)
         <Image
             source={{uri:currentUserImg.imageUrl|| "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}}
             style={{...styles.commentImg,...{}}}
-          ></Image>
+            ></Image>
         <TextInput
           style={styles.input}
           blurOnSubmit
@@ -275,7 +284,7 @@ console.log(hireid)
           maxLength={30}
           numberOfLines={3}
           placeholder="แสดงความคิดเห็น"
-        />
+          />
         {/* ปุ่มส่งคอมเม้น */}
          <TouchableOpacity style={{marginTop:20,marginLeft:10}} onPress={sentComment} >
           <MaterialCommunityIcons name='send' size={20} color="black" />
@@ -286,12 +295,12 @@ console.log(hireid)
         {/* คอมเม้นทางบ้าน */}
         {thisFliteredPostComment.map((comment, index) => (
        
- 
-        <View style={{...styles.commentRow,...{ marginVertical:10,}}}key={index}>
+          
+          <View style={{...styles.commentRow,...{ marginVertical:10,}}}key={index}>
            <TouchableOpacity   onPress={() => {
-       navigation.navigate("OtherProfile", {
-      id: comment.userId})
-    }}>
+             navigation.navigate("OtherProfile", {
+               id: comment.userId})
+              }}>
       <Image
       source={{uri:   comment.userImage || "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}}
       style={{...styles.commentImg,...{}}}
@@ -305,8 +314,8 @@ console.log(hireid)
           </View>
         </View>
              ))}
-
-    {
+  </ScrollView>
+  {
   currentUserId === displayedHire.postById && (
     <TouchableOpacity style={styles.editbutton} onPress={() => {navigation.navigate("EditHire", {
       id: displayedHire.id});}}>
@@ -314,7 +323,7 @@ console.log(hireid)
         </TouchableOpacity>
   )}
 </View>
-  </ScrollView>
+  
   );
 };
 
@@ -322,6 +331,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: "#BEBDFF",
+    
   },
   item: {
     backgroundColor: "white",
@@ -491,6 +501,7 @@ commentImg: {
     flexDirection: "row",
     // backgroundColor:"red",
   },
+ 
 });
 
 export default HireJobDetailScreen;

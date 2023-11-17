@@ -58,7 +58,7 @@ displayedJob      onPress={() => {
         ))}
     
         <Text style={{...styles.detailText,...{ alignSelf: "flex-start", bottom: 10, position: 'absolute' },}}>
-          29 ก.พ.64
+
         </Text>
       </View>
     </TouchableOpacity>

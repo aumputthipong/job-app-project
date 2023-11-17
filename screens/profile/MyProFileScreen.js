@@ -173,7 +173,7 @@ const MyProfileScreen = ({ route, navigation }) => {
         <Text  style={{...{color: "white"}}}>Log Out</Text>
         </TouchableOpacity>
          {/*1st profileBox */}
-         <View style={{ ...styles.profileBox, ...{ backgroundColor: "#E5F5FA" , height: 350} }}>
+         <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" , height: 350} }}>
         
            <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
              <View style={styles.postRow}>
@@ -200,7 +200,7 @@ const MyProfileScreen = ({ route, navigation }) => {
          </View>
 
          {/*2 ContactBox */}
-         <View style={{ ...styles.contactBox, ...{ backgroundColor: "#E5F5FA"  } }}>
+         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white"  } }}>
            {/* ช่องทางติดต่อ*/}
            <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
            {/* email */}
@@ -234,7 +234,7 @@ const MyProfileScreen = ({ route, navigation }) => {
          </View>
 
          {/*3 EducationBox */}
-         <View style={{ ...styles.contactBox, ...{ backgroundColor: "#E5F5FA" ,  position: 'relative',height:350 } }}>
+         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" ,  position: 'relative',height:350 } }}>
         
            <Text style={{ ...styles.HeaderText, ...{marginBottom: 10 } }}>การศึกษา</Text>
            
@@ -273,7 +273,7 @@ const MyProfileScreen = ({ route, navigation }) => {
       <ScrollView>
       <View style={styles.modalBackground}>
         <View style={styles.modalView}>
-        <Text style={{ ...{ alignSelf: 'center', fontSize: 20 } }}>Edit Profile</Text>
+        <Text style={{ ...{ alignSelf: 'center', fontSize: 20 } }}>แก้ไขโปรไฟล์</Text>
           <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setIsEditing(false)}
@@ -369,7 +369,7 @@ const MyProfileScreen = ({ route, navigation }) => {
               setEditData({ ...editData, doctoral: text })
             }
           />
-          <Text style={{...styles.saveButton,...{}}} title="Save" onPress={finishEditing}>Save</Text>
+          <Text style={{...styles.saveButton,...{}}} title="Save" onPress={finishEditing}>บันทึก</Text>
         </View>
       </View>
       </ScrollView>
@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
-    width: '80%',
+    width: '90%',
     height: 'auto',
   },
   txtinput: {

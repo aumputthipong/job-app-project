@@ -54,7 +54,7 @@ const HireJobScreen = ({ route, navigation }) => {
         <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
           <View style={styles.postRow}>
             <Image
-              source={{ uri: user.imageUrl }}
+              source={{ uri: user.imageUrl || "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}}
               style={{ ...styles.profileImg, ...{} }}
             ></Image>
             {/* ชื่อหน่วยงาน */}
@@ -74,7 +74,7 @@ const HireJobScreen = ({ route, navigation }) => {
           <Text
             style={{...styles.detailText,...{ alignSelf: "flex-start", bottom: 0, position: 'absolute' },}}
           >
-            29 ก.พ.64
+      
           </Text>
         </View>
       </TouchableOpacity>
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   title: {
-    marginLeft: 15,
+    marginLeft: 16,
     fontSize: 22,
     fontWeight: "bold",
     textAlign: "left",
@@ -160,8 +160,8 @@ const styles = StyleSheet.create({
   },
 
   detailText: {
-    fontSize: 13,
-    color: "#929090",
+    fontSize: 14,
+    color: "#424242",
     marginBottom: 10,
     marginLeft: 10,
   },

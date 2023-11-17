@@ -66,7 +66,7 @@ const FindJobScreen = ({ route, navigation }) => {
         ))}
     
         <Text style={{...styles.detailText,...{ alignSelf: "flex-start", bottom: 10, position: 'absolute' },}}>
-          29 ก.พ.64
+       
         </Text>
       </View>
     </TouchableOpacity>
@@ -136,19 +136,22 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: 10,
     marginTop: 5,
-    fontSize: 22,
+    fontSize: 25,
     fontWeight: "bold",
     textAlign: "left",
     color: "#4B32E5",
   },
   subText: {
-    fontSize: 14,
+    fontSize: 16,
     marginLeft: 25,
+    marginBottom:3,
   },
   detailText: {
-    fontSize: 12,
-    color: "#929090",
+  
+    fontSize: 14,
+    color: "#424242",
     marginHorizontal: 10, 
+    fontWeight:"500"
   },
   bgImage: {
     width: "100%",

@@ -1,4 +1,4 @@
-import React, { useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   View,
@@ -22,18 +22,17 @@ import { updateHireData } from "../../store/actions/hireAction";
 const EditHire = ({ route, navigation }) => {
   const hireid = route.params.id;
   const availableHire = useSelector((state) => state.hires.filteredHires);
-  const displayedHire = availableHire.find(hire => hire.id == hireid);
+  const displayedHire = availableHire.find((hire) => hire.id == hireid);
 
   const displayedUsers = useSelector((state) => state.users.users);
 
-
-const [hireTitle, setHireTitle] = useState("");
-const [category, setCategory] = useState("");
-const [detail, setDetail] = useState("");
-const [email, setEmail] = useState("");
-const [phone, setPhone] = useState("");
-const [imageUrl, setImageUrl] = useState("");
-const [postData, setPostData] = useState(null);
+  const [hireTitle, setHireTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [detail, setDetail] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [postData, setPostData] = useState(null);
 
   const [uploading, setUploading] = useState(false);
 
@@ -50,21 +49,21 @@ const [postData, setPostData] = useState(null);
   const submitPost = async () => {
     // สร้างอ็อบเจกต์ที่เก็บข้อมูลที่คุณต้องการแก้ไข
     const updatedData = {
-        hireTitle,
-        detail,
-        email,
-        phone,
-        category,
+      hireTitle,
+      detail,
+      email,
+      phone,
+      category,
       // เพิ่มข้อมูลอื่น ๆ ที่คุณต้องการแก้ไข
     };
-  
+
     try {
       // อัปเดตข้อมูลใน Firestore โดยใช้ `hireid` ของโพสต์ที่คุณต้องการแก้ไข
       const postRef = firebase.firestore().collection("HirePosts").doc(hireid);
       await postRef.update(updatedData);
-  
+
       console.log("Post updated successfully");
-      navigation.navigate("HireJobDetailScreen",{id:hireid});
+      navigation.navigate("HireJobDetailScreen", { id: hireid });
     } catch (e) {
       console.error("Error updating data: ", e);
     }
@@ -73,20 +72,20 @@ const [postData, setPostData] = useState(null);
     try {
       // Delete the post document from Firestore
       await firebase.firestore().collection("HirePosts").doc(hireid).delete();
-  
+
       // If there is an image associated with the post, delete it from storage
       if (imageUrl) {
         const imageRef = firebase.storage().refFromURL(imageUrl);
         await imageRef.delete();
       }
-  
+
       console.log("Post deleted");
       navigation.navigate("HireJobScreen");
     } catch (error) {
       console.error("Error deleting post:", error);
     }
   };
-  
+
   const categorydata = [
     { key: "1", value: "งานบัญชี" },
     { key: "2", value: "งานทรัพยากรบุคคล" },
@@ -96,15 +95,19 @@ const [postData, setPostData] = useState(null);
     { key: "6", value: "งานออกแบบ" },
     { key: "7", value: "งานไอที" },
     { key: "8", value: "งานการศึกษา" },
+    { key: "9", value: "งานอาหาร" },
+    { key: "10", value: "งานธรรมชาติ" },
+    { key: "12", value: "งานทั่วไป" },
+    { key: "12", value: "อื่นๆ" },
   ];
-    // สร้างฟังก์ชันที่จะใช้ในการอัปเดตค่า category
-    const handleCategoryChange = (selectedValue) => {
-      setCategory(selectedValue);
-    };
+  // สร้างฟังก์ชันที่จะใช้ในการอัปเดตค่า category
+  const handleCategoryChange = (selectedValue) => {
+    setCategory(selectedValue);
+  };
   return (
     <ScrollView style={{}}>
       <View style={{ padding: 20 }}>
-        <Text>หัวโพส</Text>
+        <Text>หัวข้อโพส</Text>
         <TextInput
           value={hireTitle}
           onChangeText={setHireTitle}
@@ -112,30 +115,37 @@ const [postData, setPostData] = useState(null);
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
 
-
         <Text>รายละเอียด</Text>
-     <TextInput
+        <TextInput
           value={detail}
           onChangeText={setDetail}
           placeholder="รายละเอียดที่ต้องการแก้ไข"
-          style={{ textAlignVertical: 'top',  textAlign: 'left', flex: 1, borderWidth: 1,padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5, height: 180 }}
+          style={{
+            textAlignVertical: "top",
+            textAlign: "left",
+            flex: 1,
+            borderWidth: 1,
+            padding: 10,
+            marginVertical: 10,
+            borderWidth: 2,
+            borderRadius: 5,
+            height: 180,
+          }}
         />
 
         <Text>ประเภทงาน</Text>
-  <SelectList
-      setSelected={(val) => {
-        const index = val; // เลือก index ที่คุณต้องการ (เช่น 5)
-        if (index >= 0 && index < categorydata.length) {
-          setCategory(categorydata[index].value);
-        }
-      }}
-      data={categorydata}
-      placeholder="ประเภทของงาน"
-      selectedValue={category} 
-      onValueChange={handleCategoryChange} 
-    />
-
-
+        <SelectList
+          setSelected={(val) => {
+            const index = val; // เลือก index ที่คุณต้องการ (เช่น 5)
+            if (index >= 0 && index < categorydata.length) {
+              setCategory(categorydata[index].value);
+            }
+          }}
+          data={categorydata}
+          placeholder="ประเภทของงาน"
+          selectedValue={category}
+          onValueChange={handleCategoryChange}
+        />
 
         <Text>ช่องทางติดต่อ</Text>
         <TextInput
@@ -152,28 +162,29 @@ const [postData, setPostData] = useState(null);
           maxLength={10}
           style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
         />
-
-
-        
+        <View style={styles.postRow}>
 
         <TouchableOpacity
-          style={{ ...styles.button, ...{ width: "80%", marginleft: "5" } }}
+          style={{ ...styles.button, ...{ width: "65%", marginleft: 5,marginRight:5 } }}
           onPress={submitPost}
-        >
+          >
           <Text style={{ ...{ color: "white" } }}>แก้ไข</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-  style={{ ...styles.button, ...{ backgroundColor: "red" } }}
-  onPress={deletePost}
->
-  <Text style={{ color: "white" }}>Delete Post</Text>
-</TouchableOpacity>
+          style={{
+            ...styles.button,
+            ...{ backgroundColor: "red", marginVertical: 10 ,width:"35%"},
+          }}
+          onPress={deletePost}
+          >
+          <Text style={{ color: "white" }}>ลบโพสต์</Text>
+        </TouchableOpacity>
+          </View>
       </View>
     </ScrollView>
   );
 };
-
 
 const styles = StyleSheet.create({
   screen: {

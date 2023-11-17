@@ -118,6 +118,10 @@ const CreateHire = ({ route, navigation }) => {
     { key: "6", value: "งานออกแบบ" },
     { key: "7", value: "งานไอที" },
     { key: "8", value: "งานการศึกษา" },
+    { key: "9", value: "งานอาหาร" },
+    { key: "10", value: "งานธรรมชาติ" },
+    { key: "12", value: "งานทั่วไป" },
+    { key: "12", value: "อื่นๆ" },
   ];
   return (
     <ScrollView style={{}}>

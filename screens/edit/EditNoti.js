@@ -49,22 +49,31 @@ const EditNoti = ({ navigation }) => {
     { key: "6", value: "งานออกแบบ" },
     { key: "7", value: "งานไอที" },
     { key: "8", value: "งานการศึกษา" },
+    { key: "9", value: "งานอาหาร" },
+    { key: "10", value: "งานธรรมชาติ" },
+    { key: "12", value: "งานทั่วไป" },
+    { key: "12", value: "อื่นๆ" },
   ];
 
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container,...{paddingVertical:10}}}>
+        <Text style={{...styles.title,...{fontSize:20,marginVertical:10}}} numberOfLines={2}>
+        ประเภท
+        </Text>
       <MultipleSelectList
+      style={{paddingHorizontal:20}}
         setSelected={(val) => setSelected(val)}
         data={categorydata}
         save="value"
-
+        placeholder="เลือกประเภท"
         label="Categories"
       />
 
 
-
-      <Button title="บันทึก" onPress={applyFilters} />
+      <TouchableOpacity style={{...styles.button,...{marginTop:10}}} onPress={applyFilters}>
+        <Text style={{ ...{ color: "white" } }}>บันทึก</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -92,14 +101,15 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontSize: 15,
   },
-  button: {
-    marginVertical: 10,
-    backgroundColor: "#BEBDFF",
-    color: "red",
-    width: "50%",
-    height: "5%",
-    borderRadius: 10,
-    paddingTop: "1.5%",
+  button: { 
+    backgroundColor: "#5A6BF5",
+    width:"50%",
+    height: 40,
+    borderRadius:10,
+    padding:"2.5%",
+    alignItems: "center",
+    alignSelf:"center",
+    marginTop: 10
   },
   postRow: {
     flexDirection: "row",

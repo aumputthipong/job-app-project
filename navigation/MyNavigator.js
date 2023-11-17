@@ -245,6 +245,7 @@ export default function MyNavigator() {
         initialRouteName="Welcome"
         screenOptions={{
           // headerShown: false,
+          headerTitle: '',
           drawerActiveTintColor: "orange",
           drawerInactiveTintColor: "gray",
         }}

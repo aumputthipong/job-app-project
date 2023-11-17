@@ -170,7 +170,7 @@ const FindJobDetailScreen = ({ route, navigation }) => {
     if (thisPostRating.length > 0) {
         const totalRating = thisPostRating.reduce((acc, rating) => acc + rating.rating, 0);
         const averageRating = totalRating / thisPostRating.length;
-        setRatingPost(averageRating);
+        setRatingPost(averageRating.toFixed(2));
         setMax("/5 คะแนน");
 
         // Find the user's specific rating
