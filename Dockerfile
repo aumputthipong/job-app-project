@@ -13,11 +13,8 @@ RUN npm install
 # คัดลอกทุกไฟล์ที่เกี่ยวข้อง
 COPY . .
 
-# สร้าง build ของโปรเจค React Native
-RUN npx expo build:web
-
 # ระบุไพล์ที่ต้องการให้เป็นที่เข้าถึง
 EXPOSE 19006
 
-# เริ่มต้นแอปพลิเคชัน
+# เริ่มต้น Expo Metro Bundler
 CMD ["npm", "start"]
