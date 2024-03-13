@@ -1,10 +1,23 @@
-FROM node:current-slim
+# เลือกภาพของ Node ที่เหมาะสม
+FROM node:14
 
+# ตั้งค่าตำแหน่งที่จะทำงานใน Docker
 WORKDIR /app
-COPY package.json .
+
+# คัดลอก package.json และ package-lock.json เพื่อตรวจสอบและติดตั้ง dependencies
+COPY package*.json ./
+
+# ติดตั้ง dependencies
 RUN npm install
 
-EXPOSE 8080
-CMD [ "npm", "start" ]
-
+# คัดลอกทุกไฟล์ที่เกี่ยวข้อง
 COPY . .
+
+# สร้าง build ของโปรเจค React Native
+RUN npx expo build:web
+
+# ระบุไพล์ที่ต้องการให้เป็นที่เข้าถึง
+EXPOSE 19006
+
+# เริ่มต้นแอปพลิเคชัน
+CMD ["npm", "start"]
