@@ -1,20 +1,26 @@
-# เลือกภาพของ Node ที่เหมาะสม
-FROM node:14
+# Dockerfile
 
-# ตั้งค่าตำแหน่งที่จะทำงานใน Docker
+# Use an official Node.js runtime as a parent image
+FROM node:current-alpine
+
+# Set the working directory to /app
 WORKDIR /app
 
-# คัดลอก package.json และ package-lock.json เพื่อตรวจสอบและติดตั้ง dependencies
-COPY package*.json ./
+# Copy the package.json and yarn.lock files to the working directory
+COPY package.json  ./
 
-# ติดตั้ง dependencies
+# Install app dependencies
 RUN npm install
 
-# คัดลอกทุกไฟล์ที่เกี่ยวข้อง
+# Copy the entire app directory to the working directory
 COPY . .
 
-# ระบุไพล์ที่ต้องการให้เป็นที่เข้าถึง
-EXPOSE 19006
+# Build the app for production
+RUN npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios/assets
+RUN npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res
 
-# เริ่มต้น Expo Metro Bundler
-CMD ["npm", "start"]
+# Expose port 8080 for the React Native packager
+EXPOSE 8080
+
+# Start the app
+CMD ["npx", "react-native", "start"]
