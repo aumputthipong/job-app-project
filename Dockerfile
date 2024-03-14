@@ -1,16 +1,16 @@
 # Dockerfile
 
 # Use an official Node.js runtime as a parent image
-FROM node:14-alpine
+FROM node:current-alpine
 
 # Set the working directory to /app
 WORKDIR /app
 
 # Copy the package.json and yarn.lock files to the working directory
-COPY package.json yarn.lock ./
+COPY package.json  ./
 
 # Install app dependencies
-RUN yarn install --frozen-lockfile
+RUN npm install
 
 # Copy the entire app directory to the working directory
 COPY . .
