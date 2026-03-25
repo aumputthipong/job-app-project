@@ -13,63 +13,67 @@ import { useSelector } from "react-redux";
 import { Ionicons } from '@expo/vector-icons';
 
 const FindJobScreen = ({ navigation }) => {
+  
   const [searchText, setSearchText] = useState("");
 
-  // 1. ดึงข้อมูลจาก Redux มาตรงๆ (ไม่ต้อง Filter ในนี้)
   const allJobs = useSelector((state) => state.jobs.filteredJobs || []);
 
-  // 2. ใช้ useMemo ในการจำผลลัพธ์การ Filter เพื่อไม่ให้คำนวณใหม่ถ้าข้อมูลหรือคำค้นหาไม่เปลี่ยน
-  const displayedJobs = useMemo(() => {
-    if (!searchText.trim()) return allJobs;
+const displayedJobs = useMemo(() => {
+    const validJobs = allJobs.filter((job) => job && job.id);
+
+    if (!searchText.trim()) return validJobs;
+    
     const lowerSearchText = searchText.toLowerCase();
-    return allJobs.filter((job) =>
-      job.jobTitle.toLowerCase().includes(lowerSearchText)
+    return validJobs.filter((job) =>
+      job?.jobTitle?.toLowerCase().includes(lowerSearchText)
     );
   }, [allJobs, searchText]);
 
-  const renderJobItem = ({ item }) => (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={() => navigation.navigate("FindJobDetailScreen", { id: item.id })}
-      style={styles.cardContainer}
-    >
-      {/* ส่วนรูปภาพ */}
-      <Image
-        source={{ uri: item.imageUrl }}
-        style={styles.cardImage}
-      />
-      
-      {/* ส่วนเนื้อหา */}
-      <View style={styles.cardContent}>
-        <Text style={styles.titleText} numberOfLines={2}>
-          {item.jobTitle}
-        </Text>
+ const renderJobItem = ({ item }) => {
+    // ถ้าข้อมูลพังจนไม่มี item ให้ return null ไปเลยเพื่อไม่ให้เรนเดอร์การ์ดเปล่าๆ
+    if (!item) return null; 
+
+    return (
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => navigation.navigate("FindJobDetailScreen", { id: item.id })}
+        style={styles.cardContainer}
+      >
+        <Image
+          source={{ uri: item?.imageUrl || "URL_รูปภาพสำรองหากต้องการ" }}
+          style={styles.cardImage}
+        />
         
-        <View style={styles.infoRow}>
-          <Ionicons name="briefcase-outline" size={16} color="#666" />
-          <Text style={styles.subText}>{item.position}</Text>
-        </View>
-
-        <View style={styles.infoRow}>
-          <Ionicons name="cash-outline" size={16} color="#083C6B" />
-          <Text style={styles.wageText}>
-            {item.wage} บาท / {item.employmentType}
+        <View style={styles.cardContent}>
+          <Text style={styles.titleText} numberOfLines={2}>
+            {item?.jobTitle || "ไม่ระบุตำแหน่ง"}
           </Text>
-        </View>
-
-        {/* ส่วนเงื่อนไข/คุณสมบัติ (Tags) */}
-        {item.attributes && item.attributes.length > 0 && (
-          <View style={styles.tagsContainer}>
-            {item.attributes.map((attribute, index) => (
-              <View key={index} style={styles.tagBadge}>
-                <Text style={styles.tagText}>{attribute}</Text>
-              </View>
-            ))}
+          
+          <View style={styles.infoRow}>
+            <Ionicons name="briefcase-outline" size={16} color="#666" />
+            <Text style={styles.subText}>{item?.position || "-"}</Text>
           </View>
-        )}
-      </View>
-    </TouchableOpacity>
-  );
+
+          <View style={styles.infoRow}>
+            <Ionicons name="cash-outline" size={16} color="#083C6B" />
+            <Text style={styles.wageText}>
+              {item?.wage || 0} บาท / {item?.employmentType || "-"}
+            </Text>
+          </View>
+
+          {item?.attributes && item.attributes.length > 0 && (
+            <View style={styles.tagsContainer}>
+              {item.attributes.map((attribute, index) => (
+                <View key={index} style={styles.tagBadge}>
+                  <Text style={styles.tagText}>{attribute}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -90,13 +94,13 @@ const FindJobScreen = ({ navigation }) => {
         </View>
 
         {/* Job List */}
-        <FlatList
+      <FlatList
           data={displayedJobs}
           renderItem={renderJobItem}
-          keyExtractor={(item) => item.id.toString()}
+          // ใส่ ?. และ Fallback เพื่อไม่ให้แครช
+          keyExtractor={(item, index) => item?.id ? item.id.toString() : index.toString()}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
-          // กรณีค้นหาแล้วไม่เจอข้อมูล
           ListEmptyComponent={() => (
             <View style={styles.emptyContainer}>
               <Ionicons name="document-text-outline" size={60} color="#CBD5E1" />

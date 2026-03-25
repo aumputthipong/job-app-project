@@ -1,210 +1,238 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import {
   View,
   Text,
-  Button,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
   Image,
   FlatList,
-  SafeAreaView,
-  ScrollView,
   TextInput,
+  SafeAreaView,
 } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { Ionicons } from '@expo/vector-icons'; 
+import { useSelector } from "react-redux";
+import { Ionicons } from "@expo/vector-icons";
 
-const HireJobScreen = ({ route, navigation }) => {
-  // const displayedHires = useSelector((state) => state.hires.filteredHires);
-  const displayedUsers = useSelector((state) => state.users.users);
+const HireJobScreen = ({ navigation }) => {
   const [searchText, setSearchText] = useState("");
-  const displayedHires = useSelector((state) => {
-    
-    const { filteredHires } = state.hires;
-    if (!searchText) {
-      return filteredHires; // ไม่มีข้อความค้นหา, แสดงทั้งหมด
-    }
+
+  // 1. ดึงข้อมูลเพียวๆ จาก Redux Store
+  const allHires = useSelector((state) => state.hires.filteredHires || []);
+  const allUsers = useSelector((state) => state.users.users || []);
+
+  // 2. ใช้ useMemo จัดการเรื่องการค้นหา
+  const displayedHires = useMemo(() => {
+    if (!searchText.trim()) return allHires;
     const lowerSearchText = searchText.toLowerCase();
-    return filteredHires.filter((job) =>
-      job.hireTitle.toLowerCase().includes(lowerSearchText)
+    return allHires.filter((job) =>
+      job.hireTitle?.toLowerCase().includes(lowerSearchText)
     );
-  });
-  // const [hires, setHires] = useState(displayedHires);
-  // const [users, setUsers] = useState(displayedUsers);
+  }, [allHires, searchText]);
 
-  // useEffect(() => {
-  //   setHires(displayedHires);
-  // }, [displayedHires]);
-
-  // useEffect(() => {
-  //   setUsers(displayedUsers);
-  // }, [displayedUsers]);
-
-
-  const renderHireItem = ({ item}) => {
-    const user = displayedUsers.find((user) => user.id === item.postById);
-    return(
-
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("HireJobDetailScreen", { id: item.id });
-        }}
-      >
-        <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
-          <View style={styles.postRow}>
-            <Image
-              source={{ uri: user.imageUrl || "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}}
-              style={{ ...styles.profileImg, ...{} }}
-            ></Image>
-            {/* ชื่อหน่วยงาน */}
-            <View style={{ paddingTop: 10 }}>
-              {user && (
-                <Text style={styles.title}>{user.firstName} {user.lastName}</Text>
-              )}
-
-              {/* ตำแหน่ง */}
-              <Text style={styles.subText}>{user.job}</Text>
-            </View>
-          </View>
-
-          <Text style={styles.title}>{item.hireTitle}</Text>
-          {/* รายละเอียด */}
-          <Text style={styles.detailText}>{item.detail}</Text>
-          <Text
-            style={{...styles.detailText,...{ alignSelf: "flex-start", bottom: 0, position: 'absolute' },}}
-          >
+  const renderHireItem = ({ item }) => {
+    // ป้องกันแอปพังกรณีหา User ไม่เจอ
+    const user = allUsers.find((u) => u.id === item.postById);
+    
+    // ตั้งค่ารูปโปรไฟล์เริ่มต้นหากไม่มีรูป
+    const defaultAvatar = user 
+      ? `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=083C6B&color=fff`
+      : `https://ui-avatars.com/api/?name=User&background=CBD5E1&color=fff`;
       
+    const avatarUrl = user?.imageUrl || defaultAvatar;
+
+    return (
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => navigation.navigate("HireJobDetailScreen", { id: item.id })}
+        style={styles.cardContainer}
+      >
+        {/* ส่วนหัวของการ์ด: ข้อมูลผู้โพสต์ (ผู้ว่าจ้าง หรือ ฟรีแลนซ์) */}
+        <View style={styles.userInfoRow}>
+          <Image source={{ uri: avatarUrl }} style={styles.profileImg} />
+          <View style={styles.userInfoText}>
+            <Text style={styles.userNameText} numberOfLines={1}>
+              {user ? `${user.firstName} ${user.lastName}` : "ผู้ใช้งานทั่วไป"}
+            </Text>
+            <Text style={styles.userRoleText} numberOfLines={1}>
+              {user?.job || "ไม่ระบุตำแหน่ง"}
+            </Text>
+          </View>
+        </View>
+
+        {/* ส่วนเนื้อหา: หัวข้องานและรายละเอียด */}
+        <View style={styles.contentSection}>
+          <Text style={styles.hireTitleText} numberOfLines={2}>
+            {item.hireTitle}
+          </Text>
+          <Text style={styles.detailText} numberOfLines={3}>
+            {item.detail}
           </Text>
         </View>
       </TouchableOpacity>
     );
   };
 
-  useEffect(() => {
-
-  }, []);
   return (
-    <View style={styles.container}>
-      {/* searchbar */}
-      <TextInput
-        style={styles.textInput}
-        blurOnSubmit
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="default"
-        maxLength={20}
-        placeholder="ค้นหา"
-        value={searchText}
-        onChangeText={(text) => setSearchText(text)}
-      />
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            autoCapitalize="none"
+            autoCorrect={false}
+            placeholder="ค้นหางาน หรือ ฟรีแลนซ์..."
+            value={searchText}
+            onChangeText={setSearchText}
+            clearButtonMode="while-editing"
+          />
+        </View>
 
-      <TouchableOpacity
-        style={styles.createbutton}
-        onPress={() => {
-          navigation.navigate("CreateHire", {});
-        }}
-      >
-       <Ionicons name="md-add" size={30} color="white" />
-      </TouchableOpacity>
+        {/* List Section */}
+        <FlatList
+          data={displayedHires}
+          renderItem={renderHireItem}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
+          ListEmptyComponent={() => (
+            <View style={styles.emptyContainer}>
+              <Ionicons name="people-outline" size={60} color="#CBD5E1" />
+              <Text style={styles.emptyText}>ไม่พบข้อมูลประกาศงาน/ฟรีแลนซ์</Text>
+            </View>
+          )}
+        />
 
-      <FlatList
-        data={displayedHires}
-        renderItem={renderHireItem}
-        keyExtractor={(item) => item.id.toString()}
-      />
-    </View>
+        {/* Floating Action Button */}
+        <TouchableOpacity
+          style={styles.fab}
+          onPress={() => navigation.navigate("CreateHire", {})}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="add" size={32} color="white" />
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#F5F7FA",
+  },
   container: {
     flex: 1,
-    backgroundColor: "#BEBDFF",
   },
-  textInput: {
-    width: "90%",
-    height: "5%",
-    backgroundColor: "white",
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-    marginVertical: 10,
-    textAlign: "left",
-    paddingLeft: 15,
-    marginLeft: 15,
-    borderRadius: 20,
-  },
-  item: {
-    backgroundColor: "#f9c2ff",
-    width: "95%",
-    height: 225,
-    marginVertical: "2%",
-    borderRadius: 10,
-    alignSelf: "center",
-    shadowColor: "black",
-    shadowOpacity: 0.26,
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    marginHorizontal: 16,
+    marginVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    height: 50,
+    borderWidth: 1,
+    borderColor: "#E4E9F2",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 5,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  title: {
-    marginLeft: 16,
-    fontSize: 22,
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: "#333",
+  },
+  listContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 100, // เว้นพื้นที่ให้ FAB
+  },
+  cardContainer: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    marginBottom: 16,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  userInfoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F4F8", // สร้างเส้นคั่นบางๆ ระหว่างผู้โพสต์กับเนื้องาน
+  },
+  profileImg: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: "#E4E9F2",
+  },
+  userInfoText: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  userNameText: {
+    fontSize: 16,
     fontWeight: "bold",
-    textAlign: "left",
-    color: "#4B32E5",
+    color: "#333",
   },
-  subText: {
+  userRoleText: {
     fontSize: 13,
-    marginLeft: 20,
+    color: "#64748B",
+    marginTop: 2,
   },
-
+  contentSection: {
+    marginTop: 4,
+  },
+  hireTitleText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#083C6B",
+    marginBottom: 8,
+  },
   detailText: {
     fontSize: 14,
-    color: "#424242",
-    marginBottom: 10,
-    marginLeft: 10,
+    color: "#4A5568",
+    lineHeight: 22,
   },
-  postRow: {
-    flexDirection: "row",
-    paddingTop: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  postHeader: {
-    height: "42.5%",
-    width: "100%",
-
-  },
-
-  profileImg: {
-    marginTop: 10,
-    marginLeft: 10,
-    width: 75,
-    height: 75,
-    borderRadius: 360,
-  },
-  button: {
-    backgroundColor: "#5A6BF5",
-    width: "50%",
-    height: 40,
-    borderRadius: 10,
-    padding: "2.5%",
-    alignItems: "center",
-    alignSelf: "center",
-  },
-  createbutton: {
-    position:"absolute",
-    bottom: 20, 
-    right: 20,
-    backgroundColor: "#5A6BF5",
-    width: 60,
-    height: 60,
-    borderRadius:30,
-    padding: "2.5%",
+  emptyContainer: {
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 1,
+    marginTop: 60,
+  },
+  emptyText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#64748B",
+  },
+  fab: {
+    position: "absolute",
+    bottom: 24,
+    right: 24,
+    backgroundColor: "#083C6B",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#083C6B",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
 });
+
 export default HireJobScreen;
