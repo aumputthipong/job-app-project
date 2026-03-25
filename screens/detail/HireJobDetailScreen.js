@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "flex-start", // ให้กล่องหดพอดีกับตัวหนังสือ
-    backgroundColor: "rgba(255, 255, 255, 0.15)", // พื้นหลังโปร่งแสง (Glassmorphism)
+    backgroundColor: "#0000", // พื้นหลังโปร่งแสง (Glassmorphism)
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 20, // ขอบมนเป็นแคปซูล

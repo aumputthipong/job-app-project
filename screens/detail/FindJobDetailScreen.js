@@ -285,6 +285,7 @@ const FindJobDetailScreen = ({ route, navigation }) => {
             <View style={styles.ratingBox}>
               <Text style={styles.ratingBoxTitle}>ให้คะแนนโพสต์นี้</Text>
               <Rating
+              tintColor="#e9e9e9"
                 showRating={false}
                 onFinishRating={ratingCompleted}
                 imageSize={32}
@@ -443,7 +444,7 @@ const styles = StyleSheet.create({
   contactRow: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
   contactText: { fontSize: 15, color: "#333", marginLeft: 10 },
   ratingBox: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#e9e9e9",
     padding: 20,
     borderRadius: 16,
     alignItems: "center",

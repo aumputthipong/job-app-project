@@ -39,10 +39,11 @@ const C = {
   textPrimary: "#1a1a1a",
   textMuted:   "#999",
   border:      "#ECEAE3",
+  tab:"#083C6B",
 };
 
 const HEADER_OPTIONS = {
-  headerStyle:           { backgroundColor: C.bg },
+  headerStyle:           { backgroundColor: C.tab },
   headerTintColor:       C.textPrimary,
   headerTitle:           "",
   headerShadowVisible:   false,

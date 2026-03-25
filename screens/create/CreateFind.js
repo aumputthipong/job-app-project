@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Ionicons } from "@expo/vector-icons";
+
 import {
   View,
   Text,
@@ -7,6 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  KeyboardAvoidingView,
   Alert,
   FlatList,
   ScrollView
@@ -168,218 +171,361 @@ const CreateFind = ({ route, navigation }) => {
     newData.splice(index, 1);
     setWelfareBenefits(newData);
   };
-  return (
-    <ScrollView style={{}}>
-      <View style={{ padding: 20 }}>
-        <Text>หัวข้องาน</Text>
-        <TextInput
-          value={jobTitle}
-          onChangeText={setJobTitle}
-          placeholder="หัวข้องาน"
-          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
-        />
-        <Text>ตำแหน่งที่รับ</Text>
-        <TextInput
-          value={position}
-          onChangeText={setPosition}
-          placeholder="ตำแหน่ง/อาชีพ"
-          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
-        />
-        <Text>บริษัท</Text>
-        <TextInput
-          value={agency}
-          onChangeText={setAgency}
-          placeholder="บริษัท"
-          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
-        />
-
-        <Text>รายละเอียด</Text>
-        <TextInput
-          value={detail}
-          onChangeText={setDetail}
-          placeholder="รายละเอียดงาน"
-          style={{ textAlignVertical: 'top',  textAlign: 'left', flex: 1, borderWidth: 1,padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5, height: 180 }}
-        />
-        <Text>รูปโพส</Text>
-        {image && (
-          <Image
-            source={{ uri: image }}
-            style={{ ...styles.postImage, ...{ alignSelf: "center" } }}
-          />
-        )}
-        <TouchableOpacity
-          style={{ ...styles.button, ...{ width: "80%", marginleft: "5", marginVertical: 10 } }}
-          onPress={pickImage}
+return (
+    <ScrollView style={styles.safeArea}>
+      <KeyboardAvoidingView 
+        style={styles.keyboardAvoid} 
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView 
+          style={styles.container} 
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
         >
-          <Text style={{ ...{ color: "white" } }}>เพิ่มรูปภาพโพสต์</Text>
-        </TouchableOpacity>
+          {/* --- หัวข้อหน้าจอ --- */}
+          <Text style={styles.pageHeader}>สร้างประกาศงาน</Text>
 
-        <Text style={{marginBottom: 10 }}>ประเภทงาน</Text>
-        <SelectList
-          setSelected={(val) => setCategory(val)}
-          data={categorydata}
-          placeholder="ประเภทของงาน"
-          save="value"
-        />
+          {/* --- Section 1: ข้อมูลพื้นฐาน --- */}
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>ข้อมูลพื้นฐาน</Text>
+            
+            <Text style={styles.label}>หัวข้องาน</Text>
+            <TextInput
+              style={styles.input}
+              value={jobTitle}
+              onChangeText={setJobTitle}
+              placeholder="เช่น รับสมัคร Frontend Developer"
+              placeholderTextColor="#94A3B8"
+            />
 
-        <Text style={{marginVertical: 10 }}>ประเภทการจ้าง</Text>
-        <SelectList
-          setSelected={(val) => setEmploymentType(val)}
-          data={emptypedata}
-          placeholder="ประเภทการจ้าง"
-          save="value"
-        />
+            <Text style={styles.label}>ตำแหน่งที่รับ</Text>
+            <TextInput
+              style={styles.input}
+              value={position}
+              onChangeText={setPosition}
+              placeholder="เช่น โปรแกรมเมอร์"
+              placeholderTextColor="#94A3B8"
+            />
 
-        <Text style={{marginTop: 10 }}>ค่าจ้าง</Text>
-        <TextInput
-          value={wage}
-          onChangeText={setWage}
-          placeholder="บาท"
-          keyboardType="numeric"
-          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
-        />
-        <Text>ช่องทางติดต่อ</Text>
-        <TextInput
-          value={email}
-          onChangeText={setEmail}
-          placeholder="อีเมล"
-          style={{ borderWidth: 1, padding: 10, marginVertical: 10, borderWidth: 2, borderRadius: 5 }}
-        />
-        <TextInput
-          value={phone}
-          onChangeText={setPhone}
-          keyboardType="numeric"
-          placeholder="เบอร์โทร"
-          maxLength={10}
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10, borderWidth: 2, borderRadius: 5 }}
-        />
-        {/* attribute */}
-        <Text>คุณสมบัติ</Text>
-        {attributes.map((attribute, index) => (
-           <View key={index}
-           style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={{...styles.subText,...{width:"80%"}}}numberOfLines={2} key={index}>{`${index + 1}. ${attribute}`}</Text>
-        {/* ปุ่มลบ */}
+            <Text style={styles.label}>บริษัท / หน่วยงาน</Text>
+            <TextInput
+              style={styles.input}
+              value={agency}
+              onChangeText={setAgency}
+              placeholder="ชื่อบริษัทของคุณ"
+              placeholderTextColor="#94A3B8"
+            />
+          </View>
 
-        <TouchableOpacity style={{...{width:"20%" , alignSelf:'center'}}} onPress={() => attriDel(index)} >
-          <FontAwesome name={'remove'}  size={20} />
-        </TouchableOpacity>
+          {/* --- Section 2: รายละเอียดงาน & รูปภาพ --- */}
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>รายละเอียดงาน</Text>
+            
+            <Text style={styles.label}>รายละเอียด</Text>
+            <TextInput
+              style={[styles.input, styles.textArea]}
+              value={detail}
+              onChangeText={setDetail}
+              placeholder="อธิบายรายละเอียดงาน หน้าที่ความรับผิดชอบ..."
+              placeholderTextColor="#94A3B8"
+              multiline
+              numberOfLines={6}
+            />
 
-        </View>
-      ))}
-       
-      
-      <View style={styles.postRow}>
-      <TextInput
-        placeholder="คุณสมบัติ"
-        value={inputText}
-        onChangeText={(text) => setInputText(text)}
-        style={{ borderWidth: 2, padding: 10, marginVertical: 10 ,width:"75%", borderRadius: 5}}
-      />
-     
+            <Text style={styles.label}>ประเภทงาน</Text>
+            {/* หมายเหตุ: อาจจะต้องปรับ boxStyles ตาม Library SelectList ที่คุณใช้ */}
+            <SelectList
+              setSelected={(val) => setCategory(val)}
+              data={categorydata}
+              placeholder="เลือกประเภทงาน"
+              save="value"
+              boxStyles={styles.selectBox}
+              dropdownStyles={styles.dropdownBox}
+            />
 
-     <TouchableOpacity style={{...styles.button,...{width:"20%" , marginLeft: 15}}}  onPress={attriAdd} >
-        <Text  style={{...{color: "white"}}}>เพิ่ม</Text>
+            <Text style={[styles.label, { marginTop: 16 }]}>ประเภทการจ้าง</Text>
+            <SelectList
+              setSelected={(val) => setEmploymentType(val)}
+              data={emptypedata}
+              placeholder="เลือกประเภทการจ้าง"
+              save="value"
+              boxStyles={styles.selectBox}
+              dropdownStyles={styles.dropdownBox}
+            />
 
-      </TouchableOpacity>
-      </View>
+            <Text style={[styles.label, { marginTop: 16 }]}>ค่าจ้าง (บาท)</Text>
+            <TextInput
+              style={styles.input}
+              value={wage}
+              onChangeText={setWage}
+              placeholder="เช่น 15000"
+              keyboardType="numeric"
+              placeholderTextColor="#94A3B8"
+            />
 
-          
-        {/* สวัสดิการ */}
-        <Text>สวัสดิการ</Text>
-        {welfareBenefits.map((welfareBenefit, index) => (
-          <View key={index}
-          style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={styles.subText}>{`${index + 1}. ${welfareBenefit}`}</Text>
+            <Text style={styles.label}>รูปภาพประกาศงาน</Text>
+            <TouchableOpacity style={styles.imagePickerBtn} onPress={pickImage} activeOpacity={0.8}>
+              {image ? (
+                <Image source={{ uri: image }} style={styles.previewImage} />
+              ) : (
+                <View style={styles.imagePlaceholder}>
+                  <Ionicons name="image-outline" size={32} color="#94A3B8" />
+                  <Text style={styles.imagePlaceholderText}>แตะเพื่อเพิ่มรูปภาพ</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
 
-        <TouchableOpacity style={{...{width:"20%" , alignSelf:'center'}}} onPress={() => BenefitDel(index)} >
-          <FontAwesome name={'remove'}  size={20} />
-        </TouchableOpacity>
+          {/* --- Section 3: คุณสมบัติ & สวัสดิการ (Dynamic Lists) --- */}
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>คุณสมบัติผู้สมัคร</Text>
+            {attributes.map((attribute, index) => (
+              <View key={index} style={styles.listItem}>
+                <Text style={styles.listItemText} numberOfLines={2}>
+                  {index + 1}. {attribute}
+                </Text>
+                <TouchableOpacity onPress={() => attriDel(index)} style={styles.deleteIconBtn}>
+                  <Ionicons name="trash-outline" size={18} color="#EF4444" />
+                </TouchableOpacity>
+              </View>
+            ))}
+            <View style={styles.addRow}>
+              <TextInput
+                style={[styles.input, styles.flexInput]}
+                placeholder="เพิ่มคุณสมบัติ..."
+                value={inputText}
+                onChangeText={setInputText}
+                placeholderTextColor="#94A3B8"
+              />
+              <TouchableOpacity style={styles.addButton} onPress={attriAdd}>
+                <Ionicons name="add" size={20} color="white" />
+              </TouchableOpacity>
+            </View>
 
-        </View>
-      ))}
- 
-        <View style={styles.postRow}>
-          <TextInput
-            placeholder="สวัสดิการ"
-            value={inputText2}
-            onChangeText={(text) => setInputText2(text)}
-            style={{ borderWidth: 2, padding: 10, marginVertical: 10 ,width:"75%", borderRadius: 5}}
-          />
+            <View style={styles.divider} />
 
-          <TouchableOpacity
+            <Text style={styles.sectionTitle}>สวัสดิการ</Text>
+            {welfareBenefits.map((welfare, index) => (
+              <View key={index} style={styles.listItem}>
+                <Text style={styles.listItemText} numberOfLines={2}>
+                  {index + 1}. {welfare}
+                </Text>
+                <TouchableOpacity onPress={() => BenefitDel(index)} style={styles.deleteIconBtn}>
+                  <Ionicons name="trash-outline" size={18} color="#EF4444" />
+                </TouchableOpacity>
+              </View>
+            ))}
+            <View style={styles.addRow}>
+              <TextInput
+                style={[styles.input, styles.flexInput]}
+                placeholder="เพิ่มสวัสดิการ..."
+                value={inputText2}
+                onChangeText={setInputText2}
+                placeholderTextColor="#94A3B8"
+              />
+              <TouchableOpacity style={styles.addButton} onPress={benefitAdd}>
+                <Ionicons name="add" size={20} color="white" />
+              </TouchableOpacity>
+            </View>
+          </View>
 
-            style={{ ...styles.button, ...{ width: "20%", marginLeft: 15 } }}
+          {/* --- Section 4: ช่องทางติดต่อ --- */}
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>ช่องทางติดต่อ</Text>
+            
+            <Text style={styles.label}>อีเมล</Text>
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="example@email.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              placeholderTextColor="#94A3B8"
+            />
 
-            onPress={benefitAdd}
-          >
-            <Text style={{ ...{ color: "white" } }}>เพิ่ม</Text>
-          </TouchableOpacity>   
-        </View>
-        <TouchableOpacity
-          style={{ ...styles.button, ...{ width: "80%", marginTop: 10 } }}
-          onPress={submitPost}
-        >
-          <Text style={{ ...{ color: "white"} }}>สร้างโพสต์</Text>
-        </TouchableOpacity>
-      </View>
+            <Text style={styles.label}>เบอร์โทรศัพท์</Text>
+            <TextInput
+              style={styles.input}
+              value={phone}
+              onChangeText={setPhone}
+              placeholder="08X-XXX-XXXX"
+              keyboardType="numeric"
+              maxLength={10}
+              placeholderTextColor="#94A3B8"
+            />
+          </View>
+
+          {/* --- Submit Button --- */}
+          <TouchableOpacity style={styles.submitButton} onPress={submitPost}>
+            <Text style={styles.submitButtonText}>สร้างโพสต์ประกาศงาน</Text>
+          </TouchableOpacity>
+
+        </ScrollView>
+      </KeyboardAvoidingView>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  screen: {
+  safeArea: {
     flex: 1,
-    paddingTop: "10%",
-    justifyContent: "flex-start",
-    alignItems: "center",
+    backgroundColor: "#F5F7FA",
+  },
+  keyboardAvoid: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+  },
+  scrollContent: {
+    padding: 16,
+    paddingBottom: 40,
+  },
+  pageHeader: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#083C6B",
+    marginBottom: 16,
+    marginLeft: 4,
+  },
+  card: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    // Shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#4A5568",
+    marginBottom: 8,
   },
   input: {
-    width: "85%",
-    paddingHorizontal: 10,
-    height: 40,
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-    marginVertical: 10,
-    alignSelf: "center",
-    textAlign: "left",
-    marginLeft: 15,
-    backgroundColor: "white",
-  },
-  text: {
-    textAlign: "left",
+    backgroundColor: "#F8FAFC",
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    height: 50,
     fontSize: 15,
+    color: "#333",
+    marginBottom: 16,
   },
-  postRow: {
-    flexDirection: "row",
-    // backgroundColor:"red",
+  textArea: {
+    height: 120,
+    paddingTop: 16, // จำเป็นสำหรับ multiline ใน iOS
+    textAlignVertical: "top", // จำเป็นสำหรับ Android
   },
-  postImage: {
-    width: 250,
-    height: 180,
-    justifyContent: "flex-end",
-    resizeMode: "stretch",
-  },
-  button: {
-    backgroundColor: "#5A6BF5",
-    width: "50%",
-    height: 40,
-    borderRadius: 10,
-    padding: "2.5%",
+  selectBox: {
+    borderColor: "#E2E8F0",
+    backgroundColor: "#F8FAFC",
+    borderRadius: 12,
+    height: 50,
     alignItems: "center",
-    alignSelf: "center",
   },
-
-  delbutton:{
-    backgroundColor:"red",
-    paddingTop:6,
-    width:40,height:40,alignItems:"center", 
-    borderRadius:15,
+  dropdownBox: {
+    borderColor: "#E2E8F0",
+    backgroundColor: "#FFFFFF",
   },
-  subText: {
-    fontSize: 15,
-
+  // --- Image Picker ---
+  imagePickerBtn: {
+    width: "100%",
+    height: 180,
+    backgroundColor: "#F8FAFC",
+    borderWidth: 2,
+    borderColor: "#E2E8F0",
+    borderStyle: "dashed",
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+    marginBottom: 16,
+  },
+  imagePlaceholder: {
+    alignItems: "center",
+  },
+  imagePlaceholderText: {
+    marginTop: 8,
+    color: "#94A3B8",
+    fontSize: 14,
+  },
+  previewImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+  // --- Dynamic Lists (Attributes & Welfare) ---
+  listItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#EBF8FF",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  listItemText: {
+    flex: 1,
+    color: "#083C6B",
+    fontSize: 14,
+  },
+  deleteIconBtn: {
+    padding: 4,
+    marginLeft: 8,
+  },
+  addRow: {
+    flexDirection: "row",
+    alignItems: "flex-start", // อิงตามความสูงของ Input
+  },
+  flexInput: {
+    flex: 1,
+    marginBottom: 0, // เอา Margin ล่างออกเพราะจะไปใช้ Margin ของ Card แทน
+  },
+  addButton: {
+    backgroundColor: "#083C6B",
+    width: 50,
+    height: 50,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 12,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#E2E8F0",
+    marginVertical: 20,
+  },
+  // --- Submit Button ---
+  submitButton: {
+    backgroundColor: "#083C6B",
+    height: 56,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 8,
+    // Shadow
+    shadowColor: "#083C6B",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  submitButtonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
-
 export default CreateFind;

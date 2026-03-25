@@ -80,9 +80,8 @@ const HomeScreen = ({ navigation }) => {
           >
             <Image
               source={{ 
-                uri: userData && userData.firstName 
-                  ? `https://ui-avatars.com/api/?name=${userData.firstName}+${userData.lastName}&background=083C6B&color=fff`
-                  : 'https://ui-avatars.com/api/?name=User&background=083C6B&color=fff'
+              uri: userData?.imageUrl || "https://ui-avatars.com/api/?name=User&background=E4E9F2&color=666"
+
               }}
               style={styles.profileImage}
             />
