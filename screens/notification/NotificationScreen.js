@@ -1,187 +1,257 @@
-import React, { useEffect, useState } from "react"; // ต้องเพิ่ม useState
+import React, { useMemo } from "react";
 import {
   View,
   Text,
-  Button,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
   Image,
   FlatList,
-
-  TextInput,
+  SafeAreaView,
 } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { LINK_JOB } from "../../store/actions/jobAction"
-import { filterJobs } from "../../store/actions/jobAction";
-import { ViewBase } from "react-native";
+import { useSelector } from "react-redux";
 import firebase from "../../database/firebaseDB";
+import { Ionicons } from "@expo/vector-icons";
 
-
-const NotificationScreen = ({ route, navigation }) => {
+const NotificationScreen = ({ navigation }) => {
+  const notiData = useSelector((state) => state.jobs.notiData || []);
+  const jobs = useSelector((state) => state.jobs.filterJob || []);
   
-  const notiData = useSelector((state) => state.jobs.notiData);
-  const jobs = useSelector((state) => state.jobs.filterJob);
-  
+  // ป้องกันแครชกรณีดึง uid ไม่ทัน
+  const currentUserId = firebase.auth().currentUser?.uid;
 
-  // หา userId ของผู้ใช้ปัจจุบัน
-  const currentUserId = firebase.auth().currentUser.uid;
+  // ใช้ useMemo ในการคำนวณผลลัพธ์การกรองข้อมูล เพื่อประสิทธิภาพที่ดีขึ้น
+  const filteredJobs = useMemo(() => {
+    if (!currentUserId) return [];
 
-  // กรอง User Noti ของผู้ใช้ปัจจุบัน
-  const currentUserNoti = notiData.filter((noti) => noti.notiBy === currentUserId);
+    const currentUserNoti = notiData.filter((noti) => noti?.notiBy === currentUserId);
 
+    return jobs.filter(job => 
+      job && currentUserNoti.some(noti => 
+        noti?.category?.includes(job.category) && noti?.notiBy !== job.postById
+      )
+    );
+  }, [notiData, jobs, currentUserId]);
 
-  // หา category ที่ผู้ใช้ต้องการดู
+  const renderJobItem = ({ item }) => {
+    if (!item) return null;
 
-
-  // กรองโพสต์ที่มี category ตรงกับ categoriesToDisplay
-  const filteredJobs = jobs.filter(job => currentUserNoti.some(noti => noti.category.includes(job.category) && noti.notiBy !== job.postById));
-
-
-  const renderJobItem = ({ itemData }) => (
-    <TouchableOpacity
-    onPress={() => {
-    navigation.navigate("FindJobDetailScreen", {
-   id: itemData.id})
-         }}
- >
-   <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
-     <View style={{ ...styles.postRow, ...styles.postHeader }}>
-       <Image
-         source={{
-           uri: itemData.imageUrl}}
-         style={styles.bgImage}
-       ></Image>
-       
-     </View>
-     {/* ชื่องาน */}
-     <Text style={styles.title} numberOfLines={2}>
-       {itemData.jobTitle}
-     </Text>
-     {/* ตำแหน่ง */}
-     <Text style={styles.subText}>{itemData.position}</Text>
-     {/* ค่าจ้าง */}
-     <Text style={styles.subText}>{itemData.wage} บาท/{itemData.employmentType}</Text>
-     {/* เงื่อนไข */}
-     {itemData.attributes.map((attribute, index) => (
-     <Text style={styles.detailText} key={index}>- {attribute}</Text>
-     ))}
- 
-     <Text style={{...styles.detailText,...{ alignSelf: "flex-start", bottom: 10, position: 'absolute' },}}>
-       29 ก.พ.64
-     </Text>
-   </View>
- </TouchableOpacity>
-  );
-  
-  
-  return (
-
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("EditNoti", {}); }}>
-        <Text style={{ ...{ color: "white" } }}>กรอง</Text>
-      </TouchableOpacity>
-      {/* <FlatList
+    return (
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => navigation.navigate("FindJobDetailScreen", { id: item.id })}
+        style={styles.cardContainer}
+      >
+        {/* ส่วนรูปภาพ */}
+        <Image
+          source={{ uri: item.imageUrl }}
+          style={styles.cardImage}
+        />
+        
+        {/* ส่วนเนื้อหา */}
+        <View style={styles.cardContent}>
+          <Text style={styles.titleText} numberOfLines={2}>
+            {item.jobTitle || "ไม่ระบุชื่องาน"}
+          </Text>
           
-          renderItem={({ item }) => {
-            return renderJobItem({ itemData: item });
-          }}
-          keyExtractor={(item) => item.id.toString()}
-        /> */}
-      <FlatList
-        data={filteredJobs}
-        renderItem={({ item }) => {
-          return renderJobItem({ itemData: item });
-        }}
-        keyExtractor={(item) => item.id.toString()}
-      />
+          <View style={styles.infoRow}>
+            <Ionicons name="briefcase-outline" size={16} color="#666" />
+            <Text style={styles.subText}>{item.position || "-"}</Text>
+          </View>
 
+          <View style={styles.infoRow}>
+            <Ionicons name="cash-outline" size={16} color="#083C6B" />
+            <Text style={styles.wageText}>
+              {item.wage || 0} บาท / {item.employmentType || "-"}
+            </Text>
+          </View>
 
-    </View>
+          {/* ส่วนคุณสมบัติ (Tags) */}
+          {item.attributes && item.attributes.length > 0 && (
+            <View style={styles.tagsContainer}>
+              {item.attributes.map((attribute, index) => (
+                <View key={index} style={styles.tagBadge}>
+                  <Text style={styles.tagText}>{attribute}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {/* วันที่ (ดึงลงมาไว้มุมขวาล่าง) */}
+          <Text style={styles.dateText}>
+            29 ก.พ. 64 {/* คุณสามารถเปลี่ยนเป็นข้อมูลแบบ Dynamic ได้ภายหลัง */}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        
+        {/* Header และปุ่มกรองข้อมูล */}
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerTitle}>งานที่ตรงกับคุณ</Text>
+          <TouchableOpacity 
+            style={styles.filterButton} 
+            onPress={() => navigation.navigate("EditNoti", {})}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="filter" size={16} color="#FFFFFF" />
+            <Text style={styles.filterButtonText}>ตัวกรอง</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* รายการงาน */}
+        <FlatList
+          data={filteredJobs}
+          renderItem={renderJobItem}
+          keyExtractor={(item, index) => item?.id ? item.id.toString() : index.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
+          ListEmptyComponent={() => (
+            <View style={styles.emptyContainer}>
+              <Ionicons name="notifications-off-outline" size={60} color="#CBD5E1" />
+              <Text style={styles.emptyText}>ยังไม่มีงานที่ตรงกับเงื่อนไขของคุณ</Text>
+              <Text style={styles.emptySubText}>ลองตั้งค่าตัวกรองใหม่อีกครั้ง</Text>
+            </View>
+          )}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#F5F7FA",
+  },
   container: {
     flex: 1,
-    backgroundColor:"#ABA7FA",
   },
-  textInput: {
-    width: "90%",
-    height: "5%",
-    backgroundColor: "white",
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-    marginVertical: 10,
-    textAlign: "left",
-    paddingLeft: 15,
-    marginLeft: 15,
-    borderRadius: 20,
+  // --- Header ---
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
   },
-  item: {
-    backgroundColor: "#f9c2ff",
-    width: "95%",
-    height: 390,
-    marginVertical: "2%",
-    borderRadius: 10,
-    alignSelf: "center",
-    // padding: 20
-  },
-  title: {
-    marginLeft: 10,
-    marginTop: 5,
+  headerTitle: {
     fontSize: 22,
     fontWeight: "bold",
-    textAlign: "left",
-    color: "#4B32E5",
+    color: "#083C6B",
+  },
+  filterButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#083C6B",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    shadowColor: "#083C6B",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  filterButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    marginLeft: 6,
+    fontSize: 14,
+  },
+  // --- List & Empty State ---
+  listContent: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 40,
+  },
+  emptyContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 100,
+  },
+  emptyText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#4A5568",
+    fontWeight: "600",
+  },
+  emptySubText: {
+    marginTop: 8,
+    fontSize: 14,
+    color: "#94A3B8",
+  },
+  // --- Card Item ---
+  cardContainer: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    marginBottom: 16,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  cardImage: {
+    width: "100%",
+    height: 160,
+    resizeMode: "cover",
+  },
+  cardContent: {
+    padding: 16,
+  },
+  titleText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#083C6B",
+    marginBottom: 8,
+  },
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 6,
   },
   subText: {
     fontSize: 14,
-    marginLeft: 25,
+    color: "#4A5568",
+    marginLeft: 8,
   },
-  detailText: {
-    fontSize: 12,
-    color: "#929090",
-    marginHorizontal: 10, 
+  wageText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#083C6B",
+    marginLeft: 8,
   },
-  postRow: {
+  tagsContainer: {
     flexDirection: "row",
-    backgroundColor: "gray",
-    borderRadius: 20,
+    flexWrap: "wrap",
+    marginTop: 8,
+    marginBottom: 12,
   },
-  postHeader: {
-    height: "50%",
+  tagBadge: {
+    backgroundColor: "#EBF8FF",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+    marginRight: 8,
+    marginBottom: 8,
   },
-  bgImage: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "flex-end",
-    resizeMode: "stretch",
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+  tagText: {
+    fontSize: 12,
+    color: "#2B6CB0",
+    fontWeight: "600",
   },
-  button: { 
-    backgroundColor: "#5A6BF5",
-    width:"50%",
-    height: 40,
-    borderRadius:10,
-    padding:"2.5%",
-    alignItems: "center",
-    alignSelf:"center",
-    marginTop: 10
-  },
-  createbutton: {
-    position:"absolute",
-    bottom: 20, 
-    right: 20,
-    backgroundColor: "#5A6BF5",
-    width: 60,
-    height: 60,
-    borderRadius:30,
-    padding: "2.5%",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 1,
+  dateText: {
+    fontSize: 12,
+    color: "#94A3B8",
+    position: "absolute",
+    bottom: 16,
+    right: 16,
   },
 });
 
