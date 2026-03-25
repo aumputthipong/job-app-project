@@ -1,284 +1,219 @@
 import React from "react";
-// import library ที่จำเป็น
+import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import CustomHeaderButton from "../components/CustomHeaderButton";
 import { useDispatch } from "react-redux";
+
+import CustomHeaderButton from "../components/CustomHeaderButton";
 import { toggleFavorite } from "../store/actions/jobAction";
-// import screen ที่เกี่ยวข้อง
 
-import HomeScreen from "../screens/HomeScreen";
-import LoginScreen from "../screens/reg/LoginScreen";
-import RegisterScreen from "../screens/reg/RegisterScreen";
-import FindJobScreen from "../screens/jobpost/FindJobScreen";
-import HireJobScreen from "../screens/jobpost/HireJobScreen";
-import FindJobDetailScreen from "../screens/detail/FindJobDetailScreen";
-import HireJobDetailScreen from "../screens/detail/HireJobDetailScreen";
-import WelcomeScreen from "../screens/WelcomeScreen";
-import NotificationScreen from "../screens/notification/NotificationScreen";
-import MyProfileScreen from "../screens/profile/MyProFileScreen";
-import KeepScreen from "../screens/keep/KeepScreen";
-import CreateFind from "../screens/create/CreateFind";
-import CreateHire from "../screens/create/CreateHire";
-import EditFind from "../screens/edit/EditFind";
-import EditHire from "../screens/edit/EditHire";
-import EditNoti from "../screens/edit/EditNoti";
-import OtherProfileScreen from "../screens/profile/OtherProfileScreen";
+// ── Screens ───────────────────────────────────────────────────────────────────
+import HomeScreen           from "../screens/HomeScreen";
+import WelcomeScreen        from "../screens/WelcomeScreen";
+import LoginScreen          from "../screens/reg/LoginScreen";
+import RegisterScreen       from "../screens/reg/RegisterScreen";
+import FindJobScreen        from "../screens/jobpost/FindJobScreen";
+import HireJobScreen        from "../screens/jobpost/HireJobScreen";
+import FindJobDetailScreen  from "../screens/detail/FindJobDetailScreen";
+import HireJobDetailScreen  from "../screens/detail/HireJobDetailScreen";
+import NotificationScreen   from "../screens/notification/NotificationScreen";
+import MyProfileScreen      from "../screens/profile/MyProFileScreen";
+import OtherProfileScreen   from "../screens/profile/OtherProfileScreen";
+import KeepScreen           from "../screens/keep/KeepScreen";
+import CreateFind           from "../screens/create/CreateFind";
+import CreateHire           from "../screens/create/CreateHire";
+import EditFind             from "../screens/edit/EditFind";
+import EditHire             from "../screens/edit/EditHire";
+import EditNoti             from "../screens/edit/EditNoti";
 
+// ── Design tokens (match HomeScreen) ─────────────────────────────────────────
+const C = {
+  bg:          "#F7F6F2",
+  dark:        "#1C1C1E",
+  white:       "#FFFFFF",
+  accent:      "#534AB7",
+  accentLight: "#EAE9FF",
+  textPrimary: "#1a1a1a",
+  textMuted:   "#999",
+  border:      "#ECEAE3",
+};
 
-// สร้าง navigator ตามโจทย์กำหนด
+const HEADER_OPTIONS = {
+  headerStyle:           { backgroundColor: C.bg },
+  headerTintColor:       C.textPrimary,
+  headerTitle:           "",
+  headerShadowVisible:   false,
+  headerBackTitleVisible: false,
+};
 
-
-const HomeNavigator = createNativeStackNavigator();
-const NotiNavigator = createNativeStackNavigator();
-
-
+// ── Stack Navigators ──────────────────────────────────────────────────────────
+const HomeStack = createNativeStackNavigator();
+const NotiStack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
-const MainNavigator = createNativeStackNavigator();
+const MainStack = createNativeStackNavigator();
 
-// สร้าง function สำหรับการกำหนด Navigator แต่ละตัว เช่น
-function HomeStack() {
+function HomeNavigator() {
   const dispatch = useDispatch();
-  const toggleFavoriteHandler = (mealId) => {
-    dispatch(toggleFavorite(mealId));
-  };
+  const toggleFavoriteHandler = (id) => dispatch(toggleFavorite(id));
+
   return (
-    <HomeNavigator.Navigator
+    <HomeStack.Navigator
       initialRouteName="HomeScreen"
-      screenOptions={{
-        headerStyle: { backgroundColor: "#4769E2" },
-        headerTintColor: "white",
-        headerTitle: '',
-      }}
+      screenOptions={HEADER_OPTIONS}
     >
-      <HomeNavigator.Screen
-        name="HomeScreen"
-        component={HomeScreen}
-        options={{
-        }}
-      />
-      <HomeNavigator.Screen
-        name="FindJobScreen"
-        component={FindJobScreen}
-        options={({ route }) => ({
-          // title: route.params.title,
-          // id: route.params.id,
-        })}
-      />
-      <HomeNavigator.Screen
-        name="HireJobScreen"
-        component={HireJobScreen}
-        options={({ route }) => ({
-          // title: route.params.title,
-          // id: route.params.id,
-        })}
-      />
-      <HomeNavigator.Screen
-        name="FindJobDetailScreen"
-        component={FindJobDetailScreen}
+      <HomeStack.Screen name="HomeScreen"        component={HomeScreen} />
+      <HomeStack.Screen name="FindJobScreen"     component={FindJobScreen} />
+      <HomeStack.Screen name="HireJobScreen"     component={HireJobScreen} />
+      <HomeStack.Screen name="FindJobDetailScreen" component={FindJobDetailScreen}
         options={({ route }) => ({
           headerRight: () => (
             <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-              <Item title="MealDetail" iconName="ios-star" onPress={() => { toggleFavoriteHandler(route.params.id) }} />
-            </HeaderButtons>),
+              <Item
+                title="Favorite"
+                iconName="ios-star"
+                onPress={() => toggleFavoriteHandler(route.params.id)}
+              />
+            </HeaderButtons>
+          ),
         })}
       />
-      <HomeNavigator.Screen
-        name="HireJobDetailScreen"
-        component={HireJobDetailScreen}
-        options={({ route }) => ({
-          // title: route.params.title,
-          // id: route.params.id,
-       
-        })}
-      />
-
-      <HomeNavigator.Screen
-        name="CreateFind"
-        component={CreateFind}
-        options={({ route }) => ({
-          // title: route.params.title,
-          // id: route.params.id,
-       
-        })}
-      />
-      <HomeNavigator.Screen
-        name="CreateHire"
-        component={CreateHire}
-        options={({ route }) => ({
-          // title: route.params.title,
-          // id: route.params.id,
-       
-        })}
-      />
-      <HomeNavigator.Screen
-        name="EditHire"
-        component={EditHire}
-        options={({ route }) => ({
-          // title: route.params.title,
-          // id: route.params.id,
-  
-        })}
-      />
-      <HomeNavigator.Screen
-        name="EditFind"
-        component={EditFind}
-        options={({ route }) => ({
-          // title: route.params.title,
-          // id: route.params.id,
-     
-        })}
-      />
-        <HomeNavigator.Screen
-        name="OtherProfile"
-        component={OtherProfileScreen}
-        options={({ route }) => ({
-          // title: route.params.title,
-          // id: route.params.id,
-   
-        })}
-      />
-
-
-    </HomeNavigator.Navigator>
+      <HomeStack.Screen name="HireJobDetailScreen" component={HireJobDetailScreen} />
+      <HomeStack.Screen name="CreateFind"        component={CreateFind} />
+      <HomeStack.Screen name="CreateHire"        component={CreateHire} />
+      <HomeStack.Screen name="EditFind"          component={EditFind} />
+      <HomeStack.Screen name="EditHire"          component={EditHire} />
+      <HomeStack.Screen name="OtherProfile"      component={OtherProfileScreen} />
+    </HomeStack.Navigator>
   );
 }
 
-function NotiStack() {
+function NotiNavigator() {
   return (
-    <NotiNavigator.Navigator
+    <NotiStack.Navigator
       initialRouteName="NotificationScreen"
-      screenOptions={{
-        headerStyle: { backgroundColor: "#4769E2" },
-        headerTintColor: "white",
-        headerTitle: '',
-      }}
+      screenOptions={HEADER_OPTIONS}
     >
-      <NotiNavigator.Screen
-        name="NotificationScreen"
-        component={NotificationScreen}
-        options={{}
-        }
-      />
-      <NotiNavigator.Screen
-        name="EditNoti"
-        component={EditNoti}
-        options={({ route }) => ({
-          // title: route.params.title,
-          // id: route.params.id,
-        })}
-      />
-    </NotiNavigator.Navigator>
+      <NotiStack.Screen name="NotificationScreen" component={NotificationScreen} />
+      <NotiStack.Screen name="EditNoti"            component={EditNoti} />
+    </NotiStack.Navigator>
   );
 }
 
-// BottomTabNav หน้าหลัก,ที่บันทึกไว้,แจ้งเตือน,โปรไฟล์
+// ── Tab Icon ──────────────────────────────────────────────────────────────────
+function TabIcon({ name, focused }) {
+  return (
+    <View style={[styles.tabIcon, focused && styles.tabIconActive]}>
+      <Ionicons
+        name={name}
+        size={22}
+        color={focused ? C.accent : C.textMuted}
+      />
+    </View>
+  );
+}
+
+// ── Bottom Tab Navigator ──────────────────────────────────────────────────────
 function BottomTabNav() {
   return (
     <BottomTab.Navigator
       screenOptions={{
-        //  headerShown: false,
-        tabBarActiveTintColor: "#EC8032",
-        headerStyle: { backgroundColor: "#4769E2", },
-        headerTintColor: "white",
-        tabBarStyle: { backgroundColor: "white" },
-        tabBarLabelStyle: { fontSize: 15, color: 'black' },
-        headerTitle: '',
+        headerShown:           false,
+        tabBarShowLabel:       false,
+        tabBarStyle:           styles.tabBar,
       }}
     >
       <BottomTab.Screen
         name="Home"
-        component={HomeStack}
+        component={HomeNavigator}
         options={{
-          headerShown: false,
-
-          tabBarIcon: ({ tintColor }) => {
-            return (
-              <Ionicons name="ios-home-outline" size={24} />
-            );
-          },
+          tabBarIcon: ({ focused }) => (
+            <TabIcon name={focused ? "home" : "home-outline"} focused={focused} />
+          ),
         }}
       />
       <BottomTab.Screen
         name="MyKeep"
         component={KeepScreen}
         options={{
-          tabBarIcon: ({ tintColor }) => {
-            return <Ionicons name="bookmark-outline" size={24}  />;
-          },
+          tabBarIcon: ({ focused }) => (
+            <TabIcon name={focused ? "bookmark" : "bookmark-outline"} focused={focused} />
+          ),
         }}
       />
       <BottomTab.Screen
-        name="Notifcation"
-        component={NotiStack}
+        name="Notification"
+        component={NotiNavigator}
         options={{
-          headerShown: false,
-          tabBarIcon: ({ tintColor }) => {
-            return <Ionicons name="notifications-outline" size={24}  />;
-
-          },
+          tabBarIcon: ({ focused }) => (
+            <TabIcon name={focused ? "notifications" : "notifications-outline"} focused={focused} />
+          ),
         }}
       />
       <BottomTab.Screen
         name="MyProfile"
         component={MyProfileScreen}
         options={{
-
-          tabBarIcon: ({ tintColor }) => {
-            return <Ionicons name="ios-person-outline" size={24} />;
-          },
+          tabBarIcon: ({ focused }) => (
+            <TabIcon name={focused ? "person" : "person-outline"} focused={focused} />
+          ),
         }}
       />
     </BottomTab.Navigator>
   );
 }
 
-
-// สร้าง Navigator หลัก
+// ── Main Navigator ────────────────────────────────────────────────────────────
 export default function MyNavigator() {
   return (
     <NavigationContainer>
-      <MainNavigator.Navigator
+      <MainStack.Navigator
         initialRouteName="Welcome"
-        screenOptions={{
-          // headerShown: false,
-          headerTitle: '',
-          drawerActiveTintColor: "orange",
-          drawerInactiveTintColor: "gray",
-        }}
+        screenOptions={{ headerShown: false }}
       >
-        <MainNavigator.Screen
-          name="BottomTabNav"
-          component={BottomTabNav}
-          options={{
-            drawerLabel: "Meals",
-            headerShown: false,
-          }}
+        <MainStack.Screen name="BottomTabNav" component={BottomTabNav} />
+        <MainStack.Screen
+          name="Welcome"
+          component={WelcomeScreen}
+          options={{ ...HEADER_OPTIONS, headerShown: true }}
         />
-        <MainNavigator.Screen name="Welcome" component={WelcomeScreen}
-          options={{
-            headerStyle: { backgroundColor: "#4769E2" },
-            headerTitleStyle: { color: "white" }
-          }}
+        <MainStack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ ...HEADER_OPTIONS, headerShown: true }}
         />
-        <MainNavigator.Screen name="Login" component={LoginScreen}
-          options={{
-            headerStyle: { backgroundColor: "#4769E2" },
-            headerTitleStyle: { color: "white" },
-            headerTintColor: "white",
-          }}
+        <MainStack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{ ...HEADER_OPTIONS, headerShown: true }}
         />
-        <MainNavigator.Screen name="Register" component={RegisterScreen}
-          options={{
-            headerStyle: { backgroundColor: "#4769E2" },
-            headerTitleStyle: { color: "white" },
-            headerTintColor: "white",
-          }}
-        />
-      </MainNavigator.Navigator>
+      </MainStack.Navigator>
     </NavigationContainer>
   );
 }
+
+// ── Styles ────────────────────────────────────────────────────────────────────
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor:  C.white,
+    borderTopColor:   C.border,
+    borderTopWidth:   0.5,
+    height:           64,
+    paddingBottom:    8,
+    paddingTop:       8,
+    elevation:        0,
+    shadowOpacity:    0,
+  },
+  tabIcon: {
+    width:          44,
+    height:         44,
+    borderRadius:   12,
+    alignItems:     "center",
+    justifyContent: "center",
+  },
+  tabIconActive: {
+    backgroundColor: C.accentLight,
+  },
+});

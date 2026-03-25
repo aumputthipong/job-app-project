@@ -1,89 +1,121 @@
 import React from "react";
-import { View, Text, Button, StyleSheet, TextInput ,TouchableOpacity,Image} from "react-native";
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TouchableOpacity, 
+  Image, 
+  SafeAreaView 
+} from "react-native";
 
-const WelcomeScreen = ({route, navigation}) => {
-  
-//   const {step, title} = route.params;
-
+const WelcomeScreen = ({ navigation }) => {
   return (
-    <View style={styles.screen}>
-      <Image  style={styles.logo}source={require("../assets/welcomelogo.png")}></Image>
-    <Text style={styles.title}>Job Search </Text>
-    <Text  style={styles.title}> Application </Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        {/* Header Section */}
+        <View style={styles.imageContainer}>
+          <Image 
+            style={styles.logo}
+            source={require("../assets/welcomelogo.png")}
+          />
+        </View>
 
-    <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent: "center"}}}>
-      <Text style={{...styles.text,...{fontSize:18,color:"blue",marginLeft:20,marginTop:20}}}>มีบัญชีแล้ว</Text>
-      <TouchableOpacity  onPress={() => {
-      navigation.navigate("Login");
-    }}>
-      <Text style={{...styles.text,...{fontSize:18,marginLeft:10,marginTop:20,textDecorationLine: "underline"}}}>เข้าสู่ระบบที่นี่</Text>
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.brandTitle}>Job Search</Text>
+          <Text style={styles.brandSubtitle}>Application</Text>
+        </View>
 
-      </TouchableOpacity>
-    </View> 
-    <View style={{ ...styles.postRow,...{ alignSelf: "left", width: "80%",justifyContent: "center"}}}>
-      <Text style={{...styles.text,...{fontSize:18,color: "blue",marginLeft:20,marginTop:20}}}>ยังไม่มีบัญชีใช่ไหม</Text>
-      <TouchableOpacity  onPress={() => {
-      navigation.navigate("Register");
-    }}>
-      <Text style={{...styles.text,...{fontSize:18,marginLeft:10,marginTop:20,textDecorationLine:"underline"}}}>สมัครสมาชิกที่นี่</Text>
+        {/* Action Section */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity 
+            style={styles.primaryButton}
+            onPress={() => navigation.navigate("Login")}
+          >
+            <Text style={styles.primaryButtonText}>เข้าสู่ระบบ</Text>
+          </TouchableOpacity>
 
-
-      </TouchableOpacity>
-    </View>
-  </View>
+          <View style={styles.footerRow}>
+            <Text style={styles.footerText}>ยังไม่มีบัญชีใช่ไหม? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+              <Text style={styles.linkText}>สมัครสมาชิกที่นี่</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  screen: {
-    paddingTop:"10%",
+  container: {
     flex: 1,
-    justifyContent: "flex-start",
+    backgroundColor: "#FFFFFF",
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 30,
+    justifyContent: "center",
+  },
+  imageContainer: {
     alignItems: "center",
-
-
+    marginBottom: 40,
   },
-  title: {
-    marginLeft: 15,
-    fontSize: 40,
-    fontWeight: "bold",
-    textAlign: "left",
+  logo: {
+    width: 280,
+    height: 280,
+    resizeMode: "contain", // ปรับจาก stretch เป็น contain เพื่อไม่ให้ภาพเบี้ยว
+  },
+  headerTextContainer: {
+    marginBottom: 50,
+  },
+  brandTitle: {
+    fontSize: 42,
+    fontWeight: "800",
     color: "#083C6B",
+    letterSpacing: -0.5,
   },
-  input: {
-    width: "85%",
-    paddingHorizontal: 10,
-    height: 40,
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-    marginVertical: 10,
-    alignSelf: "center",
-    textAlign: "left",
-    marginLeft: 15,
-    backgroundColor: "white",
+  brandSubtitle: {
+    fontSize: 42,
+    fontWeight: "300",
+    color: "#083C6B",
+    marginTop: -10,
   },
-  text: {
-    textAlign: "left",
-    fontSize: 15,
-    
+  buttonContainer: {
+    width: "100%",
+    alignItems: "center",
   },
-  logo:{
-    width:300,
-    height:300,
-    resizeMode:"stretch"
+  primaryButton: {
+    backgroundColor: "#083C6B",
+    width: "100%",
+    height: 56,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 4, // Shadow สำหรับ Android
+    shadowColor: "#000", // Shadow สำหรับ iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
-  button: {
-    marginVertical:10,  
-    backgroundColor: "#BEBDFF",
-    color: "red",
-    width:"50%",
-    height:"5%",
-    borderRadius:10,
-    paddingTop:"1.5%"
+  primaryButtonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "600",
   },
-  postRow: {
+  footerRow: {
     flexDirection: "row",
-    // backgroundColor:"red",
+    marginTop: 20,
+    alignItems: "center",
+  },
+  footerText: {
+    fontSize: 15,
+    color: "#666",
+  },
+  linkText: {
+    fontSize: 15,
+    color: "#083C6B",
+    fontWeight: "700",
+    textDecorationLine: "underline",
   },
 });
 
