@@ -164,353 +164,369 @@ const MyProfileScreen = ({ route, navigation }) => {
 
   
 
-  return (
-    
-    <ScrollView style={styles.screen}>
+return (
+    <ScrollView style={styles.safeArea}>
       {userData ? (
-         <View>
-        <TouchableOpacity style={styles.createbutton} onPress={handleLogout}>
-        <Text  style={{...{color: "white"}}}>Log Out</Text>
-        </TouchableOpacity>
-         {/*1st profileBox */}
-         <View style={{ ...styles.profileBox, ...{ backgroundColor: "white" , height: 350} }}>
-        
-           <View style={{ ...styles.postRow, ...styles.postHeader, ...{} }}>
-             <View style={styles.postRow}>
-             <Image source={{
-              uri: userData.imageUrl || "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}} style={styles.profileImg}></Image>
-             
-             </View>
-             <View>
-               {/* ชื่อ*/}
-               <Text style={styles.HeaderText}>{userData.firstName} {userData.lastName}</Text>
-               {/* อาชีพ */}
-               <Text style={styles.subText}>{userData.job}</Text>
-             </View>
-             <FontAwesome5 name={'edit'} size={24} onPress={startEditing} style={{...{ left: 317.5, top: 10, position: 'absolute'} }}/>
-             
-           </View>
-           {/* aboutme */}
-           <Text style={{ ...{ color: '#3C3F40', left: 10, top: 100, fontWeight: 'bold', fontSize: 18 ,position: 'absolute'} }}>About Me</Text>
-           <Text style={{ ...{ color: '#3C3F40', marginLeft: 20, fontSize:18, marginTop: 35} }}>
-             {userData.aboutme}
-           </Text>
-           <FontAwesome5 name={'camera'} size={22} onPress={pickImageAndUpload} style={{...{ left: 70, top: 70, position: 'absolute'} }} />
-           
-         </View>
+        <ScrollView 
+          style={styles.container} 
+          contentContainerStyle={{ paddingBottom: 40 }}
+          showsVerticalScrollIndicator={false}
+        >
+          
+          <View style={styles.headerBackground}>
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+              <Ionicons name="log-out-outline" size={24} color="#FFF" />
+            </TouchableOpacity>
+          </View>
 
-         {/*2 ContactBox */}
-         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white"  } }}>
-           {/* ช่องทางติดต่อ*/}
-           <Text style={styles.HeaderText}>ช่องทางติดต่อ</Text>
-           {/* email */}
-           <View style={{ ...styles.postRow, ...{} }}>
-             <Text style={styles.subTitle}><FontAwesome5 name={'user'}  size={20} />  Email :</Text>
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-             {userData.email}
-             </Text>
-           </View>
-           {/* เบอร์ */}
-           <View style={styles.postRow}>
-             <Text style={styles.subTitle}><FontAwesome5 name={'phone'}  size={20} /> Phone :</Text>
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-               {userData.phone}
-             </Text>
-           </View>
-           {/* line */}
-           <View style={styles.postRow}>
-             <Text style={styles.subTitle}><FontAwesome5 name={'line'}  size={22} /> Line :</Text>
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-               {userData.line}
-             </Text>
-           </View>
-           {/* facebook */}
-           <View style={styles.postRow}>
-             <Text style={styles.subTitle}><FontAwesome5 name={'facebook'}  size={20} /> Facebook :</Text>
-             <Text style={{ ...styles.subTitle, ...{ fontWeight: "normal" } }}>
-               {userData.facebook}
-             </Text>
-           </View>
-         </View>
+          <View style={styles.profileMainContainer}>
+            <View style={styles.avatarContainer}>
+              <Image
+                source={{
+                  uri: userData?.imageUrl || "https://ui-avatars.com/api/?name=User&background=E4E9F2&color=666"
+                }}
+                style={styles.avatarImage}
+              />
+              <TouchableOpacity style={styles.cameraButton} onPress={pickImageAndUpload}>
+                <Ionicons name="camera" size={18} color="#FFF" />
+              </TouchableOpacity>
+            </View>
 
-         {/*3 EducationBox */}
-         <View style={{ ...styles.contactBox, ...{ backgroundColor: "white" ,  position: 'relative',height:350 } }}>
-        
-           <Text style={{ ...styles.HeaderText, ...{marginBottom: 10 } }}>การศึกษา</Text>
-           
-           <View style={{ ...styles.postRow, ...{} }}>
-             <Text style={styles.subTitle2}>ปริญญาตรี : 
-             <Text style={{ ...styles.subTitle2, ...{ fontWeight: "normal", marginRight: 10 } }}>
-             <Text> </Text>{userData.bachelor}
-             </Text>
-             </Text>
-           </View>
+            <Text style={styles.nameText}>{userData.firstName} {userData.lastName}</Text>
+            <Text style={styles.jobText}>{userData.job || "ไม่ระบุอาชีพ"}</Text>
 
-           <View style={styles.postRow}>
-             <Text style={styles.subTitle2}>ปริญญาโท : 
-             <Text style={{ ...styles.subTitle2, ...{ fontWeight: "normal", marginRight: 10 } }}>
-             <Text> </Text>{userData.master}
-             </Text>
-             </Text>
-           </View>
+            <TouchableOpacity style={styles.editProfileBtn} onPress={startEditing}>
+              <FontAwesome5 name="edit" size={14} color="#083C6B" />
+              <Text style={styles.editProfileBtnText}>แก้ไขโปรไฟล์</Text>
+            </TouchableOpacity>
+          </View>
 
-           <View style={styles.postRow}>
-             <Text style={styles.subTitle2}>ปริญญาเอก : 
-             <Text style={{ ...styles.subTitle2, ...{ fontWeight: "normal", marginRight: 10 } }}>
-             <Text> </Text>{userData.doctoral}
-             </Text>
-             </Text>
-           </View>
-           
-         </View>
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>เกี่ยวกับฉัน</Text>
+            <Text style={styles.aboutMeText}>
+              {userData.aboutme || "ยังไม่มีข้อมูลแนะนำตัว"}
+            </Text>
+          </View>
 
-       </View>
-      ): (
-        <Text>กำลังโหลดข้อมูล...</Text>
-      )}
-      {isEditing && (
-      <Modal animationType="slide" transparent={true} visible={isEditing}>
-      <ScrollView>
-      <View style={styles.modalBackground}>
-        <View style={styles.modalView}>
-        <Text style={{ ...{ alignSelf: 'center', fontSize: 20 } }}>แก้ไขโปรไฟล์</Text>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setIsEditing(false)}
-          >
-            <FontAwesome name={'remove'}  size={20} />
-          </TouchableOpacity>
-          <Text>ชื่อจริง</Text>
-          <TextInput
-            style={styles.txtinput}
-            placeholder="First Name"
-            value={editData.firstName}
-            onChangeText={(text) =>
-              setEditData({ ...editData, firstName: text })
-            }
-          />
-          <Text>นามสกุล</Text>
-          <TextInput
-            style={styles.txtinput}
-            placeholder="Last Name"
-            value={editData.lastName}
-            onChangeText={(text) =>
-              setEditData({ ...editData, lastName: text })
-            }
-          />
-          <Text>อาชีพ</Text>
-          <TextInput
-          style={styles.txtinput}
-            placeholder="Job"
-            value={editData.job}
-            onChangeText={(text) => setEditData({ ...editData, job: text })}
-          />
-          <Text>About Me</Text>
-          <TextInput
-          style={styles.txtinput}
-            placeholder="About Me"
-            value={editData.aboutme}
-            onChangeText={(text) =>
-              setEditData({ ...editData, aboutme: text })
-            }
-          />
-          <Text>Email</Text>
-          <TextInput
-          style={styles.txtinput}
-            placeholder="Email"
-            value={editData.email}
-            onChangeText={(text) => setEditData({ ...editData, email: text })}
-          />
-          <Text>เบอร์โทร</Text>
-          <TextInput
-          style={styles.txtinput}
-            placeholder="Phone"
-            value={editData.phone}
-            onChangeText={(text) => setEditData({ ...editData, phone: text })}
-          />
-          <Text>Line</Text>
-          <TextInput
-          style={styles.txtinput}
-            placeholder="Line"
-            value={editData.line}
-            onChangeText={(text) => setEditData({ ...editData, line: text })}
-          />
-          <Text>Facebook</Text>
-          <TextInput
-          style={styles.txtinput}
-            placeholder="Facebook"
-            value={editData.facebook}
-            onChangeText={(text) =>
-              setEditData({ ...editData, facebook: text })
-            }
-          />
-          <Text>การศึกษา</Text>
-          <TextInput
-          style={styles.txtinput}
-            placeholder="Bachelor"
-            value={editData.bachelor}
-            onChangeText={(text) =>
-              setEditData({ ...editData, bachelor: text })
-            }
-          ></TextInput>
-          <TextInput
-          style={styles.txtinput}
-            placeholder="Master"
-            value={editData.master}
-            onChangeText={(text) =>
-              setEditData({ ...editData, master: text })
-            }
-          />
-          <TextInput
-          style={styles.txtinput}
-            placeholder="Doctoral"
-            value={editData.doctoral}
-            onChangeText={(text) =>
-              setEditData({ ...editData, doctoral: text })
-            }
-          />
-          <Text style={{...styles.saveButton,...{}}} title="Save" onPress={finishEditing}>บันทึก</Text>
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>ช่องทางติดต่อ</Text>
+            
+            <View style={styles.infoRow}>
+              <View style={styles.iconBox}><Ionicons name="mail" size={18} color="#083C6B" /></View>
+              <View style={styles.infoTextContainer}>
+                <Text style={styles.infoLabel}>Email</Text>
+                <Text style={styles.infoValue}>{userData.email || "-"}</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={styles.iconBox}><Ionicons name="call" size={18} color="#083C6B" /></View>
+              <View style={styles.infoTextContainer}>
+                <Text style={styles.infoLabel}>Phone</Text>
+                <Text style={styles.infoValue}>{userData.phone || "-"}</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={styles.iconBox}><FontAwesome5 name="line" size={18} color="#083C6B" /></View>
+              <View style={styles.infoTextContainer}>
+                <Text style={styles.infoLabel}>Line</Text>
+                <Text style={styles.infoValue}>{userData.line || "-"}</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={styles.iconBox}><FontAwesome5 name="facebook-f" size={18} color="#083C6B" /></View>
+              <View style={styles.infoTextContainer}>
+                <Text style={styles.infoLabel}>Facebook</Text>
+                <Text style={styles.infoValue}>{userData.facebook || "-"}</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>การศึกษา</Text>
+            
+            <View style={styles.infoRow}>
+              <View style={styles.iconBox}><Ionicons name="school" size={18} color="#083C6B" /></View>
+              <View style={styles.infoTextContainer}>
+                <Text style={styles.infoLabel}>ปริญญาตรี</Text>
+                <Text style={styles.infoValue}>{userData.bachelor || "-"}</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={styles.iconBox}><Ionicons name="school" size={18} color="#083C6B" /></View>
+              <View style={styles.infoTextContainer}>
+                <Text style={styles.infoLabel}>ปริญญาโท</Text>
+                <Text style={styles.infoValue}>{userData.master || "-"}</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={styles.iconBox}><Ionicons name="school" size={18} color="#083C6B" /></View>
+              <View style={styles.infoTextContainer}>
+                <Text style={styles.infoLabel}>ปริญญาเอก</Text>
+                <Text style={styles.infoValue}>{userData.doctoral || "-"}</Text>
+              </View>
+            </View>
+          </View>
+
+        </ScrollView>
+      ) : (
+        <View style={styles.loadingContainer}>
+          <Text style={{ color: "#666" }}>กำลังโหลดข้อมูล...</Text>
         </View>
-      </View>
-      </ScrollView>
-    </Modal>
-    )}
+      )}
+
+      <Modal animationType="slide" transparent={true} visible={isEditing}>
+        <View style={styles.modalBackground}>
+          <View style={styles.modalView}>
+            
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>แก้ไขโปรไฟล์</Text>
+              <TouchableOpacity onPress={() => setIsEditing(false)}>
+                <Ionicons name="close" size={28} color="#666" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
+              
+              <Text style={styles.inputLabel}>ชื่อจริง</Text>
+              <TextInput style={styles.textInput} placeholder="First Name" value={editData?.firstName} onChangeText={(text) => setEditData({ ...editData, firstName: text })} />
+
+              <Text style={styles.inputLabel}>นามสกุล</Text>
+              <TextInput style={styles.textInput} placeholder="Last Name" value={editData?.lastName} onChangeText={(text) => setEditData({ ...editData, lastName: text })} />
+
+              <Text style={styles.inputLabel}>อาชีพ</Text>
+              <TextInput style={styles.textInput} placeholder="Job" value={editData?.job} onChangeText={(text) => setEditData({ ...editData, job: text })} />
+
+              <Text style={styles.inputLabel}>เกี่ยวกับฉัน (About Me)</Text>
+              <TextInput style={[styles.textInput, { height: 80, textAlignVertical: 'top' }]} multiline placeholder="About Me" value={editData?.aboutme} onChangeText={(text) => setEditData({ ...editData, aboutme: text })} />
+
+              <Text style={styles.inputLabel}>Email</Text>
+              <TextInput style={styles.textInput} placeholder="Email" value={editData?.email} onChangeText={(text) => setEditData({ ...editData, email: text })} />
+
+              <Text style={styles.inputLabel}>เบอร์โทร</Text>
+              <TextInput style={styles.textInput} placeholder="Phone" keyboardType="phone-pad" value={editData?.phone} onChangeText={(text) => setEditData({ ...editData, phone: text })} />
+
+              <Text style={styles.inputLabel}>Line ID</Text>
+              <TextInput style={styles.textInput} placeholder="Line ID" value={editData?.line} onChangeText={(text) => setEditData({ ...editData, line: text })} />
+
+              <Text style={styles.inputLabel}>Facebook</Text>
+              <TextInput style={styles.textInput} placeholder="Facebook URL/Name" value={editData?.facebook} onChangeText={(text) => setEditData({ ...editData, facebook: text })} />
+
+              <Text style={styles.inputLabel}>ปริญญาตรี</Text>
+              <TextInput style={styles.textInput} placeholder="Bachelor" value={editData?.bachelor} onChangeText={(text) => setEditData({ ...editData, bachelor: text })} />
+
+              <Text style={styles.inputLabel}>ปริญญาโท</Text>
+              <TextInput style={styles.textInput} placeholder="Master" value={editData?.master} onChangeText={(text) => setEditData({ ...editData, master: text })} />
+
+              <Text style={styles.inputLabel}>ปริญญาเอก</Text>
+              <TextInput style={styles.textInput} placeholder="Doctoral" value={editData?.doctoral} onChangeText={(text) => setEditData({ ...editData, doctoral: text })} />
+
+              <TouchableOpacity style={styles.saveButton} onPress={finishEditing}>
+                <Text style={styles.saveButtonText}>บันทึกข้อมูล</Text>
+              </TouchableOpacity>
+              
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  screen: {
+  safeArea: {
     flex: 1,
-    // justifyContent: "flex-start",
-    // alignItems: "center",
-    backgroundColor: "#ABA7FA",
+    backgroundColor: "#F5F7FA",
   },
-  profileBox: {
-    width: 350,
-    height: 250,
-    marginVertical: "2%",
-    borderRadius: 10,
-    alignSelf:'center'
+  container: {
+    flex: 1,
   },
-  contactBox: {
-    width: 350,
-    height: 300,
-    marginVertical: "1.5%",
-    borderRadius: 10,
-    alignSelf:'center'
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  HeaderText: {
-    marginTop: 10,
-    marginLeft: 15,
-    fontSize: 22,
+  // --- Header & Profile ---
+  headerBackground: {
+    backgroundColor: "#083C6B",
+    height: 120,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    justifyContent: "flex-start",
+    alignItems: "flex-end",
+    paddingTop: 20,
+    paddingRight: 20,
+  },
+  logoutButton: {
+    padding: 8,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 8,
+  },
+  profileMainContainer: {
+    alignItems: "center",
+    marginTop: -60, // ดึงโปรไฟล์ให้ไปทับกับ Header ครึ่งนึง
+    marginBottom: 20,
+  },
+  avatarContainer: {
+    position: "relative",
+    marginBottom: 12,
+  },
+  avatarImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 4,
+    borderColor: "#FFFFFF",
+    backgroundColor: "#E4E9F2",
+  },
+  cameraButton: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    backgroundColor: "#FF9800",
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 3,
+    borderColor: "#FFFFFF",
+  },
+  nameText: {
+    fontSize: 24,
     fontWeight: "bold",
-    textAlign: "left",
-    color: '#3C3F40'
+    color: "#333",
   },
-  subTitle: {
-    marginTop: 10,
-    fontSize: 18,
-    marginLeft: 10,
-    fontWeight: "bold",
-    color: '#3C3F40'
+  jobText: {
+    fontSize: 16,
+    color: "#64748B",
+    marginTop: 4,
   },
-  subTitle2: {
-    marginBottom: 10,
-    fontSize: 18,
-    marginLeft: 10,
-    fontWeight: "bold",
-    color: '#3C3F40'
-  },
-  subText: {
-    fontSize: 18,
-    marginHorizontal:15,
-    // backgroundColor:"blue"
-    color: '#3C3F40'
-  },
-  detailText: {
-    fontSize: 11,
-    color: "#929090",
-    marginHorizontal: 10,
-  },
-  bgImage: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "flex-end",
-    resizeMode: "stretch",
-  },
-  postRow: {
+  editProfileBtn: {
     flexDirection: "row",
-    // backgroundColor:"red",
+    alignItems: "center",
+    backgroundColor: "#EBF8FF",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginTop: 12,
   },
-  postHeader: {
-    height: "30%",
+  editProfileBtnText: {
+    color: "#083C6B",
+    fontWeight: "bold",
+    marginLeft: 8,
   },
-  profileImg: {
-    marginTop: 10,
-    marginLeft: 10,
-    width: 80,
-    height: 80,
-    borderRadius: 360,
-    borderColor: '#5666E9',
-    borderWidth: 3
+  // --- Cards ---
+  card: {
+    backgroundColor: "#FFFFFF",
+    marginHorizontal: 16,
+    marginBottom: 16,
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 3,
   },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#083C6B",
+    marginBottom: 16,
+  },
+  aboutMeText: {
+    fontSize: 15,
+    color: "#4A5568",
+    lineHeight: 24,
+  },
+  // --- Info Rows ---
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  iconBox: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: "#F0F4F8",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 16,
+  },
+  infoTextContainer: {
+    flex: 1,
+  },
+  infoLabel: {
+    fontSize: 13,
+    color: "#64748B",
+    marginBottom: 2,
+  },
+  infoValue: {
+    fontSize: 15,
+    color: "#333",
+    fontWeight: "500",
+  },
+  // --- Modal Styles ---
   modalBackground: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.6)', // สีสแครมหลังหน้า
+    justifyContent: "flex-end", // ให้ Modal ดันขึ้นมาจากข้างล่าง
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalView: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    width: '90%',
-    height: 'auto',
+    backgroundColor: "#FFF",
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    height: "85%", // ไม่ให้เต็มจอ 100%
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
-  txtinput: {
-    width: "100%",
-    paddingHorizontal: 10,
-    height: 40,
-    borderColor: "grey",
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  inputLabel: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#4A5568",
+    marginBottom: 6,
+    marginTop: 12,
+  },
+  textInput: {
+    backgroundColor: "#F5F7FA",
     borderWidth: 1,
-    borderRadius: 5,
-    marginVertical: 10,
-    textAlign: "left",
-    backgroundColor: "white",
-    shadowColor: "black",
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  closeButton: {
-    alignSelf: 'flex-end',
-    bottom: 25
+    borderColor: "#E4E9F2",
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: "#333",
   },
   saveButton: {
-    backgroundColor: "#5A6BF5",
-    width:"50%",
-    height: 40,
-    borderRadius:10,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    color: "white",
-    alignSelf: "center",
-    fontSize : 18
-  },
-  createbutton: {
-    position:"absolute",
-    bottom: 15, 
-    right: 30,
-    backgroundColor: "#5A6BF5",
-    width: 45,
-    height: 45,
-    borderRadius:10,
-    padding: "2.5%",
-    alignItems: "center",
+    backgroundColor: "#083C6B",
+    height: 54,
+    borderRadius: 12,
     justifyContent: "center",
-    zIndex: 1,
+    alignItems: "center",
+    marginTop: 30,
+    marginBottom: 20,
+  },
+  saveButtonText: {
+    color: "#FFF",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 
