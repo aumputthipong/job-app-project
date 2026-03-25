@@ -78,9 +78,14 @@ const HomeScreen = ({ navigation }) => {
             style={styles.profileImageContainer}
             onPress={() => console.log("Go to Profile")}
           >
-           <Image source={{
-                        uri: userData.imageUrl || "https://firebasestorage.googleapis.com/v0/b/log-in-d8f2c.appspot.com/o/profiles%2FprofilePlaceHolder.jpg?alt=media&token=35a4911f-5c6e-4604-8031-f38cc31343a1&_gl=1*51075c*_ga*ODI1Nzg1MDQ3LjE2NjI5N6JhaZ1Yx5r1r15r1h&_ga_CW55HF8NVT*MTY5ODA2NzU0NC4yNy4xLjE2OTgwNjgyMjEuMTcuMC4w"}} style={styles.profileImg}></Image>
-                       
+            <Image
+              source={{ 
+                uri: userData && userData.firstName 
+                  ? `https://ui-avatars.com/api/?name=${userData.firstName}+${userData.lastName}&background=083C6B&color=fff`
+                  : 'https://ui-avatars.com/api/?name=User&background=083C6B&color=fff'
+              }}
+              style={styles.profileImage}
+            />
           </TouchableOpacity>
         </View>
 

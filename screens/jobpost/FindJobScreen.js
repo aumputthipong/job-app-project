@@ -1,196 +1,248 @@
-import React, { useState, useEffect , useCallback} from "react";
+import React, { useState, useMemo } from "react";
 import {
   View,
   Text,
-  Button,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
   Image,
   FlatList,
   TextInput,
-  Alert,
+  SafeAreaView,
 } from "react-native";
-import { useNavigation, useIsFocused ,useFocusEffect } from '@react-navigation/native';
-import { useSelector,useDispatch } from "react-redux";
-import {LINK_JOB} from "../../store/actions/jobAction"
-import firebase from "../../database/firebaseDB";
-import { Ionicons } from '@expo/vector-icons'; 
+import { useSelector } from "react-redux";
+import { Ionicons } from '@expo/vector-icons';
 
-
-
-
-const FindJobScreen = ({ route, navigation }) => {
+const FindJobScreen = ({ navigation }) => {
   const [searchText, setSearchText] = useState("");
-  const currentUserId = firebase.auth().currentUser.uid;
-  // const displayedJobs = useSelector((state) => state.jobs.filteredJobs);
-  const displayedJobs = useSelector((state) => {
-    const { filteredJobs } = state.jobs;
-    if (!searchText) {
-      return filteredJobs; // ไม่มีข้อความค้นหา, แสดงทั้งหมด
-    }
+
+  // 1. ดึงข้อมูลจาก Redux มาตรงๆ (ไม่ต้อง Filter ในนี้)
+  const allJobs = useSelector((state) => state.jobs.filteredJobs || []);
+
+  // 2. ใช้ useMemo ในการจำผลลัพธ์การ Filter เพื่อไม่ให้คำนวณใหม่ถ้าข้อมูลหรือคำค้นหาไม่เปลี่ยน
+  const displayedJobs = useMemo(() => {
+    if (!searchText.trim()) return allJobs;
     const lowerSearchText = searchText.toLowerCase();
-    return filteredJobs.filter((job) =>
+    return allJobs.filter((job) =>
       job.jobTitle.toLowerCase().includes(lowerSearchText)
     );
-  });
-  const renderJobItem = ({ itemData }) => (
+  }, [allJobs, searchText]);
 
-  
+  const renderJobItem = ({ item }) => (
     <TouchableOpacity
-       onPress={() => {
-       navigation.navigate("FindJobDetailScreen", {
-      id: itemData.id})
-            }}
+      activeOpacity={0.8}
+      onPress={() => navigation.navigate("FindJobDetailScreen", { id: item.id })}
+      style={styles.cardContainer}
     >
-      <View style={{ ...styles.item, ...{ backgroundColor: "white" } }}>
-        <View style={{ ...styles.postRow, ...styles.postHeader }}>
-          <Image
-            source={{
-              uri: itemData.imageUrl}}
-            style={styles.bgImage}
-          ></Image>
-          
+      {/* ส่วนรูปภาพ */}
+      <Image
+        source={{ uri: item.imageUrl }}
+        style={styles.cardImage}
+      />
+      
+      {/* ส่วนเนื้อหา */}
+      <View style={styles.cardContent}>
+        <Text style={styles.titleText} numberOfLines={2}>
+          {item.jobTitle}
+        </Text>
+        
+        <View style={styles.infoRow}>
+          <Ionicons name="briefcase-outline" size={16} color="#666" />
+          <Text style={styles.subText}>{item.position}</Text>
         </View>
-        {/* ชื่องาน */}
-        <Text style={styles.title} numberOfLines={2}>
-          {itemData.jobTitle}
-        </Text>
-        {/* ตำแหน่ง */}
-        <Text style={styles.subText}>{itemData.position}</Text>
-        {/* ค่าจ้าง */}
-        <Text style={styles.subText}>{itemData.wage} บาท/{itemData.employmentType}</Text>
-        {/* เงื่อนไข */}
-        {itemData.attributes.map((attribute, index) => (
-        <Text style={styles.detailText} key={index}>- {attribute}</Text>
-        ))}
-    
-        <Text style={{...styles.detailText,...{ alignSelf: "flex-start", bottom: 10, position: 'absolute' },}}>
-       
-        </Text>
+
+        <View style={styles.infoRow}>
+          <Ionicons name="cash-outline" size={16} color="#083C6B" />
+          <Text style={styles.wageText}>
+            {item.wage} บาท / {item.employmentType}
+          </Text>
+        </View>
+
+        {/* ส่วนเงื่อนไข/คุณสมบัติ (Tags) */}
+        {item.attributes && item.attributes.length > 0 && (
+          <View style={styles.tagsContainer}>
+            {item.attributes.map((attribute, index) => (
+              <View key={index} style={styles.tagBadge}>
+                <Text style={styles.tagText}>{attribute}</Text>
+              </View>
+            ))}
+          </View>
+        )}
       </View>
     </TouchableOpacity>
-    
-    
   );
 
-  
-
   return (
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            autoCapitalize="none"
+            autoCorrect={false}
+            placeholder="ค้นหาตำแหน่งงาน..."
+            value={searchText}
+            onChangeText={setSearchText}
+            clearButtonMode="while-editing" // ให้มีปุ่มกากบาทลบข้อความได้ (iOS)
+          />
+        </View>
 
-    <View style={styles.container}>
-      {/* searchbar */}
-      <TextInput
-        style={styles.textInput}
-        blurOnSubmit
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="default"
-        maxLength={20}
-        placeholder="ค้นหา"
-        value={searchText}
-        onChangeText={(text) => setSearchText(text)}
-      />
+        {/* Job List */}
+        <FlatList
+          data={displayedJobs}
+          renderItem={renderJobItem}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
+          // กรณีค้นหาแล้วไม่เจอข้อมูล
+          ListEmptyComponent={() => (
+            <View style={styles.emptyContainer}>
+              <Ionicons name="document-text-outline" size={60} color="#CBD5E1" />
+              <Text style={styles.emptyText}>ไม่พบตำแหน่งงานที่คุณค้นหา</Text>
+            </View>
+          )}
+        />
 
-      <TouchableOpacity style={styles.createbutton} onPress={() => {navigation.navigate("CreateFind", {});}}>
-       <Ionicons name="md-add" size={30} color="white" />
-      </TouchableOpacity>
+        {/* Floating Action Button (FAB) */}
+        <TouchableOpacity 
+          style={styles.fab} 
+          onPress={() => navigation.navigate("CreateFind", {})}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="add" size={32} color="white" />
+        </TouchableOpacity>
 
-      <FlatList
-        data={displayedJobs}
-        renderItem={({ item }) => {
-          return renderJobItem({ itemData: item });
-        }}
-        keyExtractor={(item) => item.id.toString()} // Use toString() to ensure the key is a string
-      />
-    </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#F5F7FA", // ใช้สีพื้นหลังให้เข้ากับหน้า Home
+  },
   container: {
     flex: 1,
-    backgroundColor:"#ABA7FA",
   },
-  textInput: {
-    width: "90%",
-    height: "5%",
-    backgroundColor: "white",
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-    marginVertical: 10,
-    textAlign: "left",
-    paddingLeft: 15,
-    marginLeft: 15,
-    borderRadius: 20,
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    marginHorizontal: 16,
+    marginVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    height: 50,
+    borderWidth: 1,
+    borderColor: "#E4E9F2",
+    // Shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  item: {
-    backgroundColor: "#f9c2ff",
-    width: "95%",
-    height: 390,
-    marginVertical: "2%",
-    borderRadius: 10,
-    alignSelf: "center",
-    // padding: 20
+  searchIcon: {
+    marginRight: 10,
   },
-  title: {
-    marginLeft: 10,
-    marginTop: 5,
-    fontSize: 25,
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: "#333",
+  },
+  listContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 100, // สำคัญ: เว้นที่ไว้ให้ปุ่ม FAB ไม่บังเนื้อหา
+  },
+  cardContainer: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    marginBottom: 16,
+    overflow: "hidden", // ป้องกันรูปภาพล้นขอบโค้ง
+    // Shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  cardImage: {
+    width: "100%",
+    height: 160,
+    resizeMode: "cover", // ให้ภาพเต็มกรอบโดยไม่เสียสัดส่วน
+  },
+  cardContent: {
+    padding: 16,
+  },
+  titleText: {
+    fontSize: 20,
     fontWeight: "bold",
-    textAlign: "left",
-    color: "#4B32E5",
+    color: "#083C6B",
+    marginBottom: 8,
+  },
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 6,
   },
   subText: {
-    fontSize: 16,
-    marginLeft: 25,
-    marginBottom:3,
+    fontSize: 15,
+    color: "#4A5568",
+    marginLeft: 8,
   },
-  detailText: {
-  
-    fontSize: 14,
-    color: "#424242",
-    marginHorizontal: 10, 
-    fontWeight:"500"
+  wageText: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#083C6B",
+    marginLeft: 8,
   },
-  bgImage: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "flex-end",
-    resizeMode: "stretch",
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  postRow: {
+  tagsContainer: {
     flexDirection: "row",
-    backgroundColor: "gray",
-    borderRadius: 20,
+    flexWrap: "wrap",
+    marginTop: 10,
   },
-  postHeader: {
-    height: "50%",
-    
+  tagBadge: {
+    backgroundColor: "#EBF8FF",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+    marginRight: 8,
+    marginBottom: 8,
   },
-  button: { 
-    backgroundColor: "#5A6BF5",
-    width:"50%",
-    height: 40,
-    borderRadius:10,
-    padding:"2.5%",
-    alignItems: "center",
-    alignSelf:"center",
+  tagText: {
+    fontSize: 12,
+    color: "#2B6CB0",
+    fontWeight: "600",
   },
-  createbutton: {
-    position:"absolute",
-    bottom: 20, 
-    right: 20,
-    backgroundColor: "#5A6BF5",
-    width: 60,
-    height: 60,
-    borderRadius:30,
-    padding: "2.5%",
+  emptyContainer: {
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 1,
+    marginTop: 60,
+  },
+  emptyText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#64748B",
+  },
+  fab: {
+    position: "absolute",
+    bottom: 24,
+    right: 24,
+    backgroundColor: "#083C6B",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    // Shadow
+    shadowColor: "#083C6B",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
 });
 
