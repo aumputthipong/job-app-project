@@ -1,9 +1,10 @@
 # Job search ReactNative App
-A job seach & freelance seach you can post and searching for post freelance post & job postdevelope by using React Nativeand with Firebase database 
+A React Native application for job searching and freelance hiring develope by using React Nativeand with Firebase database 
+
 ## Installation & Setup
 #### Project setup
 ```bash
-npm install --legacy-peer-deps
+npx expo install expo-dev-client
 ```
 #### add local.properties android folder
 ```bash
@@ -13,7 +14,7 @@ sdk.dir=YourPath:.../Android/Sdk
   ```bash 
   npx expo run:android
 ```
-## 📱 Screenshots
+##  Screenshots
 
 <table>
   <tr>
